@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ES2022",
+    "moduleResolution": "Bundler", // friendlier resolution for modern ESM (lets you use explicit ".js" extensions in TS)
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true, // smoother CJS/ESM interop for defs like "express"
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true, // speeds up builds by not type-checking node_modules
+    "baseUrl": "."
+  }
+}
