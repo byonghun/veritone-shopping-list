@@ -6,5 +6,7 @@ dist
 .gitignore
 .DS_Store
 npm-debug.log
+.vscode
 .env
 .env.*
+!.env.example

@@ -8,10 +8,9 @@ services:
     container_name: veritone-shopping-list-server
     working_dir: /workspace/apps/server
     ports:
-      - "3001:3001"
-    environment:
-      - PORT=3001
-      - CORS_ORIGIN=http://localhost:5173
+      - "${PORT:-3001}:3001"
+    env_file:
+      - .env.development
     # Bind mount your repo -> live code inside the container (hot reload)
     # Anonymous volume on /workspace/node_modules to hide host modules and use the container's own node_modules (prevents OS/ABI mismatches)
       # Telling Docker to not use the node_modules from host computer but use the dedicated node_modules folder inside the container
