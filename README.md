@@ -1,2 +1,33 @@
 # veritone-shopping-list
 Shopping List App
+
+## Backend
+### Prerequisites
+- Docker Desktop
+  - macOS - `brew install --cask docker`
+  - Windows 10/11 (WSL2 recommended) - `winget install -e --id Docker.DockerDesktop`
+- Node.js 22.x
+- Npm 10.9.2
+
+### Environment Variables
+```
+cp .env.example .env.development
+# Edit values as needed:
+PORT=3001
+CORS_ORIGIN=http://localhost:5173
+```
+
+### Quick Start (Docker)
+```
+# Build + run dev stack (hot reload via tsx)
+npm run dev:docker
+# or
+docker compose up --build
+```
+
+### Quick Start (Locally)
+```
+# Run locally, hot reload via tsx
+cd apps/server
+npm run dev
+```
