@@ -4,7 +4,7 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "docker compose up --build",
+    "dev:docker": "docker compose up --build",
     "down": "docker compose down -v",
     "typecheck": "tsc -b"
   },

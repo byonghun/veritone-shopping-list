@@ -1,0 +1,32 @@
+# What is Docker
+# A Docker image is like a snapshot of an OS + tools + your app.
+# A container is a running instance of that image.
+# This Dockerfile builds a development image for a Node/Express app that runs npm run dev (using tsx watch) so code changes reload automatically.
+
+# Dev-only Dockerfile for Node.js/Express with hot reload (tsx)
+# By default, containers run as root. For safety, we create a non-root user app.
+# Use alpine for its small bundle size
+FROM node:22-alpine3.22
+
+# (Optional but recommended) pull latest security fixes for base packages
+RUN apk -U --no-cache upgrade
+
+# create non-root user
+RUN addgroup -S app && adduser -S app -G app
+WORKDIR /workspace
+
+# Copy manifests first for better layer caching
+# Cache-friendly install for workspaces
+COPY package.json package-lock.json ./
+COPY apps/server/package.json apps/server/package.json
+
+RUN npm ci
+
+# Copy the full repo (monorepo-friendly)
+COPY . .
+
+USER app
+WORKDIR /workspace/apps/server
+
+EXPOSE 3001
+CMD ["npm", "run", "dev"]

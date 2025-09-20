@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile.dev
+    container_name: veritone-shopping-list-server
+    working_dir: /workspace/apps/server
+    ports:
+      - "${PORT:-3001}:3001"
+    env_file:
+      - .env.development
+    # Bind mount your repo -> live code inside the container (hot reload)
+    # Anonymous volume on /workspace/node_modules to hide host modules and use the container's own node_modules (prevents OS/ABI mismatches)
+      # Telling Docker to not use the node_modules from host computer but use the dedicated node_modules folder inside the container
+      # Ensures that they are compiled for the correct operating system and architecture
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "node -e \"http=require('http');http.get('http://localhost:3001/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))\""
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      start_period: 15s
