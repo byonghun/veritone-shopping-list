@@ -6,7 +6,7 @@ import express, {
 } from "express";
 import cors from "cors";
 import morgan from "morgan";
-
+import { errorHandler } from "./middleware/errorHandler";
 import { itemsRoutes } from "./modules/items/routes";
 
 const API_VERSION = "v1" as const;
@@ -40,5 +40,6 @@ app.use((_req: Request, res: Response) =>
     .status(404)
     .json({ error: "NOT_FOUND" as const, message: "Route not found" })
 );
+app.use(errorHandler);
 
 export { app };
