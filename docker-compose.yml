@@ -1,6 +1,28 @@
-version: "3.9"
+# version: "3.9"
 
 services:
+  db:
+    # Smallest size, great for simple Node.js services
+    image: postgres:16-alpine
+    container_name: veritone-shopping-list-db
+    restart: always
+    environment:
+      - POSTGRES_USER=veritoneuser
+      - POSTGRES_PASSWORD=veritonepassword
+      - POSTGRES_DB=veritonedb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # pg_isready is a standard liveness check
+      # It's lightweight and reliable
+      test: ["CMD-SHELL", "pg_isready -U veritoneuser -d veritonedb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
   server:
     build:
       context: .
@@ -18,13 +40,24 @@ services:
     volumes:
       - .:/workspace
       - /workspace/node_modules
+    
+    # Prevents the server from trying to connect before Postgres is listening
+    # This removes "ECONNREFUSED" boots
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test:
         [
-          "CMD-SHELL",
-          "node -e \"http=require('http');http.get('http://localhost:3001/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))\""
+          "CMD",
+          "node",
+          "-e",
+          "const http=require('http');const p=process.env.PORT||3001;http.get('http://localhost:'+p+'/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
         ]
       interval: 5s
       timeout: 2s
       retries: 20
       start_period: 15s
+
+volumes:
+  pgdata:

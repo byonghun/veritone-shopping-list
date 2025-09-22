@@ -9,7 +9,8 @@
 FROM node:22-alpine3.22
 
 # (Optional but recommended) pull latest security fixes for base packages
-RUN apk -U --no-cache upgrade
+# Install openssl and psql
+RUN apk -U --no-cache upgrade && apk add --no-cache openssl postgresql-client
 
 # create non-root user
 RUN addgroup -S app && adduser -S app -G app
@@ -19,14 +20,15 @@ WORKDIR /workspace
 # Cache-friendly install for workspaces
 COPY package.json package-lock.json ./
 COPY apps/server/package.json apps/server/package.json
+RUN npm ci --workspaces --include-workspace-root
 
 RUN npm ci
 
 # Copy the full repo (monorepo-friendly)
 COPY . .
+WORKDIR /workspace/apps/server
+RUN npx prisma generate
 
 USER app
-WORKDIR /workspace/apps/server
-
 EXPOSE 3001
 CMD ["npm", "run", "dev"]
