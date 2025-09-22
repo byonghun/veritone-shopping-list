@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { ItemsService } from "./service";
+import { ItemsService } from "./service.instance";
 import {
   ItemCreateSchema,
   ItemUpdateSchema,
