@@ -1,40 +1,24 @@
-import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain";
+// src/repos/repo.prisma.ts
+import type { PrismaClient } from "@prisma/client";
+import type { ItemCreate, ItemId, ItemUpdate } from "./domain";
 import type { ItemsRepo } from "./repo";
-import { prisma } from "../../db/prisma";
-
-function mapPrismaItemToDomain(row: {
-  id: string;
-  name: string;
-  description: string | null;
-  quantity: number;
-  purchased: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}): Item {
-  return {
-    id: row.id,
-    name: row.name,
-    description: row.description ?? undefined,
-    quantity: row.quantity,
-    purchased: row.purchased,
-    createdAt: row.createdAt.toISOString(),
-    updatedAt: row.updatedAt.toISOString(),
-  };
-}
+import { mapPrismaItemToDomain } from "../../utils/prisma";
 
 export class PrismaItemsRepo implements ItemsRepo {
-  async listAll(): Promise<Item[]> {
-    const rows = await prisma.item.findMany({ orderBy: { createdAt: "desc" } });
+  constructor(private readonly prisma: PrismaClient) {}
+
+  async listAll() {
+    const rows = await this.prisma.item.findMany({ orderBy: { createdAt: "desc" } });
     return rows.map(mapPrismaItemToDomain);
   }
 
-  async get(id: ItemId): Promise<Item | undefined> {
-    const row = await prisma.item.findUnique({ where: { id } });
+  async get(id: ItemId) {
+    const row = await this.prisma.item.findUnique({ where: { id } });
     return row ? mapPrismaItemToDomain(row) : undefined;
   }
 
-  async create(input: ItemCreate): Promise<Item> {
-    const row = await prisma.item.create({
+  async create(input: ItemCreate) {
+    const row = await this.prisma.item.create({
       data: {
         name: input.name,
         description: input.description?.trim() || null,
@@ -45,36 +29,30 @@ export class PrismaItemsRepo implements ItemsRepo {
     return mapPrismaItemToDomain(row);
   }
 
-  async update(id: ItemId, patch: ItemUpdate): Promise<Item | undefined> {
-    const exists = await prisma.item.findUnique({ where: { id } });
+  async update(id: ItemId, patch: ItemUpdate) {
+    const exists = await this.prisma.item.findUnique({ where: { id } });
     if (!exists) return undefined;
 
-    const row = await prisma.item.update({
+    const row = await this.prisma.item.update({
       where: { id },
       data: {
         name: patch.name?.trim() || undefined,
         description:
-          patch.description !== undefined
-            ? patch.description?.trim() || null
-            : undefined,
+          patch.description !== undefined ? (patch.description?.trim() || null) : undefined,
         quantity:
-          patch.quantity !== undefined
-            ? patch.quantity ?? exists.quantity
-            : undefined,
+          patch.quantity !== undefined ? (patch.quantity ?? exists.quantity) : undefined,
         purchased: patch.purchased ?? undefined,
       },
     });
     return mapPrismaItemToDomain(row);
   }
 
-  async delete(id: ItemId): Promise<boolean> {
+  async delete(id: ItemId) {
     try {
-      await prisma.item.delete({ where: { id } });
+      await this.prisma.item.delete({ where: { id } });
       return true;
     } catch {
       return false;
     }
   }
 }
-
-export const prismaItemsRepo: ItemsRepo = new PrismaItemsRepo();

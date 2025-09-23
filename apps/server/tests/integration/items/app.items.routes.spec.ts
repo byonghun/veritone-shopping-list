@@ -21,7 +21,7 @@ async function createItem(name = "Milk", quantity = 1, description?: string) {
   };
 }
 
-describe("items routes via full app (separated CRUD tests)", () => {
+describe("Items routes CRUD tests", () => {
   it("POST /api/v1/items creates an item", async () => {
     const created = await createItem("Bananas", 6);
 

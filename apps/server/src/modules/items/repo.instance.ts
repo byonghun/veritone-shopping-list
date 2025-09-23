@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import type { ItemsRepo } from "./repo";
 import { itemsRepo as inMemory } from "./repo.inMemory";
 
@@ -28,8 +29,8 @@ export async function initItemsRepo(): Promise<void> {
   if (IS_TEST) return; // tests always use in-memory
 
   if (await canReachDb()) {
-    const { prismaItemsRepo } = await import("./repo.prisma");
-    itemsRepoInstance = prismaItemsRepo;
+    const { PrismaItemsRepo } = await import("./repo.prisma");
+    itemsRepoInstance = new PrismaItemsRepo(new PrismaClient());
     console.log("Using Prisma/Postgres repository");
   } else {
     console.log("Using InMemory repository (DB not reachable)");
