@@ -1,4 +1,3 @@
-// apps/server/tests/integration/app.http.spec.ts
 import { describe, it, expect } from "@jest/globals";
 import request from "supertest";
 import { app } from "../../../src/app"

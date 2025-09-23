@@ -1,4 +1,3 @@
-// src/repos/repo.prisma.ts
 import type { PrismaClient } from "@prisma/client";
 import type { ItemCreate, ItemId, ItemUpdate } from "./domain";
 import type { ItemsRepo } from "./repo";
