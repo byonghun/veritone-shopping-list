@@ -21,7 +21,7 @@ describe("mapPrismaItemToDomain function test", () => {
     expect(item).toEqual({
       id: "a",
       name: "Milk",
-      description: undefined, // null → undefined
+      description: undefined,
       quantity: 1,
       purchased: false,
       createdAt: createdAt.toISOString(),
