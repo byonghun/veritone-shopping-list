@@ -1,6 +1,6 @@
-import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain.js";
-import type { ItemsRepo } from "./repo.js";
-import { prisma } from "../../db/prisma.js";
+import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain";
+import type { ItemsRepo } from "./repo";
+import { prisma } from "../../db/prisma";
 
 function mapPrismaItemToDomain(row: {
   id: string;

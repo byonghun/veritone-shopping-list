@@ -1,7 +1,7 @@
 // NOTE: Provides repository implementation prior to connecting to the Postgres database
 import { nanoid } from "nanoid";
-import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain.js";
-import type { ItemsRepo } from "./repo.js";
+import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain";
+import type { ItemsRepo } from "./repo";
 
 const nowISO = (): string => new Date().toISOString();
 

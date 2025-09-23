@@ -1,4 +1,4 @@
-import { createItemsService } from "./service.js";
-import { itemsRepoInstance } from "./repo.instance.js";
+import { createItemsService } from "./service";
+import { itemsRepoInstance } from "./repo.instance";
 
 export const ItemsService = createItemsService(itemsRepoInstance);

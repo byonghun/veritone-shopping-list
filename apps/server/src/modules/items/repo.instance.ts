@@ -1,11 +1,11 @@
-import type { ItemsRepo } from "./repo.js";
-import { itemsRepo as inMemory } from "./repo.inMemory.js";
+import type { ItemsRepo } from "./repo";
+import { itemsRepo as inMemory } from "./repo.inMemory";
 
 async function canReachDb(): Promise<boolean> {
   if (!process.env.DATABASE_URL) return false;
 
   try {
-    const { prisma } = await import("../../db/prisma.js");
+    const { prisma } = await import("../../db/prisma");
     const timeout = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error("db-timeout")), 1500)
     );
@@ -21,7 +21,7 @@ let chosen: ItemsRepo = inMemory;
 const reachedDb = await canReachDb()
 
 if (reachedDb) {
-  const mod = await import("./repo.prisma.js");
+  const mod = await import("./repo.prisma");
   chosen = mod.prismaItemsRepo;
   console.log("Using Prisma/Postgres repository");
 } else {
