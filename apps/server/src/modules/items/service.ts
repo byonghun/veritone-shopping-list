@@ -1,5 +1,5 @@
-import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain.js";
-import type { ItemsRepo } from "./repo.js";
+import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain";
+import type { ItemsRepo } from "./repo";
 
 export function createItemsService(repo: ItemsRepo) {
   return {

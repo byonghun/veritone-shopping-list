@@ -1,4 +1,7 @@
 import { app } from "./app";
+import { initItemsRepo } from "./modules/items/repo.instance";
+
+await initItemsRepo();
 
 const port = Number(process.env.PORT ?? 3001);
 

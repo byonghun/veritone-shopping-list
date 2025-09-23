@@ -7,7 +7,7 @@ import {
   type ItemCreateInput,
   type ItemUpdateInput,
   type ItemIdInput,
-} from "./schemas.js";
+} from "./schemas";
 
 export const ItemsController = {
   /** GET /api/v1/items — list all (MVP) */
