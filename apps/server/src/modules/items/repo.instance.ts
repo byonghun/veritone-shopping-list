@@ -1,6 +1,11 @@
 import type { ItemsRepo } from "./repo";
 import { itemsRepo as inMemory } from "./repo.inMemory";
 
+const IS_TEST =
+  process.env.NODE_ENV === "test" ||
+  typeof process.env.JEST_WORKER_ID !== "undefined";
+
+
 async function canReachDb(): Promise<boolean> {
   if (!process.env.DATABASE_URL) return false;
 
@@ -12,20 +17,21 @@ async function canReachDb(): Promise<boolean> {
     await Promise.race([prisma.$queryRaw`SELECT 1`, timeout]);
     return true;
   } catch (e) {
-    console.warn("[items] DB probe failed:", (e as Error).message);
+    console.warn("DB probe failed:", (e as Error).message);
     return false;
   }
 }
 
-let chosen: ItemsRepo = inMemory;
-const reachedDb = await canReachDb()
+export let itemsRepoInstance: ItemsRepo = inMemory;
 
-if (reachedDb) {
-  const mod = await import("./repo.prisma");
-  chosen = mod.prismaItemsRepo;
-  console.log("Using Prisma/Postgres repository");
-} else {
-  console.log("Using InMemory repository");
+export async function initItemsRepo(): Promise<void> {
+  if (IS_TEST) return; // tests always use in-memory
+
+  if (await canReachDb()) {
+    const { prismaItemsRepo } = await import("./repo.prisma");
+    itemsRepoInstance = prismaItemsRepo;
+    console.log("Using Prisma/Postgres repository");
+  } else {
+    console.log("Using InMemory repository (DB not reachable)");
+  }
 }
-
-export const itemsRepoInstance: ItemsRepo = chosen;
