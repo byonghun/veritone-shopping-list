@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       boxShadow: {
-        dialog: "0 4px 34px 0 rgba(0, 0, 0, 0.5)"
+        dialog: "0 4px 34px 0 rgba(0, 0, 0, 0.5)",
+        drawer: "0 0 14px 0 rgba(0,0,0,0.25)",
       },
       colors: {
         brand: "#4D81B7",
@@ -13,7 +14,9 @@ export default {
         borderGray: "#C6C6C6",
         textGray: "#87898C",
         descriptionGray: '#5C6269',
-        titleBlack: '#2A323C'
+        titleBlack: '#2A323C',
+        drawerHeaderBg: '#FAFAFA',
+        drawerBorderGray: "#D5DFE9"
       },
       fontFamily: {
         dosis: ['"Dosis"', "ui-sans-serif", "system-ui", "sans-serif"],
