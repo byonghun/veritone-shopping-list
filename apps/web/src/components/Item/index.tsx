@@ -33,12 +33,16 @@ const Item: FC<ItemProps> = ({
         <Checkbox
           id="list-item-purchased"
           name="list-item-purchased"
+          aria-label={`Mark ${itemName} as purchased`}
           checked={purchased}
           onCheckedChange={(checkedState: boolean) => {
             onTogglePurchased(id, checkedState);
           }}
         />
-        <div id="item-content" className="flex flex-col font-nunito gap-[3px]">
+        <div
+          id="item-content"
+          className="flex flex-col font-nunito gap-[3px] pr-4 max-w-prose"
+        >
           <h3
             className={cn(
               "font-semibold text-base leading-5",
@@ -50,7 +54,7 @@ const Item: FC<ItemProps> = ({
           {description && (
             <p
               className={cn(
-                "text-listDescriptionGray text-sm font-semibold",
+                "text-listDescriptionGray text-sm font-semibold line-clamp-3",
                 purchased && "line-through"
               )}
             >

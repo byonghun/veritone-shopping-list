@@ -56,6 +56,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "assets/[name].[contenthash].css",
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "public", to: "."}
+      ]
+    })
   ],
   optimization: {
     splitChunks: { chunks: "all" },

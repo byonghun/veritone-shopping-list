@@ -5,9 +5,9 @@ module.exports = {
   mode: "development",
   entry: path.resolve(__dirname, "src/main.tsx"),
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "dist"), // emitted only if you run a build; dev server serves from memory
     filename: "assets/[name].js",
-    publicPath: "/",
+    publicPath: "/", // SPA base path
   },
   devtool: "eval-source-map",
   resolve: {
@@ -61,6 +61,18 @@ module.exports = {
     client: {
       overlay: true,
     },
-    static: { directory: path.resolve(__dirname, "dist") },
+    static: {
+      directory: path.resolve(__dirname, "public"),
+      publicPath: "/",
+      watch: true,
+    },
+    // { directory: path.resolve(__dirname, "dist") },
+    watchFiles: {
+      paths: [
+        path.resolve(__dirname, "src/index.html"),
+        path.resolve(__dirname, "public/**/*"),
+      ],
+      options: { usePolling: false },
+    },
   },
 };

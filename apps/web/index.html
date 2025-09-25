@@ -3,12 +3,23 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="description" content="A simple shopping list app." />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&display=swap"
-    rel="stylesheet" />
+
+  <!-- Preconnect early to font servers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Preload the Google Fonts stylesheet non-blocking -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&display=optional"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&display=optional">
+  </noscript>
+
   <title>Shopping List</title>
-  <meta name="Veritone Shopping List" content="A basic shopping list.">
 </head>
 
 <body class="bg-white">

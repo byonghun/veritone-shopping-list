@@ -59,7 +59,11 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
         <DialogContent
           className={cn("bg-white", className)}
           showCloseButton={!onConfirm}
-          onOpenAutoFocus={(e) => e.preventDefault()}
+          onOpenAutoFocus={(e) => {
+            // Note: this stops Radix’s default target and focuses on the content container
+            e.preventDefault();
+            (e.currentTarget as HTMLElement).focus();
+          }}
         >
           <DialogHeader>
             <DialogTitle
