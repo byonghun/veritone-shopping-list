@@ -25,8 +25,8 @@ const Item: FC<ItemProps> = ({
   return (
     <div
       className={cn(
-        "w-full h-[87px] p-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px]",
-        purchased && "bg-drawerBorderGray/[0.17] border-none"
+        "w-full sm:h-[87px] p-4 px-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px] min-h-[87px]",
+        purchased && "bg-drawerBorderGray/[0.17] border-transparent"
       )}
     >
       <div className="flex gap-[18px] items-center">
