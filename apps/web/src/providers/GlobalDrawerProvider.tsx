@@ -246,7 +246,7 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
             </div>
           </div>
           <DrawerFooter className="bg-white w-full flex">
-            <div className="flex gap-4 w-[cacl(163px_+_1rem)] justify-end pr-2 font-nunito">
+            <div className="flex gap-4 w-full justify-end pr-2 font-nunito mb-1">
               <DrawerClose asChild>
                 <Button variant="secondary" className="h-9 font-normal hover:opacity-80">
                   Cancel
