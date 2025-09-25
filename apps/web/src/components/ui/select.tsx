@@ -1,7 +1,7 @@
 import { FC } from "react";
 
-import { AMOUNT_LIMIT } from "../constants/drawer";
-import ArrowIcon from "../icons/ArrowIcon";
+import { AMOUNT_LIMIT } from "../../constants/drawer";
+import ArrowIcon from "../Icons/ArrowIcon";
 import { cn } from "../../utils";
 
 interface CustomSelectProps {

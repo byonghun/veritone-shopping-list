@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GlobalDrawerContext } from "../components/providers/GlobalDrawerProvider";
+import { GlobalDrawerContext } from "../providers/GlobalDrawerProvider";
 
 export const useDrawer = () => {
   const context = useContext(GlobalDrawerContext);

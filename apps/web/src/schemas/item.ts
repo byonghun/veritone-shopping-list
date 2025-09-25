@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AMOUNT_LIMIT } from "../components/constants/drawer";
+import { AMOUNT_LIMIT } from "../constants/drawer";
 
 export const ItemSchema = z.object({
   itemName: z

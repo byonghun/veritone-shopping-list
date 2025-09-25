@@ -1,11 +1,14 @@
-import { FC, ReactNode, createContext, useState } from "react";
+import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { DEFAULT_GLOBAL_DRAWER_PROPS } from "../constants/drawer";
-import HideIcon from "../icons/HideIcon";
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
+import {
+  DEFAULT_ITEM,
+  MAX_DESCRIPTION,
+} from "../constants/drawer";
+import HideIcon from "../components/Icons/HideIcon";
+import { Button } from "../components/ui/button";
+import { Checkbox } from "../components/ui/checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -14,13 +17,13 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "../ui/drawer";
-import { Input } from "../ui/input";
-import Select from "../ui/select";
-import { Textarea } from "../ui/textarea";
-import { ItemSchema, ItemFormInput, ItemFormOutput } from "../../schemas/item";
-import { GlobalDrawerContextType, GlobalDrawerProps } from "../../types/drawer";
-import { cn } from "../../utils";
+} from "../components/ui/drawer";
+import { Input } from "../components/ui/input";
+import Select from "../components/ui/select";
+import { Textarea } from "../components/ui/textarea";
+import { ItemSchema, ItemFormInput, ItemFormOutput } from "../schemas/item";
+import { GlobalDrawerContextType, GlobalDrawerProps } from "../types/drawer";
+import { cn } from "../utils";
 
 export const GlobalDrawerContext =
   createContext<GlobalDrawerContextType | null>(null);
@@ -32,14 +35,15 @@ interface GlobalDrawerProviderProps {
 const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [selectOpen, setSelectOpen] = useState(false);
-  const [drawerProps, setDrawerProps] = useState<GlobalDrawerProps>(
-    DEFAULT_GLOBAL_DRAWER_PROPS
-  );
+  const [drawerProps, setDrawerProps] = useState<GlobalDrawerProps>({
+    defaultValues: DEFAULT_ITEM
+  });
 
   const {
     type,
     description = "Add your new item below",
     descriptionTextClassName,
+    defaultValues,
   } = drawerProps;
 
   const isUpdateMode = type === "update";
@@ -54,25 +58,29 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
   } = useForm<ItemFormInput, any, ItemFormOutput>({
     resolver: zodResolver(ItemSchema),
     mode: "onChange",
-    defaultValues: {
-      itemName: "",
-      description: "",
-      quantity: undefined,
-      purchased: false,
-    },
+    defaultValues,
   });
 
   const descriptionValue = watch("description") ?? "";
-  const maxDescription = 100;
   const quantityValue = watch("quantity") as number | undefined;
 
+  useEffect(() => {
+    console.log({type, defaultValues })
+    if(type === undefined) return
+
+    if (type === "update" || type === 'create') {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset, type]);
+
   const clearForm = () =>
-    reset({
-      itemName: "",
-      description: "",
-      quantity: undefined,
-      purchased: false,
-    });
+    reset(DEFAULT_ITEM);
+
+  useEffect(() => {
+    if (!open && isDirty) {
+      clearForm();
+    }
+  }, [open, isDirty]);
 
   const onSubmit: SubmitHandler<ItemFormOutput> = async (data) => {
     // API Call
@@ -165,13 +173,13 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
                     <span
                       className={cn(
                         "text-xs absolute bottom-3 right-3",
-                        descriptionValue.length > maxDescription
+                        descriptionValue.length > MAX_DESCRIPTION
                           ? "text-red-600"
                           : "text-descriptionGray"
                       )}
                       aria-live="polite"
                     >
-                      {descriptionValue.length}/{maxDescription}
+                      {descriptionValue.length}/{MAX_DESCRIPTION}
                     </span>
                   </div>
                   {errors.description && (

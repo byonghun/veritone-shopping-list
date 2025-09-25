@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GlobalDialogContext } from "../components/providers/GlobalDialogProvider";
+import { GlobalDialogContext } from "../providers/GlobalDialogProvider";
 
 export const useDialog = () => {
   const context = useContext(GlobalDialogContext);

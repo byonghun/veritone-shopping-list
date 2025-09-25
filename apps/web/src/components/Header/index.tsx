@@ -1,8 +1,15 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { ROUTES } from "../../constants/routes";
 
 const Header = () => {
   const navigate = useNavigate();
-  const onClick = () => navigate("/");
+  const location = useLocation();
+
+  const onClick = () => {
+    if (location.pathname !== ROUTES.home) {
+      navigate(ROUTES.home);
+    }
+  };
 
   return (
     <header className="flex items-center justify-between px-[30px] h-[64px] bg-brand">

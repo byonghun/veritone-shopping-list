@@ -1,7 +1,7 @@
 import { FC, ReactNode, createContext,  useState } from "react";
 
 import { DEFAULT_GLOBAL_DIALOG_PROPS } from "../constants/dialog";
-import { Button } from "../ui/button";
+import { Button } from "../components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,9 +10,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
-import { GlobalDialogContextType, GlobalDialogProps } from "../../types/dialog";
-import { cn } from "../../utils";
+} from "../components/ui/dialog";
+import { GlobalDialogContextType, GlobalDialogProps } from "../types/dialog";
+import { cn } from "../utils";
 
 export const GlobalDialogContext =
   createContext<GlobalDialogContextType | null>(null);

@@ -4,8 +4,8 @@ import { BrowserRouter } from "react-router";
 
 import "./index.css";
 import App from "./App";
-import GlobalDialogProvider from "./components/providers/GlobalDialogProvider";
-import GlobalDrawerProvider from "./components/providers/GlobalDrawerProvider";
+import GlobalDialogProvider from "./providers/GlobalDialogProvider";
+import GlobalDrawerProvider from "./providers/GlobalDrawerProvider";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element #root not found");
