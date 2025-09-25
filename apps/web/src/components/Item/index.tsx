@@ -19,10 +19,16 @@ const Item: FC<ItemProps> = ({
   description,
   id,
   purchased,
-  ...item
+  itemName,
+  quantity
 }) => {
   return (
-    <div className="w-full h-[87px] p-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px]">
+    <div
+      className={cn(
+        "w-full h-[87px] p-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px]",
+        purchased && "bg-drawerBorderGray/[0.17] border-none"
+      )}
+    >
       <div className="flex gap-[18px] items-center">
         <Checkbox
           id="list-item-purchased"
@@ -39,7 +45,7 @@ const Item: FC<ItemProps> = ({
               purchased && "line-through text-brand"
             )}
           >
-            {item.itemName}
+            {`${(quantity ?? 1) > 1 ? `${quantity}x` : ""} ${itemName}`}
           </h3>
           {description && (
             <p

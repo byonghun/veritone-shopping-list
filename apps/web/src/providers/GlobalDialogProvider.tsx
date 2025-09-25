@@ -47,6 +47,11 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
 
   const closeDialog = () => setOpen(false);
 
+  const onClick = () => {
+    onConfirm()
+    setOpen(false)
+  }
+
   return (
     <GlobalDialogContext.Provider value={{ openDialog, closeDialog }}>
       {children}
@@ -63,22 +68,20 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
               {title}
             </DialogTitle>
             {description && (
-              <DialogDescription
-                className={descriptionTextClassName}
-              >
+              <DialogDescription className={descriptionTextClassName}>
                 {description}
               </DialogDescription>
             )}
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="secondary">{closeBtnLabel}</Button>
-            </DialogClose>
-            {onConfirm && (
-              <Button variant="default" onClick={onConfirm}>
-                {btnLabel}
+              <Button variant="secondary" className="hover:opacity-80">
+                {closeBtnLabel}
               </Button>
-            )}
+            </DialogClose>
+            <Button variant="default" onClick={onClick}>
+              {btnLabel}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

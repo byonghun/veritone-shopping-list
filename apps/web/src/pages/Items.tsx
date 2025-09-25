@@ -17,7 +17,7 @@ const ItemsPage = () => {
   }
 
   const onDrawerOpen = () => {
-    openDrawer({ type: "create", defaultValues: DEFAULT_ITEM });
+    openDrawer({ type: "create", defaultValues: DEFAULT_ITEM, onConfirm: () => {} });
   };
 
   return (

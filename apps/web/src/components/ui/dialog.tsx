@@ -132,7 +132,7 @@ function DialogDescription({
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={cn(
-        "max-w-[350px] text-sm leading-6 text-descriptionGray",
+        "max-w-[350px] text-sm leading-6 text-secondaryFont",
         className
       )}
       {...props}

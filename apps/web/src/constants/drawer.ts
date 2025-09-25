@@ -1,3 +1,4 @@
+import { GlobalDrawerProps } from "../types/drawer";
 import { TItem } from "../types/item";
 
 export const AMOUNT_LIMIT = 5;
@@ -11,3 +12,8 @@ export const DEFAULT_ITEM: TItem = {
   quantity: undefined,
   purchased: false,
 };
+
+export const DEFAULT_GLOBAL_DRAWER_PROPS: GlobalDrawerProps = {
+  defaultValues: DEFAULT_ITEM,
+  onConfirm: () => {}
+}

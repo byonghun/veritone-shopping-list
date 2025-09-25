@@ -3,6 +3,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
+  DEFAULT_GLOBAL_DRAWER_PROPS,
   DEFAULT_ITEM,
   MAX_DESCRIPTION,
 } from "../constants/drawer";
@@ -35,15 +36,14 @@ interface GlobalDrawerProviderProps {
 const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [selectOpen, setSelectOpen] = useState(false);
-  const [drawerProps, setDrawerProps] = useState<GlobalDrawerProps>({
-    defaultValues: DEFAULT_ITEM
-  });
+  const [drawerProps, setDrawerProps] = useState<GlobalDrawerProps>(DEFAULT_GLOBAL_DRAWER_PROPS);
 
   const {
     type,
     description = "Add your new item below",
     descriptionTextClassName,
     defaultValues,
+    onConfirm
   } = drawerProps;
 
   const isUpdateMode = type === "update";
@@ -65,7 +65,6 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
   const quantityValue = watch("quantity") as number | undefined;
 
   useEffect(() => {
-    console.log({type, defaultValues })
     if(type === undefined) return
 
     if (type === "update" || type === 'create') {
@@ -84,9 +83,12 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
 
   const onSubmit: SubmitHandler<ItemFormOutput> = async (data) => {
     // API Call
-    console.log({ data });
     clearForm();
     setOpen(false);
+    onConfirm && onConfirm({
+      ...data,
+      quantity: data.quantity ?? 1
+    })
   };
 
   const openDrawer = (props: GlobalDrawerProps) => {
@@ -111,7 +113,7 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
           <div className="h-full bg-white">
             <DrawerHeader className="bg-drawerHeaderBg w-full h-16 pl-[30px] border-b-[0.5px] border-drawerBorderGray">
               <div className="w-full h-full flex items-center justify-between">
-                <DrawerTitle className="text-descriptionGray font-dosis">
+                <DrawerTitle className="text-secondaryFont font-dosis">
                   SHOPPING LIST
                 </DrawerTitle>
                 <button
@@ -126,11 +128,11 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
             </DrawerHeader>
             <div className="pl-[30px] pt-7 pr-6">
               <div className="flex flex-col font-nunito font-normal mb-4">
-                <h2 className="text-lg leading-6">Add an Item</h2>
+                <h2 className="text-lg leading-6 text-primaryFont">Add an Item</h2>
                 <div className="flex items-center justify-between">
                   <DrawerDescription
                     className={cn(
-                      "text-base leading-[22px] text-descriptionGray mt-2",
+                      "text-base leading-[22px] text-secondaryFont mt-2",
                       descriptionTextClassName
                     )}
                   >
@@ -175,7 +177,7 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
                         "text-xs absolute bottom-3 right-3",
                         descriptionValue.length > MAX_DESCRIPTION
                           ? "text-red-600"
-                          : "text-descriptionGray"
+                          : "text-secondaryFont"
                       )}
                       aria-live="polite"
                     >
@@ -246,7 +248,7 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
           <DrawerFooter className="bg-white w-full flex">
             <div className="flex gap-4 w-[cacl(163px_+_1rem)] justify-end pr-2 font-nunito">
               <DrawerClose asChild>
-                <Button variant="secondary" className="h-9 font-normal">
+                <Button variant="secondary" className="h-9 font-normal hover:opacity-80">
                   Cancel
                 </Button>
               </DrawerClose>

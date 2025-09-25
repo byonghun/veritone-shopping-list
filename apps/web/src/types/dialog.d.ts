@@ -1,20 +1,19 @@
 export type GlobalDialogType =
-  | 'update'
   | 'delete'
   | 'alert'
   | 'error'
 
 export type GlobalDialogProps = {
-  title: string
   type: GlobalDialogType
+  title: string
   btnLabel?: string
   className?: string
   closeBtnLabel?: string
-  description?: string
+  description: string
   descriptionTextClassName?: string
   headerTextClassName?: string
   triggerLabel?: string
-  onConfirm?: () => void
+  onConfirm: () => void
 }
 
 export type GlobalDialogContextType = {
