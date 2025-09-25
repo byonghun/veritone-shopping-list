@@ -9,8 +9,8 @@ async function main() {
 
   await prisma.item.createMany({
     data: [
-      { name: "Apples", description: "Honey Crisp", quantity: 8 },
-      { name: "Eggs", description: "Free-range", quantity: 20 },
+      { itemName: "Apples", description: "Honey Crisp", quantity: 8 },
+      { itemName: "Eggs", description: "Free-range", quantity: 20 },
     ],
   });
 }

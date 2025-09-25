@@ -27,7 +27,7 @@
     "express": "4.19.2",
     "morgan": "1.10.0",
     "nanoid": "5.0.7",
-    "zod": "3.23.8"
+    "zod": "4.1.11"
   },
   "devDependencies": {
     "@types/cors": "2.8.17",
@@ -44,6 +44,6 @@
     "typescript": "5.6.2"
   },
   "engines": {
-    "node": "22.x"
+    "node": ">=18.0.0"
   }
 }

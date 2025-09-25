@@ -22,7 +22,7 @@ export class InMemoryItemsRepo implements ItemsRepo {
     const createdAt = nowISO();
     const item: Item = {
       id,
-      name: input.name,
+      itemName: input.itemName,
       description: input.description?.trim() || undefined,
       quantity: Number(input.quantity ?? 1),
       purchased: false,
@@ -39,7 +39,7 @@ export class InMemoryItemsRepo implements ItemsRepo {
 
     const next: Item = {
       ...current,
-      name: patch.name?.trim() ?? current.name,
+      itemName: patch.itemName?.trim() ?? current.itemName,
       description:
         patch.description !== undefined ? patch.description.trim() || undefined : current.description,
       quantity: patch.quantity !== undefined ? Math.max(1, Number(patch.quantity)) : current.quantity,
@@ -60,5 +60,5 @@ export class InMemoryItemsRepo implements ItemsRepo {
 export const itemsRepo = new InMemoryItemsRepo();
 
 // Seed a couple for quick manual checks
-void itemsRepo.create({ name: "Apples", description: "Honey Crisp", quantity: 4 });
-void itemsRepo.create({ name: "Eggs", description: "Free-range", quantity: 12 });
+void itemsRepo.create({ itemName: "Apples", description: "Honey Crisp", quantity: 4 });
+void itemsRepo.create({ itemName: "Eggs", description: "Free-range", quantity: 12 });

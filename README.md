@@ -6,7 +6,7 @@ Shopping List App
 - Docker Desktop
   - macOS - `brew install --cask docker`
   - Windows 10/11 (WSL2 recommended) - `winget install -e --id Docker.DockerDesktop`
-- Node.js 22.x
+- Node.js >=18.0.0
 - Npm 10.9.2
 
 ### Environment Variables

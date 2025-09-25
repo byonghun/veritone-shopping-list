@@ -5,13 +5,13 @@ export const ItemIdSchema = z.object({
 });
 
 export const ItemCreateSchema = z.object({
-  name: z.string().min(1, "name is required").max(120),
-  description: z.string().max(500).optional(),
-  quantity: z.coerce.number().int().min(1).max(999).optional(),
+  itemName: z.string().min(1, "Item name is required").max(120),
+  description: z.string().max(100).optional(),
+  quantity: z.coerce.number().int().min(1).max(5).optional(),
 });
 
 export const ItemUpdateSchema = z.object({
-  name: z.string().min(1).max(120).optional(),
+  itemName: z.string().min(1).max(120).optional(),
   description: z
     .string()
     .max(500)

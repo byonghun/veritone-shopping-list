@@ -19,7 +19,7 @@ export class PrismaItemsRepo implements ItemsRepo {
   async create(input: ItemCreate) {
     const row = await this.prisma.item.create({
       data: {
-        name: input.name,
+        itemName: input.itemName,
         description: input.description?.trim() || null,
         quantity: input.quantity ?? 1,
         purchased: false,
@@ -35,7 +35,7 @@ export class PrismaItemsRepo implements ItemsRepo {
     const row = await this.prisma.item.update({
       where: { id },
       data: {
-        name: patch.name?.trim() || undefined,
+        itemName: patch.itemName?.trim() || undefined,
         description:
           patch.description !== undefined ? (patch.description?.trim() || null) : undefined,
         quantity:

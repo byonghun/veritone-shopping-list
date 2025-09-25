@@ -11,7 +11,7 @@ import { createItemsService } from "../../../src/modules/items/service";
 function makeItem(overrides: Partial<Item> = {}): Item {
   return {
     id: "test-id-1",
-    name: "Milk",
+    itemName: "Milk",
     quantity: 1,
     purchased: false,
     createdAt: new Date().toISOString(),
@@ -57,13 +57,13 @@ describe("Items Service file test", () => {
 
   it("create passes input through to repo", async () => {
     const input: ItemCreate = {
-      name: "Eggs",
+      itemName: "Eggs",
       quantity: 12,
       description: "Dozen",
     };
     const created = makeItem({
       id: "new",
-      name: "Eggs",
+      itemName: "Eggs",
       quantity: 12,
       description: "Dozen",
     });

@@ -3,18 +3,18 @@ import request from "supertest";
 import { app } from "../../../src/app";
 
 // Helper to create an item for a test
-async function createItem(name = "Milk", quantity = 1, description?: string) {
+async function createItem(itemName = "Milk", quantity = 1, description?: string) {
   const res = await request(app)
     .post("/api/v1/items")
     .set("Content-Type", "application/json")
-    .send({ name, quantity, description })
+    .send({ itemName, quantity, description })
     .expect(201);
 
   expect(typeof res.body.id).toBe("string");
   expect(res.headers["x-api-version"]).toBe("v1");
   return res.body as {
     id: string;
-    name: string;
+    itemName: string;
     quantity: number;
     description?: string;
     purchased: boolean;
@@ -27,7 +27,7 @@ describe("Items routes CRUD tests", () => {
 
     expect(created).toEqual(
       expect.objectContaining({
-        name: "Bananas",
+        itemName: "Bananas",
         quantity: 6,
         purchased: false,
       })
@@ -45,7 +45,7 @@ describe("Items routes CRUD tests", () => {
     expect(getRes.body).toEqual(
       expect.objectContaining({
         id: created.id,
-        name: "Eggs",
+        itemName: "Eggs",
         description: "Dozen",
         quantity: 12,
         purchased: false,
@@ -66,7 +66,7 @@ describe("Items routes CRUD tests", () => {
     expect(patchRes.body).toEqual(
       expect.objectContaining({
         id: created.id,
-        name: "Milk",
+        itemName: "Milk",
         description: "Whole",
         quantity: 3,
         purchased: true,
@@ -86,11 +86,11 @@ describe("Items routes CRUD tests", () => {
     await request(app).get(`/api/v1/items/${created.id}`).expect(404);
   });
 
-  it("400 on create when 'name' is missing", async () => {
+  it("400 on create when 'itemName' is missing", async () => {
     const res = await request(app)
       .post("/api/v1/items")
       .set("Content-Type", "application/json")
-      .send({ quantity: 1, description: "no name" })
+      .send({ quantity: 1, description: "no itemName" })
       .expect(400);
 
     expect(res.body).toEqual(
@@ -106,7 +106,7 @@ describe("Items routes CRUD tests", () => {
     const res = await request(app)
       .post("/api/v1/items")
       .set("Content-Type", "application/json")
-      .send({ name: "Grapes", quantity: "twelve" })
+      .send({ itemName: "Grapes", quantity: "twelve" })
       .expect(400);
 
     expect(res.body.error).toBe("BAD_REQUEST");
@@ -127,7 +127,7 @@ describe("Items routes CRUD tests", () => {
     const created = await request(app)
       .post("/api/v1/items")
       .set("Content-Type", "application/json")
-      .send({ name: "Apples", quantity: 4 })
+      .send({ itemName: "Apples", quantity: 4 })
       .expect(201);
 
     // now send an invalid patch (wrong types)

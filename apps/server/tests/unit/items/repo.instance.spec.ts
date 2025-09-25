@@ -33,11 +33,11 @@ describe("Confirms test environment never uses Prisma and uses in-memory repo", 
 
     // functional check (works even if instanceof ever changes)
     const created = await itemsRepoInstance.create({
-      name: "Test",
+      itemName: "Test",
       quantity: 1,
     });
     const got = await itemsRepoInstance.get(created.id);
-    expect(got?.name).toBe("Test");
+    expect(got?.itemName).toBe("Test");
   });
 
   it("in Jest/test env: stays in-memory and does not import prisma repo", async () => {

@@ -9,7 +9,7 @@ datasource db {
 
 model Item {
   id          String   @id @default(cuid())
-  name        String
+  itemName    String
   description String?
   quantity    Int      @default(1)
   purchased   Boolean  @default(false)
