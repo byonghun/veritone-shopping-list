@@ -23,6 +23,7 @@ export default {
         drawerHeaderBg: "#FAFAFA",
         drawerBorderGray: "#D5DFE9",
         placeholderGray: "#9CA8BA",
+        listDescriptionGray: "#7D7A7A"
       },
       fontFamily: {
         dosis: ['"Dosis"', "ui-sans-serif", "system-ui", "sans-serif"],

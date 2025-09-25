@@ -1,9 +1,11 @@
+import { TItem } from "./item"
+
 export type GlobalDrawerType =
   | 'update'
   | 'create'
 
 export type GlobalDrawerProps = {
-  type: GlobalDrawerType
+  type?: GlobalDrawerType
   btnLabel?: string
   className?: string
   closeBtnLabel?: string
@@ -11,6 +13,7 @@ export type GlobalDrawerProps = {
   descriptionTextClassName?: string
   headerTextClassName?: string
   triggerLabel?: string
+  defaultValues: TItem
   onConfirm?: () => void
 }
 

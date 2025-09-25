@@ -7,9 +7,9 @@ const NotFoundPage = () => {
 
   return (
     <div className="w-full">
-      <div className="mt-4 h-96 md:mt-[110px] md:mx-auto md:w-[614px] md:h-[290px] border border-borderGray rounded-[5px] flex items-center justify-center">
-        <div className="font-nunito w-[250px] flex flex-col items-center gap-4 lg:mb-6">
-          <p className="font-normal text-textGray leading-6 text-[18px]">
+      <div className="card-wrapper">
+        <div className="card-content">
+          <p className="cart-text">
             Page Not Found.
           </p>
           <Button variant="default" onClick={onClick}>
