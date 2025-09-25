@@ -14,9 +14,10 @@ export default {
         borderGray: "#C6C6C6",
         textGray: "#87898C",
         descriptionGray: '#5C6269',
-        titleBlack: '#2A323C',
+        primaryFont: '#2A323C',
         drawerHeaderBg: '#FAFAFA',
-        drawerBorderGray: "#D5DFE9"
+        drawerBorderGray: "#D5DFE9",
+        placeholderGray: '#9CA8BA'
       },
       fontFamily: {
         dosis: ['"Dosis"', "ui-sans-serif", "system-ui", "sans-serif"],
