@@ -3,7 +3,7 @@ export type ItemId = string;
 
 export interface Item {
   id: ItemId;
-  name: string;
+  itemName: string;
   description?: string;
   quantity: number;
   purchased: boolean;
@@ -12,9 +12,9 @@ export interface Item {
 }
 
 export type ItemCreate = {
-  name: string;
+  itemName: string;
   description?: string;
   quantity?: number;
 };
 
-export type ItemUpdate = Partial<Pick<Item, "name" | "description" | "quantity" | "purchased">>;
+export type ItemUpdate = Partial<Pick<Item, "itemName" | "description" | "quantity" | "purchased">>;

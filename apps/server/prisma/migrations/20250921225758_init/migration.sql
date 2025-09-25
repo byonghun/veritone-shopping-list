@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "public"."Item" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "itemName" TEXT NOT NULL,
     "description" TEXT,
     "quantity" INTEGER NOT NULL DEFAULT 1,
     "purchased" BOOLEAN NOT NULL DEFAULT false,

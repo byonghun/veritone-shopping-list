@@ -10,12 +10,12 @@ describe("InMemoryItemsRepo (unit)", () => {
 
   it("creates items and lists them back (newest first)", async () => {
     const milk = await repo.create({
-      name: "Milk",
+      itemName: "Milk",
       description: "2%",
       quantity: 1,
     });
     const eggs = await repo.create({
-      name: "Eggs",
+      itemName: "Eggs",
       description: "Dozen",
       quantity: 12,
     });
@@ -30,10 +30,10 @@ describe("InMemoryItemsRepo (unit)", () => {
   });
 
   it("gets, updates, and deletes an item", async () => {
-    const item = await repo.create({ name: "Bread", quantity: 1 });
+    const item = await repo.create({ itemName: "Bread", quantity: 1 });
 
     const fetched = await repo.get(item.id);
-    expect(fetched?.name).toBe("Bread");
+    expect(fetched?.itemName).toBe("Bread");
     expect(fetched?.quantity).toBe(1);
     expect(fetched?.purchased).toBe(false);
 

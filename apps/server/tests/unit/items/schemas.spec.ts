@@ -8,19 +8,19 @@ import {
 describe("Item schemas using zod", () => {
   it("ItemCreateSchema accepts valid payload", () => {
     const parsed = ItemCreateSchema.safeParse({
-      name: "Milk",
+      itemName: "Milk",
       quantity: 1,
       description: "2%",
     });
     expect(parsed.success).toBe(true);
     if (parsed.success) {
-      expect(parsed.data.name).toBe("Milk");
+      expect(parsed.data.itemName).toBe("Milk");
       expect(parsed.data.quantity).toBe(1);
       expect(parsed.data.description).toBe("2%");
     }
   });
 
-  it("ItemCreateSchema rejects missing name", () => {
+  it("ItemCreateSchema rejects missing itemName", () => {
     const parsed = ItemCreateSchema.safeParse({ quantity: 1 });
     expect(parsed.success).toBe(false);
     if (!parsed.success) {

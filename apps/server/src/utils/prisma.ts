@@ -2,7 +2,7 @@ import { Item } from "../modules/items/domain";
 
 export function mapPrismaItemToDomain(row: {
   id: string;
-  name: string;
+  itemName: string;
   description: string | null;
   quantity: number;
   purchased: boolean;
@@ -11,7 +11,7 @@ export function mapPrismaItemToDomain(row: {
 }): Item {
   return {
     id: row.id,
-    name: row.name,
+    itemName: row.itemName,
     description: row.description?.trim() ?? undefined,
     quantity: row.quantity,
     purchased: row.purchased,

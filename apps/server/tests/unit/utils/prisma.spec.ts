@@ -8,7 +8,7 @@ describe("mapPrismaItemToDomain function test", () => {
 
     const row = {
       id: "a",
-      name: "Milk",
+      itemName: "Milk",
       description: null,
       quantity: 1,
       purchased: false,
@@ -20,7 +20,7 @@ describe("mapPrismaItemToDomain function test", () => {
 
     expect(item).toEqual({
       id: "a",
-      name: "Milk",
+      itemName: "Milk",
       description: undefined,
       quantity: 1,
       purchased: false,
@@ -35,7 +35,7 @@ describe("mapPrismaItemToDomain function test", () => {
 
     const row = {
       id: "b",
-      name: "Eggs",
+      itemName: "Eggs",
       description: "Dozen",
       quantity: 12,
       purchased: true,
@@ -60,7 +60,7 @@ describe("mapPrismaItemToDomain function test", () => {
 
     const row = {
       id: "c",
-      name: "Bread",
+      itemName: "Bread",
       description: "", // empty string should be preserved (?? only changes null/undefined)
       quantity: 1,
       purchased: false,

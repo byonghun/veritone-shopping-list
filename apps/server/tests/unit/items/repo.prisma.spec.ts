@@ -9,7 +9,7 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
   const now = new Date();
   const baseRow = {
     id: "id-1",
-    name: "Apples",
+    itemName: "Apples",
     description: " Honeycrisp ",
     quantity: 4,
     purchased: false,
@@ -36,7 +36,7 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
     expect(items).toEqual([
       {
         id: "id-1",
-        name: "Apples",
+        itemName: "Apples",
         description: "Honeycrisp",
         quantity: 4,
         purchased: false,
@@ -53,13 +53,13 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
     prismaMock.item.create.mockResolvedValueOnce(baseRow);
     const repo = new PrismaItemsRepo(prismaMock);
     const created = await repo.create({
-      name: "Apples",
+      itemName: "Apples",
       description: "  Honeycrisp  ",
       quantity: 4,
     });
     expect(prismaMock.item.create).toHaveBeenCalledWith({
       data: {
-        name: "Apples",
+        itemName: "Apples",
         description: "Honeycrisp",
         quantity: 4,
         purchased: false,
@@ -71,7 +71,7 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
   it("update returns undefined when not found", async () => {
     prismaMock.item.findUnique.mockResolvedValueOnce(null);
     const repo = new PrismaItemsRepo(prismaMock);
-    const res = await repo.update("missing", { name: "x" });
+    const res = await repo.update("missing", { itemName: "x" });
     expect(res).toBeUndefined();
   });
 
