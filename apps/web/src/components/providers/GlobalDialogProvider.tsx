@@ -1,6 +1,7 @@
-import { FC, ReactNode, createContext, useState } from "react";
+import { FC, ReactNode, createContext,  useState } from "react";
 
 import { DEFAULT_GLOBAL_DIALOG_PROPS } from "../constants/dialog";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,7 +13,6 @@ import {
 } from "../ui/dialog";
 import { GlobalDialogContextType, GlobalDialogProps } from "../../types/dialog";
 import { cn } from "../../utils";
-import { Button } from "../ui/button";
 
 export const GlobalDialogContext =
   createContext<GlobalDialogContextType | null>(null);
@@ -51,7 +51,11 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
     <GlobalDialogContext.Provider value={{ openDialog, closeDialog }}>
       {children}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className={cn("bg-white", className)} showCloseButton={!onConfirm}>
+        <DialogContent
+          className={cn("bg-white", className)}
+          showCloseButton={!onConfirm}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle
               className={cn("flex items-center", headerTextClassName)}
@@ -59,7 +63,9 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
               {title}
             </DialogTitle>
             {description && (
-              <DialogDescription className={cn("mt-1", descriptionTextClassName)}>
+              <DialogDescription
+                className={descriptionTextClassName}
+              >
                 {description}
               </DialogDescription>
             )}
@@ -68,7 +74,11 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
             <DialogClose asChild>
               <Button variant="secondary">{closeBtnLabel}</Button>
             </DialogClose>
-            {onConfirm && <Button variant="default" onClick={onConfirm}>{btnLabel}</Button>}
+            {onConfirm && (
+              <Button variant="default" onClick={onConfirm}>
+                {btnLabel}
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

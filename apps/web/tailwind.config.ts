@@ -1,7 +1,11 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{ts,tsx,js,jsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       boxShadow: {
@@ -14,11 +18,11 @@ export default {
         buttonBlue: "#1871E8",
         borderGray: "#C6C6C6",
         textGray: "#87898C",
-        descriptionGray: '#5C6269',
-        primaryFont: '#2A323C',
-        drawerHeaderBg: '#FAFAFA',
+        descriptionGray: "#5C6269",
+        primaryFont: "#2A323C",
+        drawerHeaderBg: "#FAFAFA",
         drawerBorderGray: "#D5DFE9",
-        placeholderGray: '#9CA8BA'
+        placeholderGray: "#9CA8BA",
       },
       fontFamily: {
         dosis: ['"Dosis"', "ui-sans-serif", "system-ui", "sans-serif"],

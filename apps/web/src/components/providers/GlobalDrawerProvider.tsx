@@ -101,13 +101,18 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
           }}
         >
           <div className="h-full bg-white">
-            <DrawerHeader className="bg-drawerHeaderBg w-full h-16 pl-[30px] pr-6 border-b-[0.5px] border-drawerBorderGray">
+            <DrawerHeader className="bg-drawerHeaderBg w-full h-16 pl-[30px] border-b-[0.5px] border-drawerBorderGray">
               <div className="w-full h-full flex items-center justify-between">
                 <DrawerTitle className="text-descriptionGray font-dosis">
                   SHOPPING LIST
                 </DrawerTitle>
-                <button onClick={closeDrawer}>
-                  <HideIcon className="hover:opacity-80" />
+                <button
+                  onClick={closeDrawer}
+                  className="w-[70px] h-full hover:opacity-80"
+                >
+                  <div className="pl-10">
+                    <HideIcon />
+                  </div>
                 </button>
               </div>
             </DrawerHeader>
@@ -124,7 +129,10 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
                     {description}
                   </DrawerDescription>
                   {isDirty && (
-                    <button onClick={clearForm} className="font-medium text-xs hover:opacity-80 text-primaryFont">
+                    <button
+                      onClick={clearForm}
+                      className="font-medium text-xs hover:opacity-80 text-primaryFont"
+                    >
                       Clear Form
                     </button>
                   )}
