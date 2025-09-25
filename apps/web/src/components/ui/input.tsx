@@ -1,20 +1,26 @@
 import * as React from "react";
-
 import { cn } from "../../utils";
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+type InputProps = React.ComponentPropsWithoutRef<"input">;
+type InputRef = React.ElementRef<"input">;
+
+const Input = React.forwardRef<InputRef, InputProps>(function Input(
+  { className, type = "text", ...props },
+  ref
+) {
   return (
     <input
+      ref={ref}
       type={type}
       data-slot="input"
       className={cn(
-        "focus-visible:border-brand focus-visible:ring-brand/50 focus-visible:ring-[1px]",
-        "w-full border border-drawerBorderGray rounded-md h-[52px] max-w-[504px] text-base font-nunito text-primaryFont pl-3 placeholder:text-placeholderGray",
+        "focus-visible:border-brand focus-visible:outline-none w-full border border-drawerBorderGray rounded-[4px] h-[52px] max-w-[504px] text-base font-nunito text-primaryFont px-3 placeholder:text-placeholderGray",
         className
       )}
       {...props}
     />
   );
-}
+});
 
 export { Input };
+
