@@ -20,14 +20,22 @@ CORS_ORIGIN=http://localhost:5173
 ### Quick Start (Docker)
 ```
 # Build + run dev stack (hot reload via tsx)
+# db + server + web
 npm run dev:docker
 # or
 docker compose up --build
 ```
 
-### Quick Start (Locally)
+### Quick Start Backend (Locally)
 ```
 # Run locally, hot reload via tsx
 cd apps/server
+npm run dev
+```
+
+### Quick Start Frontend (Locally)
+```
+# Run locally, hot reload via tsx
+cd apps/web
 npm run dev
 ```
