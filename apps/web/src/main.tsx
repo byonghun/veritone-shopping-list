@@ -1,6 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
+// Note: Allows Google Fonts to be loaded in docker container
+import "@fontsource/dosis/600.css";
+import "@fontsource/nunito/400.css";
+import "@fontsource/nunito/600.css";
 
 import "./index.css";
 import App from "./App";

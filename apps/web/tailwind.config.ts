@@ -26,7 +26,7 @@ export default {
         listDescriptionGray: "#7D7A7A"
       },
       fontFamily: {
-        dosis: ['"Dosis"', "ui-sans-serif", "system-ui", "sans-serif"],
+        dosis: ['"Dosis"', "Trebuchet MS", "Arial", "ui-sans-serif", "system-ui", "sans-serif"],
         nunito: ['"Nunito"', "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },

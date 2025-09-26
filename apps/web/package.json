@@ -9,6 +9,8 @@
     "start": "webpack serve --config webpack.dev.cjs"
   },
   "dependencies": {
+    "@fontsource/dosis": "5.2.8",
+    "@fontsource/nunito": "5.2.7",
     "@hookform/resolvers": "5.2.2",
     "@radix-ui/react-checkbox": "1.3.3",
     "@radix-ui/react-dialog": "1.1.14",
