@@ -35,7 +35,7 @@ const mockData: TItem[] = [
 
 // TODO: WHen on edit, -> making edits should update in your items list 
 // TODO: Move to completed list when items are finished
-const HomeContainer = () => {
+const ItemsContainer = () => {
   const { openDrawer} = useDrawer();
   const { openDialog } = useDialog();
 
@@ -153,4 +153,4 @@ const HomeContainer = () => {
   );
 };
 
-export default HomeContainer;
+export default ItemsContainer;
