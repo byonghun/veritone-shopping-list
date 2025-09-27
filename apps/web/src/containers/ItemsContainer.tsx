@@ -128,7 +128,7 @@ const ItemsContainer = () => {
           <div id="home-nav" className="flex justify-between items-end">
             <h2 className="font-semibold text-lg leading-6">
               Your Items{" "}
-              <span className={cn("text-sm ml-2", isCompleted && "text-green-600")}>
+              <span className={cn("text-sm ml-2 text-listDescriptionGray", isCompleted && "text-green-600")}>
                 {checkList}
               </span>
             </h2>
