@@ -3,6 +3,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   mode: "production",
@@ -26,11 +27,6 @@ module.exports = {
           loader: "babel-loader",
           options: {
             cacheDirectory: true,
-            presets: [
-              ["@babel/preset-env", { targets: "defaults" }],
-              ["@babel/preset-react", { runtime: "automatic" }],
-              ["@babel/preset-typescript", {}],
-            ],
           },
         },
       },
@@ -61,10 +57,16 @@ module.exports = {
       patterns: [
         { from: "public", to: "."}
       ]
-    })
+    }),
+    new webpack.DefinePlugin({
+      "process.env.API_BASE_URL": JSON.stringify(process.env.API_BASE_URL || "http://localhost:3001"),
+    }),
   ],
   optimization: {
     splitChunks: { chunks: "all" },
     runtimeChunk: "single",
+    sideEffects: true,
+    usedExports: true,
+    concatenateModules: true
   },
 };
