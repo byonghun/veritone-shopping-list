@@ -13,7 +13,7 @@ export type GlobalDialogProps = {
   descriptionTextClassName?: string
   headerTextClassName?: string
   triggerLabel?: string
-  onConfirm: () => void
+  onConfirm?: () => void
 }
 
 export type GlobalDialogContextType = {

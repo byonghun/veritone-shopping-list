@@ -1,4 +1,4 @@
-import { TItem, TItemPost } from "./item"
+import { TItem, TItemPost, TItemUpdate } from "./item"
 
 export type GlobalDrawerType =
   | 'update'
@@ -14,7 +14,7 @@ export type GlobalDrawerProps = {
   headerTextClassName?: string
   triggerLabel?: string
   defaultValues: TItem | TItemPost
-  onConfirm: (data: TItemPost | TItemPost) => void
+  onConfirm: (data: TItemUpdate) => void
 }
 
 export type GlobalDrawerContextType = {

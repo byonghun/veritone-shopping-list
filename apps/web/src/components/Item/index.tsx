@@ -25,7 +25,7 @@ const Item: FC<ItemProps> = ({
   return (
     <div
       className={cn(
-        "w-full sm:h-[87px] p-4 px-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px] min-h-[87px]",
+        "w-full sm:h-[87px] p-4 px-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px] min-h-[87px] transition-colors",
         purchased && "bg-drawerBorderGray/[0.17] border-transparent"
       )}
     >
