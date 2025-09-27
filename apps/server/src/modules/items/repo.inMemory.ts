@@ -61,4 +61,4 @@ export const itemsRepo = new InMemoryItemsRepo();
 
 // Seed a couple for quick manual checks
 void itemsRepo.create({ itemName: "Apples", description: "Honey Crisp", quantity: 4 });
-void itemsRepo.create({ itemName: "Eggs", description: "Free-range", quantity: 12 });
+void itemsRepo.create({ itemName: "Eggs", description: "Free-range", quantity: 2 });

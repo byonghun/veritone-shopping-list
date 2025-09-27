@@ -14,7 +14,7 @@ Shopping List App
 cp .env.example .env.development
 # Edit values as needed:
 PORT=3001
-CORS_ORIGIN=http://localhost:5173
+API_BASE_URL=http://localhost:3001
 ```
 
 ### Quick Start (Docker)
