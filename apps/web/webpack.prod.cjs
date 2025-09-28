@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -28,6 +27,20 @@ module.exports = {
           options: {
             cacheDirectory: true,
           },
+          options: {
+            cacheDirectory: true,
+            presets: [
+              [
+                "@babel/preset-env",
+                { targets: { esmodules: true }, modules: false },
+              ],
+              [
+                "@babel/preset-react",
+                { runtime: "automatic", development: false },
+              ],
+              ["@babel/preset-typescript", {}],
+            ],
+          },
         },
       },
       {
@@ -54,12 +67,12 @@ module.exports = {
       filename: "assets/[name].[contenthash].css",
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: "public", to: "."}
-      ]
+      patterns: [{ from: "public", to: "." }],
     }),
     new webpack.DefinePlugin({
-      "process.env.API_BASE_URL": JSON.stringify(process.env.API_BASE_URL || "http://localhost:3001"),
+      "process.env.API_BASE_URL": JSON.stringify(
+        process.env.API_BASE_URL || "http://localhost:3001"
+      ),
     }),
   ],
   optimization: {
@@ -67,6 +80,6 @@ module.exports = {
     runtimeChunk: "single",
     sideEffects: true,
     usedExports: true,
-    concatenateModules: true
+    concatenateModules: true,
   },
 };

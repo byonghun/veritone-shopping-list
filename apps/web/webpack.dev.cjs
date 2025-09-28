@@ -24,6 +24,20 @@ module.exports = {
           options: {
             cacheDirectory: true,
           },
+          options: {
+            cacheDirectory: true,
+            presets: [
+              [
+                "@babel/preset-env",
+                { targets: { esmodules: true }, modules: false },
+              ],
+              [
+                "@babel/preset-react",
+                { runtime: "automatic", development: true },
+              ],
+              ["@babel/preset-typescript", {}],
+            ],
+          },
         },
       },
       {
