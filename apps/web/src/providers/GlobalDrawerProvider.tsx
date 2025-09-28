@@ -36,14 +36,16 @@ interface GlobalDrawerProviderProps {
 const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [selectOpen, setSelectOpen] = useState(false);
-  const [drawerProps, setDrawerProps] = useState<GlobalDrawerProps>(DEFAULT_GLOBAL_DRAWER_PROPS);
+  const [drawerProps, setDrawerProps] = useState<GlobalDrawerProps>(
+    DEFAULT_GLOBAL_DRAWER_PROPS
+  );
 
   const {
     type,
     description = "Add your new item below",
     descriptionTextClassName,
     defaultValues,
-    onConfirm
+    onConfirm,
   } = drawerProps;
 
   const isUpdateMode = type === "update";
@@ -65,15 +67,22 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
   const quantityValue = watch("quantity") as number | undefined;
 
   useEffect(() => {
-    if(type === undefined) return
+    if (type === undefined) return;
 
-    if (type === "update" || type === 'create') {
+    if (type === "update" || type === "create") {
       reset(defaultValues);
     }
   }, [defaultValues, reset, type]);
 
-  const clearForm = () =>
-    reset(DEFAULT_ITEM);
+  const clearForm = () => {
+    if (isUpdateMode) {
+      return reset({
+        ...defaultValues,
+        description: defaultValues.description ?? "",
+      });
+    }
+    return reset(DEFAULT_ITEM);
+  };
 
   useEffect(() => {
     if (!open && isDirty) {
@@ -85,10 +94,12 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
     // API Call
     clearForm();
     setOpen(false);
-    onConfirm && onConfirm({
-      ...data,
-      quantity: data.quantity ?? 1
-    })
+    onConfirm &&
+      onConfirm({
+        ...data,
+        quantity: data.quantity ?? 1,
+        purchased: data.purchased ?? false,
+      });
   };
 
   const openDrawer = (props: GlobalDrawerProps) => {
@@ -128,7 +139,9 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
             </DrawerHeader>
             <div className="pl-[30px] pt-7 pr-6">
               <div className="flex flex-col font-nunito font-normal mb-4">
-                <h2 className="text-lg leading-6 text-primaryFont">Add an Item</h2>
+                <h2 className="text-lg leading-6 text-primaryFont">
+                  Add an Item
+                </h2>
                 <div className="flex items-center justify-between">
                   <DrawerDescription
                     className={cn(
@@ -248,7 +261,10 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
           <DrawerFooter className="bg-white w-full flex">
             <div className="flex gap-4 w-full justify-end pr-2 font-nunito mb-1">
               <DrawerClose asChild>
-                <Button variant="secondary" className="h-9 font-normal hover:opacity-80">
+                <Button
+                  variant="secondary"
+                  className="h-9 font-normal hover:opacity-80"
+                >
                   Cancel
                 </Button>
               </DrawerClose>
@@ -260,7 +276,7 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
                 )}
                 form="item-form"
                 type="submit"
-                disabled={isSubmitting || !isValid}
+                disabled={isSubmitting || !isValid || (!isDirty && isUpdateMode)}
               >
                 {isSubmitting
                   ? isUpdateMode

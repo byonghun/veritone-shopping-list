@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   mode: "development",
@@ -22,8 +23,14 @@ module.exports = {
           loader: "babel-loader",
           options: {
             cacheDirectory: true,
+          },
+          options: {
+            cacheDirectory: true,
             presets: [
-              ["@babel/preset-env", { targets: "defaults" }],
+              [
+                "@babel/preset-env",
+                { targets: { esmodules: true }, modules: false },
+              ],
               [
                 "@babel/preset-react",
                 { runtime: "automatic", development: true },
@@ -52,10 +59,24 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "index.html"),
     }),
+    new webpack.DefinePlugin({
+      "process.env.API_BASE_URL": JSON.stringify(
+        process.env.API_BASE_URL || "http://localhost:3001"
+      ),
+    }),
   ],
   devServer: {
     port: 3000, // matches your backend CORS origin
     historyApiFallback: true, // React Router support
+    proxy: {
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+        secure: false,
+        ws: false,
+        logLevel: "debug",
+      },
+    },
     hot: true,
     open: true,
     client: {

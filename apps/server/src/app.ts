@@ -20,9 +20,30 @@ function setApiVersion(version: typeof API_VERSION) {
 
 const app: Application = express();
 
-const corsOrigin = process.env.CORS_ORIGIN ?? "*";
+const allowlist = new Set([
+  "http://localhost:3000",
+  "http://localhost:8080",
+  "http://127.0.0.1:3000",
+]);
 
-app.use(cors({ origin: corsOrigin }));
+const corsOptions: cors.CorsOptions = {
+  origin(origin, cb) {
+    // allow server-to-server (no Origin) and your dev origins
+    if (!origin || allowlist.has(origin)) return cb(null, true);
+    cb(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: false, // set true ONLY if you send cookies from the browser
+  methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+  exposedHeaders: ["ETag"],
+  maxAge: 86400,          // cache preflight
+  optionsSuccessStatus: 204,
+  preflightContinue: false // let cors() terminate OPTIONS itself
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 

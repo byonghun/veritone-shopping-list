@@ -58,7 +58,7 @@ const Select: FC<CustomSelectProps> = ({
           return (
             <div
               key={value}
-              className="flex items-center h-10 hover:bg-drawerHeaderBg text-primaryFont leading-5 font-normal pl-3 font-nunito"
+              className="flex items-center h-10 hover:bg-drawerBorderGray/30 text-primaryFont leading-5 font-normal pl-3 font-nunito"
               onClick={() => onClick(value)}
             >
               {value}

@@ -1,0 +1,33 @@
+import { http } from "./http";
+import type {
+  TItem,
+  TItemUpdate,
+  ItemsResponse,
+  TItemPost,
+} from "../types/item";
+
+const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:3001";
+const ITEMS_URL = `${API_BASE_URL}/api/v1/items`;
+
+export const ItemsClient = {
+  create: (input: TItemPost) => httpPost<TItem>(ITEMS_URL, input),
+  listAll: () => httpGet<ItemsResponse>(ITEMS_URL),
+  update: (id: string, input: TItemUpdate) =>
+    httpPatch<TItem>(`${ITEMS_URL}/${encodeURIComponent(id)}`, input),
+  remove: (id: string) =>
+    httpDelete<void>(`${ITEMS_URL}/${encodeURIComponent(id)}`),
+};
+
+// http wrappers
+async function httpGet<T>(url: string) {
+  return http<T>(url);
+}
+async function httpPost<T>(url: string, body: unknown) {
+  return http<T>(url, { method: "POST", body });
+}
+async function httpPatch<T>(url: string, body: unknown) {
+  return http<T>(url, { method: "PATCH", body });
+}
+async function httpDelete<T>(url: string) {
+  return http<T>(url, { method: "DELETE" });
+}

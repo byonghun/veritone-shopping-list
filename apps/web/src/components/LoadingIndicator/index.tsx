@@ -1,23 +1,25 @@
-import React from "react";
+import React, { FC } from "react";
 import { cn } from "../../utils";
 
 type LoadingIndicatorProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string;
 };
 
-export default function LoadingIndicator({
+const LoadingIndicator: FC<LoadingIndicatorProps> = ({
   className,
   ...props
-}: LoadingIndicatorProps) {
+}) => {
   return (
     <div
       role="status"
       aria-label="Loading Indicator"
       className={cn(
-        "w-[92px] h-[92px] rounded-full border-[3px] border-white animate-spin border-t-brand",
+        "w-[92px] h-[92px] rounded-full border-[3px] border-white animate-spin border-t-brand mt-[110px]",
         className
       )}
       {...props}
     />
   );
-}
+};
+
+export default LoadingIndicator;
