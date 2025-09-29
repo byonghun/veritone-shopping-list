@@ -12,7 +12,6 @@ export type GlobalDialogProps = {
   description: string
   descriptionTextClassName?: string
   headerTextClassName?: string
-  triggerLabel?: string
   onConfirm?: () => void
 }
 
