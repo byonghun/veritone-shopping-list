@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import ErrorCard from "../components/ErrorCard";
 import Item from "../components/Item";
@@ -8,6 +8,7 @@ import { DEFAULT_ITEM } from "../constants/drawer";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
 import { useItems } from "../hooks/useItems";
+import { useItemsSSE } from "../hooks/useItemsSSE";
 import type { TItem, TItemUpdate } from "../types/item";
 import { cn } from "../utils";
 
@@ -26,25 +27,46 @@ const ItemsContainer = () => {
     }
   }, [query.isSuccess, query.data]);
 
+  const onSnapshot = useCallback(
+    (snap: { items: TItem[] }) => {
+      setItems(snap.items);
+      if (!hasLoadedOnce) setHasLoadedOnce(true);
+    },
+    [hasLoadedOnce]
+  );
+  useItemsSSE(onSnapshot);
+
   if (query.isPending && !hasLoadedOnce) {
-    return <LoadingIndicator className="mx-auto" />;
+    return (
+      <section className="max-w-[1025px] mx-auto">
+        <div className="min-h-[160px] flex items-center justify-center">
+          <LoadingIndicator />
+        </div>
+      </section>
+    );
   }
 
   if (query.isError && !hasLoadedOnce) {
     return (
-      <ErrorCard
-        onClick={() => query.refetch()}
-        errorMessage={
-          query.error instanceof Error ? query.error.message : "Unknown error"
-        }
-      />
+      <section className="max-w-[1025px] mx-auto">
+        <div className="min-h-[160px] flex items-center justify-center">
+          <ErrorCard
+            onClick={() => query.refetch()}
+            errorMessage={
+              query.error instanceof Error
+                ? query.error.message
+                : "Unknown error"
+            }
+          />
+        </div>
+      </section>
     );
   }
 
   const emptyItems = items.length === 0;
-  const purchased = items.filter((item) => item.purchased);
-  const isCompleted = purchased.length === items.length;
-  const checkList = `${purchased.length}/${items.length} Completed`;
+  const purchasedCount = items.filter((item) => item.purchased).length;
+  const isCompleted = purchasedCount === items.length;
+  const checkList = `${purchasedCount}/${items.length} Completed`;
 
   const onDrawerOpen = () => {
     openDrawer({
@@ -67,13 +89,16 @@ const ItemsContainer = () => {
         });
         try {
           const created = await create.mutateAsync(item);
-          setItems((prev) => prev.map((i) => (i.id === tempId ? created : i)));
+          setItems((prevItems) =>
+            prevItems.map((item) => (item.id === tempId ? created : item))
+          );
         } catch (err) {
           setItems(snapshot);
           openDialog({
             type: "error",
             title: "Failed to create item.",
             description: "Please check your inputs. Title is required.",
+            btnLabel: "Close"
           });
         }
       },
@@ -105,6 +130,7 @@ const ItemsContainer = () => {
             type: "error",
             title: "Failed to update selected item.",
             description: "Please check your inputs. Title is required.",
+            btnLabel: "Close"
           });
         }
       },
@@ -131,6 +157,7 @@ const ItemsContainer = () => {
             type: "error",
             title: "Failed to delete item.",
             description: "Please try again.",
+            btnLabel: "Close"
           });
         }
       },
@@ -159,6 +186,7 @@ const ItemsContainer = () => {
         type: "error",
         title: "Failed to update selected item.",
         description: "Please check your inputs. Title is required.",
+        btnLabel: "Close",
       });
     }
   };
@@ -166,7 +194,7 @@ const ItemsContainer = () => {
   return (
     <>
       {emptyItems && (
-        <div className="card-wrapper md:mt-[110px]">
+        <div className="card-wrapper">
           <div className="card-content">
             <p className="card-text">Your shopping list is empty :(</p>
             <Button
@@ -186,14 +214,14 @@ const ItemsContainer = () => {
               Your Items{" "}
               <span
                 className={cn(
-                  "text-sm ml-2 text-listDescriptionGray",
+                  "text-sm ml-2 text-listDescriptionGray min-w-[110px]",
                   isCompleted && "text-green-600"
                 )}
               >
                 {checkList}
               </span>
             </h2>
-            <Button variant="default" onClick={onDrawerOpen}>
+            <Button variant="default" onClick={onDrawerOpen} className="w-[90px]">
               Add Item
             </Button>
           </div>

@@ -8,6 +8,7 @@ import {
   type ItemUpdateInput,
   type ItemIdInput,
 } from "./schemas";
+import { sseBroadcastItems } from "../../sse";
 
 export const ItemsController = {
   /** GET /api/v1/items — list all (MVP) */
@@ -56,6 +57,11 @@ export const ItemsController = {
       return;
     }
     const created = await ItemsService.create(parsed.data);
+
+    // Note: Pushes a fresh snapshot to all SSE subscribers
+    const items = await ItemsService.listAll();
+    sseBroadcastItems({ items });
+
     res.status(201).json(created);
   },
 
@@ -93,6 +99,10 @@ export const ItemsController = {
         .json({ error: "NOT_FOUND" as const, message: "Item not found" });
       return;
     }
+
+    const items = await ItemsService.listAll();
+    sseBroadcastItems({ items });
+
     res.json(updated);
   },
 
@@ -116,6 +126,10 @@ export const ItemsController = {
         .json({ error: "NOT_FOUND" as const, message: "Item not found" });
       return;
     }
+
+    const items = await ItemsService.listAll();
+    sseBroadcastItems({ items });
+
     res.status(204).send();
   },
 } as const;

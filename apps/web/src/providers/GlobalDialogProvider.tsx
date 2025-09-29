@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext,  useState } from "react";
+import { FC, ReactNode, createContext, useMemo, useState } from "react";
 
 import { DEFAULT_GLOBAL_DIALOG_PROPS } from "../constants/dialog";
 import { Button } from "../components/ui/button";
@@ -36,9 +36,9 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
     description,
     descriptionTextClassName,
     headerTextClassName,
-    triggerLabel,
     onConfirm,
   } = dialogProps;
+  const isErrorType = useMemo(() => type === "error", [type]);
 
   const openDialog = (props: GlobalDialogProps) => {
     setOpen(true);
@@ -48,9 +48,9 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
   const closeDialog = () => setOpen(false);
 
   const onClick = () => {
-    setOpen(false)
-    onConfirm && onConfirm()
-  }
+    setOpen(false);
+    onConfirm && onConfirm();
+  };
 
   return (
     <GlobalDialogContext.Provider value={{ openDialog, closeDialog }}>
@@ -78,12 +78,16 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
             )}
           </DialogHeader>
           <DialogFooter>
-            <DialogClose asChild>
+            {!isErrorType && <DialogClose asChild>
               <Button variant="secondary" className="hover:opacity-80">
                 {closeBtnLabel}
               </Button>
-            </DialogClose>
-            <Button variant="default" onClick={onClick}>
+            </DialogClose>}
+            <Button
+              variant="default"
+              onClick={onClick}
+              className={cn(isErrorType && "bg-red-600")}
+            >
               {btnLabel}
             </Button>
           </DialogFooter>

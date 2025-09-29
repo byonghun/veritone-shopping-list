@@ -6,6 +6,11 @@ export type TItem = {
   purchased: boolean;
 };
 
+export type Item = TItem & {
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type TItemPost = {
   itemName: string;
   description?: string;
