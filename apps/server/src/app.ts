@@ -8,6 +8,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { errorHandler } from "./middleware/errorHandler";
 import { itemsRoutes } from "./modules/items/routes";
+import { sseRouter } from "./sse";
 
 const API_VERSION = "v1" as const;
 
@@ -52,6 +53,9 @@ app.get("/healthz", (_req: Request, res) => {
 });
 
 app.use("/api/v1", setApiVersion(API_VERSION));
+
+// Mount SSE under /api/v1/sse  (→ /api/v1/sse/items)
+app.use("/api/v1/sse", sseRouter);
 
 // Mount MVP CRUD at /api/v1/items
 app.use("/api/v1/items", itemsRoutes);
