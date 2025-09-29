@@ -1,23 +1,21 @@
-import { TItem, TItemPost, TItemUpdate } from "./item"
+import type { ItemDTO, ItemFormOutput } from "@app/shared";
 
-export type GlobalDrawerType =
-  | 'update'
-  | 'create'
+export type GlobalDrawerType = "update" | "create";
 
 export type GlobalDrawerProps = {
-  type?: GlobalDrawerType
-  btnLabel?: string
-  className?: string
-  closeBtnLabel?: string
-  description?: string
-  descriptionTextClassName?: string
-  headerTextClassName?: string
-  triggerLabel?: string
-  defaultValues: TItem | TItemPost
-  onConfirm: (data: TItemUpdate) => void
-}
+  type?: GlobalDrawerType;
+  btnLabel?: string;
+  className?: string;
+  closeBtnLabel?: string;
+  description?: string;
+  descriptionTextClassName?: string;
+  headerTextClassName?: string;
+  triggerLabel?: string;
+  defaultValues: ItemDTO;
+  onConfirm: (data: ItemFormOutput) => void;
+};
 
 export type GlobalDrawerContextType = {
   openDrawer: (props: GlobalDrawerProps) => void;
-  closeDrawer: () => void
-}
+  closeDrawer: () => void;
+};

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ItemFormOutput } from "@app/shared";
 import { ItemsClient } from "../api/itemsService";
-import type { TItemPost, TItemUpdate } from "../types/item";
 
 const itemsKeys = {
   items: ["items"] as const,
@@ -15,14 +15,14 @@ export function useItems() {
   });
 
   const create = useMutation({
-    mutationFn: (input: TItemPost) => ItemsClient.create(input),
+    mutationFn: (input: ItemFormOutput) => ItemsClient.create(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemsKeys.items });
     },
   });
 
   const update = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: TItemUpdate }) =>
+    mutationFn: ({ id, data }: { id: string; data: ItemFormOutput }) =>
       ItemsClient.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemsKeys.items });

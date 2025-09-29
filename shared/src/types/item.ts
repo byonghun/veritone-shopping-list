@@ -16,6 +16,8 @@ export type UIItem = ItemDTO & {
 
 export type ItemsSnapshot = { items: Item[] };
 
+export type UIItemsSnapshot = { items: ItemDTO[] };
+
 export type ItemsResponse = {
   items: ItemDTO[];
   count: number;

@@ -1,5 +1,3 @@
-# version: "3.9"
-
 services:
   web:
     build:
@@ -12,7 +10,7 @@ services:
       server:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-q0-", "http://localhost/healthz"]
+      test: ["CMD", "wget", "-qO-", "http://localhost/healthz"]
       interval: 5s
       timeout: 2s
       retries: 20
@@ -45,6 +43,8 @@ services:
       dockerfile: apps/server/Dockerfile.dev
     container_name: veritone-shopping-list-server
     working_dir: /workspace/apps/server
+    # run as non-root
+    user: app
     ports:
       - "${PORT:-3001}:3001"
     env_file:
@@ -53,9 +53,13 @@ services:
     # Anonymous volume on /workspace/node_modules to hide host modules and use the container's own node_modules (prevents OS/ABI mismatches)
       # Telling Docker to not use the node_modules from host computer but use the dedicated node_modules folder inside the container
       # Ensures that they are compiled for the correct operating system and architecture
+    # volumes:
+    #   - .:/workspace
+    #   - /workspace/node_modules
+    # Mount ONLY sources, not the whole repo, and do NOT mount node_modules
     volumes:
-      - .:/workspace
-      - /workspace/node_modules
+      - ./apps/server:/workspace/apps/server
+      - ./shared:/workspace/shared
     
     # Prevents the server from trying to connect before Postgres is listening
     # This removes "ECONNREFUSED" boots

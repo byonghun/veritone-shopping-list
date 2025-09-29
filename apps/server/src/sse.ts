@@ -26,10 +26,7 @@
 
 import express from "express";
 import { nanoid } from "nanoid";
-
-import { Item } from "./types/domain";
-
-export type ItemsSnapshot = { items: Item[] };
+import type { ItemsSnapshot } from "@app/shared";
 
 export const sseRouter = express.Router();
 
@@ -62,7 +59,9 @@ sseRouter.get("/items", (req, res) => {
 
   // Periodic comment to keep the connection alive through proxies/load balancers
   const keepAlive = setInterval(() => {
-    try { res.write(`: ping ${Date.now()}\n\n`); } catch {}
+    try {
+      res.write(`: ping ${Date.now()}\n\n`);
+    } catch {}
   }, 25000);
 
   const id = nanoid();

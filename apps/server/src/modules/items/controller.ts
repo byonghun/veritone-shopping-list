@@ -1,13 +1,12 @@
 import type { Request, Response } from "express";
-import { ItemsService } from "./service.instance";
 import {
-  ItemCreateSchema,
-  ItemUpdateSchema,
   ItemIdSchema,
-  type ItemCreateInput,
-  type ItemUpdateInput,
-  type ItemIdInput,
-} from "./schemas";
+  ItemInputSchemaServer,
+  type ItemId,
+  type ItemFormInput,
+} from "@app/shared";
+
+import { ItemsService } from "./service.instance";
 import { sseBroadcastItems } from "../../sse";
 
 export const ItemsController = {
@@ -18,16 +17,14 @@ export const ItemsController = {
   },
 
   /** GET /api/v1/items/:id */
-  async get(req: Request<ItemIdInput>, res: Response): Promise<void> {
+  async get(req: Request<ItemId>, res: Response): Promise<void> {
     const params = ItemIdSchema.safeParse(req.params);
     if (!params.success) {
-      res
-        .status(400)
-        .json({
-          error: "BAD_REQUEST" as const,
-          message: "Invalid id",
-          issues: params.error.issues,
-        });
+      res.status(400).json({
+        error: "BAD_REQUEST" as const,
+        message: "Invalid id",
+        issues: params.error.issues,
+      });
       return;
     }
     const item = await ItemsService.get(params.data.id);
@@ -42,18 +39,16 @@ export const ItemsController = {
 
   /** POST /api/v1/items */
   async create(
-    req: Request<unknown, unknown, ItemCreateInput>,
+    req: Request<unknown, unknown, ItemFormInput>,
     res: Response
   ): Promise<void> {
-    const parsed = ItemCreateSchema.safeParse(req.body);
+    const parsed = ItemInputSchemaServer.safeParse(req.body);
     if (!parsed.success) {
-      res
-        .status(400)
-        .json({
-          error: "BAD_REQUEST" as const,
-          message: "Validation failed",
-          issues: parsed.error.issues,
-        });
+      res.status(400).json({
+        error: "BAD_REQUEST" as const,
+        message: "Validation failed",
+        issues: parsed.error.issues,
+      });
       return;
     }
     const created = await ItemsService.create(parsed.data);
@@ -67,29 +62,25 @@ export const ItemsController = {
 
   /** PATCH /api/v1/items/:id */
   async update(
-    req: Request<ItemIdInput, unknown, ItemUpdateInput>,
+    req: Request<ItemId, unknown, ItemFormInput>,
     res: Response
   ): Promise<void> {
     const params = ItemIdSchema.safeParse(req.params);
     if (!params.success) {
-      res
-        .status(400)
-        .json({
-          error: "BAD_REQUEST" as const,
-          message: "Invalid id",
-          issues: params.error.issues,
-        });
+      res.status(400).json({
+        error: "BAD_REQUEST" as const,
+        message: "Invalid id",
+        issues: params.error.issues,
+      });
       return;
     }
-    const patch = ItemUpdateSchema.safeParse(req.body);
+    const patch = ItemInputSchemaServer.safeParse(req.body);
     if (!patch.success) {
-      res
-        .status(400)
-        .json({
-          error: "BAD_REQUEST" as const,
-          message: "Validation failed",
-          issues: patch.error.issues,
-        });
+      res.status(400).json({
+        error: "BAD_REQUEST" as const,
+        message: "Validation failed",
+        issues: patch.error.issues,
+      });
       return;
     }
     const updated = await ItemsService.update(params.data.id, patch.data);
@@ -107,16 +98,14 @@ export const ItemsController = {
   },
 
   /** DELETE /api/v1/items/:id */
-  async remove(req: Request<ItemIdInput>, res: Response): Promise<void> {
+  async remove(req: Request<ItemId>, res: Response): Promise<void> {
     const params = ItemIdSchema.safeParse(req.params);
     if (!params.success) {
-      res
-        .status(400)
-        .json({
-          error: "BAD_REQUEST" as const,
-          message: "Invalid id",
-          issues: params.error.issues,
-        });
+      res.status(400).json({
+        error: "BAD_REQUEST" as const,
+        message: "Invalid id",
+        issues: params.error.issues,
+      });
       return;
     }
     const ok = await ItemsService.delete(params.data.id);

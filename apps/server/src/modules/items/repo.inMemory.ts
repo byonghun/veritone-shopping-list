@@ -1,6 +1,7 @@
 // NOTE: Provides repository implementation prior to connecting to the Postgres database
 import { nanoid } from "nanoid";
-import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain";
+import type { Item, ItemFormInput, ItemId } from "@app/shared";
+
 import type { ItemsRepo } from "./repo";
 
 const nowISO = (): string => new Date().toISOString();
@@ -10,14 +11,16 @@ export class InMemoryItemsRepo implements ItemsRepo {
 
   async listAll(): Promise<Item[]> {
     // MVP: return everything (creation-desc to keep newest first)
-    return Array.from(this.items.values()).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    return Array.from(this.items.values()).sort((a, b) =>
+      b.createdAt.localeCompare(a.createdAt)
+    );
   }
 
   async get(id: ItemId): Promise<Item | undefined> {
     return this.items.get(id);
   }
 
-  async create(input: ItemCreate): Promise<Item> {
+  async create(input: ItemFormInput): Promise<Item> {
     const id = nanoid();
     const createdAt = nowISO();
     const item: Item = {
@@ -25,7 +28,7 @@ export class InMemoryItemsRepo implements ItemsRepo {
       itemName: input.itemName,
       description: input.description?.trim() || undefined,
       quantity: Number(input.quantity ?? 1),
-      purchased: false,
+      purchased: Boolean(input.purchased ?? false),
       createdAt,
       updatedAt: createdAt,
     };
@@ -33,7 +36,7 @@ export class InMemoryItemsRepo implements ItemsRepo {
     return item;
   }
 
-  async update(id: ItemId, patch: ItemUpdate): Promise<Item | undefined> {
+  async update(id: ItemId, patch: ItemFormInput): Promise<Item | undefined> {
     const current = this.items.get(id);
     if (!current) return undefined;
 
@@ -41,8 +44,13 @@ export class InMemoryItemsRepo implements ItemsRepo {
       ...current,
       itemName: patch.itemName?.trim() ?? current.itemName,
       description:
-        patch.description !== undefined ? patch.description.trim() || undefined : current.description,
-      quantity: patch.quantity !== undefined ? Math.max(1, Number(patch.quantity)) : current.quantity,
+        patch.description !== undefined
+          ? patch.description.trim() || undefined
+          : current.description,
+      quantity:
+        patch.quantity !== undefined
+          ? Math.max(1, Number(patch.quantity))
+          : current.quantity,
       purchased: patch.purchased ?? current.purchased,
       updatedAt: nowISO(),
     };
@@ -60,5 +68,13 @@ export class InMemoryItemsRepo implements ItemsRepo {
 export const itemsRepo = new InMemoryItemsRepo();
 
 // Seed a couple for quick manual checks
-void itemsRepo.create({ itemName: "Apples", description: "Honey Crisp", quantity: 4 });
-void itemsRepo.create({ itemName: "Eggs", description: "Free-range", quantity: 2 });
+void itemsRepo.create({
+  itemName: "Apples",
+  description: "Honey Crisp",
+  quantity: 4,
+});
+void itemsRepo.create({
+  itemName: "Eggs",
+  description: "Free-range",
+  quantity: 2,
+});

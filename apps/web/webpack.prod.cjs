@@ -16,6 +16,9 @@ module.exports = {
   devtool: "source-map",
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
+    alias: {
+      "@app/shared": path.resolve(__dirname, "../../shared/src")
+    }
   },
   module: {
     rules: [
