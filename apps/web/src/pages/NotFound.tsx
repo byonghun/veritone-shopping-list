@@ -13,7 +13,7 @@ const NotFoundPage = () => {
             Page Not Found.
           </p>
           <Button variant="default" onClick={onClick}>
-            Lets start your list.
+            Lets start your list
           </Button>
         </div>
       </div>

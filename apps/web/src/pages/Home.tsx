@@ -13,7 +13,7 @@ const HomePage = () => {
             Home Page
           </p>
           <Button variant="default" onClick={onClick}>
-            Lets start your list.
+            Lets start your list
           </Button>
         </div>
       </div>
