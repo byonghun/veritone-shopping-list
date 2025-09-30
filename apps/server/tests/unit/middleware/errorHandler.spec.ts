@@ -8,6 +8,7 @@ function makeAppThatThrows(): express.Application {
   app.get("/boom", (_req: Request, _res: Response, next: NextFunction) => {
     next(new Error("kaboom"));
   });
+
   // 404 not needed here; we want error handler only
   app.use(errorHandler);
   return app;
@@ -22,7 +23,8 @@ describe("ErrorHandler middleware", () => {
     // Adjust these assertions to match your error handler's shape
     expect(res.body).toEqual(
       expect.objectContaining({
-        error: expect.any(String),   // ex: "INTERNAL_SERVER_ERROR"
+        // ex: "INTERNAL_SERVER_ERROR"
+        error: expect.any(String),
         message: expect.any(String),
       })
     );
