@@ -1,15 +1,15 @@
 import { FC } from "react";
+import type { ItemDTO } from "@app/shared";
 
 import EditIcon from "../Icons/EditIcon";
 import TrashIcon from "../Icons/TrashIcon";
 import { Checkbox } from "../ui/checkbox";
-import { TItem } from "../../types/item";
 import { cn } from "../../utils";
 
-interface ItemProps extends TItem {
-  onTogglePurchased: (id: TItem["id"], checkedState: boolean) => void;
-  onEdit: (id: TItem["id"]) => void;
-  onDelete: (id: TItem["id"]) => void;
+interface ItemProps extends ItemDTO {
+  onTogglePurchased: (id: ItemDTO["id"], checkedState: boolean) => void;
+  onEdit: (id: ItemDTO["id"]) => void;
+  onDelete: (id: ItemDTO["id"]) => void;
 }
 
 const Item: FC<ItemProps> = ({
@@ -20,7 +20,7 @@ const Item: FC<ItemProps> = ({
   id,
   purchased,
   itemName,
-  quantity
+  quantity,
 }) => {
   return (
     <div

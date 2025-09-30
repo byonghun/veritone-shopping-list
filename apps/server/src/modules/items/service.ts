@@ -1,12 +1,12 @@
-import type { Item, ItemCreate, ItemId, ItemUpdate } from "./domain";
+import type { Item, ItemFormInput, ItemId } from "@app/shared";
 import type { ItemsRepo } from "./repo";
 
 export function createItemsService(repo: ItemsRepo) {
   return {
     listAll: (): Promise<Item[]> => repo.listAll(),
     get: (id: ItemId): Promise<Item | undefined> => repo.get(id),
-    create: (input: ItemCreate): Promise<Item> => repo.create(input),
-    update: (id: ItemId, patch: ItemUpdate): Promise<Item | undefined> => repo.update(id, patch),
+    create: (input: ItemFormInput): Promise<Item> => repo.create(input),
+    update: (id: ItemId, patch: ItemFormInput): Promise<Item | undefined> => repo.update(id, patch),
     delete: (id: ItemId): Promise<boolean> => repo.delete(id)
   } as const;
 }

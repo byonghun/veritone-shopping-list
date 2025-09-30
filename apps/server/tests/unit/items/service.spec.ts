@@ -1,11 +1,7 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+import type { Item, ItemFormInput, ItemId } from "@app/shared";
+
 import type { ItemsRepo } from "../../../src/modules/items/repo";
-import type {
-  Item,
-  ItemCreate,
-  ItemId,
-  ItemUpdate,
-} from "../../../src/modules/items/domain";
 import { createItemsService } from "../../../src/modules/items/service";
 
 function makeItem(overrides: Partial<Item> = {}): Item {
@@ -56,7 +52,7 @@ describe("Items Service file test", () => {
   });
 
   it("create passes input through to repo", async () => {
-    const input: ItemCreate = {
+    const input: ItemFormInput = {
       itemName: "Eggs",
       quantity: 12,
       description: "Dozen",
@@ -77,7 +73,11 @@ describe("Items Service file test", () => {
   });
 
   it("update delegates id + patch", async () => {
-    const patch: ItemUpdate = { quantity: 3, purchased: true };
+    const patch: ItemFormInput = {
+      itemName: "Eggs",
+      quantity: 3,
+      purchased: true,
+    };
     const updated = makeItem({ id: "x", quantity: 3, purchased: true });
     repo.update.mockResolvedValueOnce(updated);
 

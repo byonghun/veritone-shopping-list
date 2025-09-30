@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
-import type { ItemCreate, ItemId, ItemUpdate } from "./domain";
+import type { ItemId, ItemFormInput } from "@app/shared";
+
 import type { ItemsRepo } from "./repo";
 import { mapPrismaItemToDomain } from "../../utils/prisma";
 
@@ -16,7 +17,7 @@ export class PrismaItemsRepo implements ItemsRepo {
     return row ? mapPrismaItemToDomain(row) : undefined;
   }
 
-  async create(input: ItemCreate) {
+  async create(input: ItemFormInput) {
     const row = await this.prisma.item.create({
       data: {
         itemName: input.itemName,
@@ -28,7 +29,7 @@ export class PrismaItemsRepo implements ItemsRepo {
     return mapPrismaItemToDomain(row);
   }
 
-  async update(id: ItemId, patch: ItemUpdate) {
+  async update(id: ItemId, patch: ItemFormInput) {
     const exists = await this.prisma.item.findUnique({ where: { id } });
     if (!exists) return undefined;
 

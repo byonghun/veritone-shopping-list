@@ -59,7 +59,12 @@ describe("Items routes CRUD tests", () => {
     const patchRes = await request(app)
       .patch(`/api/v1/items/${created.id}`)
       .set("Content-Type", "application/json")
-      .send({ quantity: 3, purchased: true, description: "Whole" })
+      .send({
+        itemName: "Milk",
+        quantity: 3,
+        purchased: true,
+        description: "Whole",
+      })
       .expect(200);
 
     expect(patchRes.headers["x-api-version"]).toBe("v1");

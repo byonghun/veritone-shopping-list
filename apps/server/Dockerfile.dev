@@ -19,8 +19,11 @@ WORKDIR /workspace
 # Copy manifests first for better layer caching
 # Cache-friendly install for workspaces
 COPY package.json package-lock.json ./
+COPY shared/package.json shared/package.json
 COPY apps/server/package.json apps/server/package.json
-RUN npm ci --workspaces --include-workspace-root
+# Install ONLY the needed workspaces (shared + server)
+RUN npm ci -w @app/shared -w @app/server
+# RUN npm ci --workspaces --include-workspace-root
 
 RUN npm ci
 
@@ -28,6 +31,10 @@ RUN npm ci
 COPY . .
 WORKDIR /workspace/apps/server
 RUN npx prisma generate
+
+# Ensure non-root can access everything
+WORKDIR /workspace
+RUN chown -R app:app /workspace
 
 USER app
 EXPOSE 3001

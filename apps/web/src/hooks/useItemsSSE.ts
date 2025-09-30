@@ -1,9 +1,7 @@
 import { useEffect } from "react";
-import { TItem } from "../types/item";
+import { UIItemsSnapshot } from "@app/shared";
 
-type Snapshot = { items: TItem[] };
-
-export function useItemsSSE(onSnapshot: (s: Snapshot) => void) {
+export function useItemsSSE(onSnapshot: (s: UIItemsSnapshot) => void) {
   useEffect(() => {
     // Note: Creates a new browser EventSource object that connects
     // to the "/api/v1/sse/items"

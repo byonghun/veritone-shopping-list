@@ -1,5 +1,10 @@
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import {
+  ItemSchema,
+  type ItemFormInput,
+  type ItemFormOutput,
+} from "@app/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -22,7 +27,6 @@ import {
 import { Input } from "../components/ui/input";
 import Select from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
-import { ItemSchema, ItemFormInput, ItemFormOutput } from "../schemas/item";
 import { GlobalDrawerContextType, GlobalDrawerProps } from "../types/drawer";
 import { cn } from "../utils";
 
@@ -78,7 +82,7 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
     if (isUpdateMode) {
       return reset({
         ...defaultValues,
-        description: defaultValues.description ?? "",
+        description: defaultValues.description ?? ""
       });
     }
     return reset(DEFAULT_ITEM);

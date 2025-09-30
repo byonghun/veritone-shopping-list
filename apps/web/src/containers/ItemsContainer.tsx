@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import type { ItemDTO, ItemFormOutput } from "@app/shared";
 
 import ErrorCard from "../components/ErrorCard";
 import Item from "../components/Item";
@@ -9,26 +10,26 @@ import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
 import { useItems } from "../hooks/useItems";
 import { useItemsSSE } from "../hooks/useItemsSSE";
-import type { TItem, TItemUpdate } from "../types/item";
 import { cn } from "../utils";
+import { getErrorDescription } from "../utils/errors";
 
 const ItemsContainer = () => {
   const { openDrawer } = useDrawer();
   const { openDialog } = useDialog();
   const { query, create, update, remove } = useItems();
 
-  const [items, setItems] = useState<TItem[]>([]);
+  const [items, setItems] = useState<ItemDTO[]>([]);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
   useEffect(() => {
     if (query.isSuccess) {
-      setItems(query.data.items);
+      setItems(query.data.items as ItemDTO[]);
       setHasLoadedOnce(true);
     }
   }, [query.isSuccess, query.data]);
 
   const onSnapshot = useCallback(
-    (snap: { items: TItem[] }) => {
+    (snap: { items: ItemDTO[] }) => {
       setItems(snap.items);
       if (!hasLoadedOnce) setHasLoadedOnce(true);
     },
@@ -72,17 +73,18 @@ const ItemsContainer = () => {
     openDrawer({
       type: "create",
       defaultValues: DEFAULT_ITEM,
-      onConfirm: async (item: TItemUpdate) => {
+      // TODO: Needs to update TItemUpdate to TItemCreate, without purchased
+      onConfirm: async (item: ItemFormOutput) => {
         const tempId = `temp-${Date.now()}`;
 
-        let snapshot: TItem[] = [];
+        let snapshot: ItemDTO[] = [];
         setItems((prevItems) => {
           snapshot = prevItems;
-          const tempItem: TItem = {
+          const tempItem: ItemDTO = {
             id: tempId,
             itemName: item.itemName,
             description: item.description ?? undefined,
-            quantity: item.quantity,
+            quantity: item.quantity ?? 1,
             purchased: false,
           };
           return [...prevItems, tempItem];
@@ -93,30 +95,31 @@ const ItemsContainer = () => {
             prevItems.map((item) => (item.id === tempId ? created : item))
           );
         } catch (err) {
+          const description = await getErrorDescription(err);
           setItems(snapshot);
           openDialog({
             type: "error",
             title: "Failed to create item.",
-            description: "Please check your inputs. Title is required.",
-            btnLabel: "Close"
+            description,
+            btnLabel: "Close",
           });
         }
       },
     });
   };
 
-  const onEdit = (id: TItem["id"]) => {
+  const onEdit = (id: ItemDTO["id"]) => {
     const item = items.find((i) => i.id === id);
     openDrawer({
       type: "update",
-      defaultValues: item as TItem,
-      onConfirm: async (item: TItemUpdate) => {
-        let snapshot: TItem[] = [];
+      defaultValues: item as ItemDTO,
+      onConfirm: async (item: ItemFormOutput) => {
+        let snapshot: ItemDTO[] = [];
         setItems((prevItems) => {
           snapshot = prevItems;
           return prevItems.map((prevItem) => {
             if (prevItem.id === id) {
-              return { ...item, ...prevItem } as TItem;
+              return { ...item, ...prevItem } as ItemDTO;
             }
 
             return prevItem;
@@ -125,11 +128,12 @@ const ItemsContainer = () => {
         try {
           await update.mutateAsync({ id, data: item });
         } catch (err) {
+          const description = await getErrorDescription(err);
           setItems(snapshot);
           openDialog({
             type: "error",
             title: "Failed to update selected item.",
-            description: "Please check your inputs. Title is required.",
+            description,
             btnLabel: "Close"
           });
         }
@@ -137,14 +141,14 @@ const ItemsContainer = () => {
     });
   };
 
-  const onDelete = (id: TItem["id"]) => {
+  const onDelete = (id: ItemDTO["id"]) => {
     openDialog({
       type: "delete",
       title: "Delete Item?",
       description:
         "Are you sure you want to delete this item? This can not be undone.",
       onConfirm: async () => {
-        let snapshot: TItem[] = [];
+        let snapshot: ItemDTO[] = [];
         setItems((prevItems) => {
           snapshot = prevItems;
           return prevItems.filter((item) => item.id !== id);
@@ -152,11 +156,12 @@ const ItemsContainer = () => {
         try {
           await remove.mutateAsync(id);
         } catch (err) {
+          const description = await getErrorDescription(err);
           setItems(snapshot);
           openDialog({
             type: "error",
             title: "Failed to delete item.",
-            description: "Please try again.",
+            description,
             btnLabel: "Close"
           });
         }
@@ -164,8 +169,8 @@ const ItemsContainer = () => {
     });
   };
 
-  const onTogglePurchased = async (id: TItem["id"], checked: boolean) => {
-    let snapshot: TItem[] = [];
+  const onTogglePurchased = async (id: ItemDTO["id"], checked: boolean) => {
+    let snapshot: ItemDTO[] = [];
     setItems((prevItems) => {
       snapshot = prevItems;
       return prevItems.map((item) =>
@@ -173,19 +178,25 @@ const ItemsContainer = () => {
       );
     });
 
-    const item = snapshot.find((item) => item.id === id) as TItemUpdate;
+    const item = items.find((item) => item.id === id) as ItemFormOutput;
 
     try {
       await update.mutateAsync({
         id,
-        data: { ...item, purchased: checked },
+        data: {
+          itemName: item.itemName,
+          description: item.description ?? "",
+          quantity: item.quantity ?? 1,
+          purchased: checked,
+        },
       });
     } catch (err) {
+      const description = await getErrorDescription(err);
       setItems(snapshot);
       openDialog({
         type: "error",
         title: "Failed to update selected item.",
-        description: "Please check your inputs. Title is required.",
+        description,
         btnLabel: "Close",
       });
     }
@@ -194,13 +205,13 @@ const ItemsContainer = () => {
   return (
     <>
       {emptyItems && (
-        <div className="card-wrapper">
+        <div className="card-wrapper md:mt-[110px]">
           <div className="card-content">
             <p className="card-text">Your shopping list is empty :(</p>
             <Button
               variant="default"
               onClick={onDrawerOpen}
-              className="min-w-[151px]"
+              className="min-w-[151px] mt-1"
             >
               Add your first item
             </Button>

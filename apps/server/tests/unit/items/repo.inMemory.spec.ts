@@ -38,6 +38,7 @@ describe("InMemoryItemsRepo (unit)", () => {
     expect(fetched?.purchased).toBe(false);
 
     const updated = await repo.update(item.id, {
+      itemName: "Bread",
       quantity: 2,
       purchased: true,
       description: "Whole wheat",
@@ -57,7 +58,7 @@ describe("InMemoryItemsRepo (unit)", () => {
   it("returns undefined when updating or getting a non-existent id", async () => {
     const nonexistent = "does-not-exist";
     const got = await repo.get(nonexistent);
-    const upd = await repo.update(nonexistent, { quantity: 3 });
+    const upd = await repo.update(nonexistent, { itemName: "Bread", quantity: 3 });
     expect(got).toBeUndefined();
     expect(upd).toBeUndefined();
   });

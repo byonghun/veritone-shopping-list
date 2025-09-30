@@ -5,7 +5,13 @@
     "moduleResolution": "bundler",
     "target": "es2022",
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@app/shared": ["../../shared/src/index"],
+      "@app/shared/*": ["../../shared/src/*"]
+    }
   },
+  "references": [{ "path": "../../shared" }],
   "include": ["src"]
 }
