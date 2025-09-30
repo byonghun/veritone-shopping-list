@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ItemFormOutput } from "@app/shared";
-import { ItemsClient } from "../api/itemsService";
+import { ItemsClient } from "../api/items.api";
 
 const itemsKeys = {
   items: ["items"] as const,

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router"; // <-- v7
+import { Routes, Route, Navigate } from "react-router";
 
 import HomePage from "../pages/Home";
 import ItemsPage from "../pages/Items";

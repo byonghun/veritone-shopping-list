@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { cn } from "../../utils";
 
-type LoadingIndicatorProps = React.HTMLAttributes<HTMLDivElement> & {
+interface LoadingIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
 };
 

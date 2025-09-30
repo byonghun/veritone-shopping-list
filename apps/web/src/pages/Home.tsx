@@ -6,7 +6,7 @@ const HomePage = () => {
   const onClick = () => navigate("/items");
 
   return (
-    <div className="w-full">
+    <div id="home-page" className="w-full">
       <div className="card-wrapper mt-[110px]">
         <div className="card-content">
           <p className="card-text text-primaryFont">
