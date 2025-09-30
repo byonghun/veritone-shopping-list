@@ -1,10 +1,5 @@
 import { ZodError } from "zod";
-
-type ApiErrorBody = {
-  error?: string;
-  message?: string;
-  issues?: Array<{ message: string }>;
-};
+import { ApiErrorBody } from "@app/shared";
 
 function isAxiosError(e: unknown): e is {
   isAxiosError: true;

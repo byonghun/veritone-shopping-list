@@ -25,7 +25,7 @@ import {
   DrawerTitle,
 } from "../components/ui/drawer";
 import { Input } from "../components/ui/input";
-import Select from "../components/ui/select";
+import { Select } from "../components/ui/select";
 import { Textarea } from "../components/ui/textarea";
 import { GlobalDrawerContextType, GlobalDrawerProps } from "../types/drawer";
 import { cn } from "../utils";

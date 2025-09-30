@@ -36,7 +36,7 @@ const Select: FC<CustomSelectProps> = ({
   }, [open, onOpenChange]);
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <button
         type="button"
         aria-haspopup="listbox"
@@ -100,4 +100,4 @@ const Select: FC<CustomSelectProps> = ({
   );
 };
 
-export default Select;
+export { Select };
