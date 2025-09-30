@@ -10,14 +10,14 @@ import { ItemsService } from "./service.instance";
 import { sseBroadcastItems } from "../../sse";
 
 export const ItemsController = {
-  /** GET /api/v1/items — list all (MVP) */
+  /** GET /api/v1/items */
   async list(_req: Request, res: Response): Promise<void> {
     const items = await ItemsService.listAll();
     res.json({ items, count: items.length });
   },
 
   /** GET /api/v1/items/:id */
-  async get(req: Request<ItemId>, res: Response): Promise<void> {
+  async get(req: Request<{ id: ItemId }>, res: Response): Promise<void> {
     const params = ItemIdSchema.safeParse(req.params);
     if (!params.success) {
       res.status(400).json({
@@ -62,7 +62,7 @@ export const ItemsController = {
 
   /** PATCH /api/v1/items/:id */
   async update(
-    req: Request<ItemId, unknown, ItemFormInput>,
+    req: Request<{ id: ItemId }, unknown, ItemFormInput>,
     res: Response
   ): Promise<void> {
     const params = ItemIdSchema.safeParse(req.params);
@@ -98,7 +98,7 @@ export const ItemsController = {
   },
 
   /** DELETE /api/v1/items/:id */
-  async remove(req: Request<ItemId>, res: Response): Promise<void> {
+  async remove(req: Request<{ id: ItemId }>, res: Response): Promise<void> {
     const params = ItemIdSchema.safeParse(req.params);
     if (!params.success) {
       res.status(400).json({

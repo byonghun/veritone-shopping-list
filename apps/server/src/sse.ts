@@ -27,6 +27,7 @@
 import express from "express";
 import { nanoid } from "nanoid";
 import type { ItemsSnapshot } from "@app/shared";
+import { sseConnectionGuard } from "./middleware/rateLimit";
 
 export const sseRouter = express.Router();
 
@@ -45,7 +46,7 @@ const itemClients: Client[] = [];
  * GET /api/v1/sse/items
  * Opens a long-lived SSE connection. Server will emit "snapshot" events.
  */
-sseRouter.get("/items", (req, res) => {
+sseRouter.get("/items", sseConnectionGuard, (req, res) => {
   // Required SSE headers
   res.setHeader("Content-Type", "text/event-stream");
   // Don't cachce this response and do not transform it
