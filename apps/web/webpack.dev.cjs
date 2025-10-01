@@ -69,8 +69,8 @@ module.exports = {
     }),
   ],
   devServer: {
-    port: 3000, // matches your backend CORS origin
-    historyApiFallback: true, // React Router support
+    port: 3000,
+    historyApiFallback: true,
     proxy: {
       "/api": {
         target: "http://localhost:3001",
@@ -90,7 +90,6 @@ module.exports = {
       publicPath: "/",
       watch: true,
     },
-    // { directory: path.resolve(__dirname, "dist") },
     watchFiles: {
       paths: [
         path.resolve(__dirname, "src/index.html"),
