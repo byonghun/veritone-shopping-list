@@ -1,0 +1,3 @@
+echo "🔍 Running Prettier and ESLint before commit..."
+npm run lint
+npm run format
