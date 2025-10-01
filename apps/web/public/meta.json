@@ -1,0 +1,8 @@
+{
+  "name": "shopping-list-app",
+  "version": "1.0.0",
+  "description": "A simple shopping list application",
+  "buildDate": "2025-09-25T10:30:00Z",
+  "commitHash": "abc123def456",
+  "environment": "development"
+}

@@ -1,0 +1,83 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile.dev
+    container_name: veritone-shopping-list-web
+    ports:
+      - "8080:80"
+    depends_on:
+      server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/healthz"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      start_period: 10s
+  db:
+    # Smallest size, great for simple Node.js services
+    image: postgres:16-alpine
+    container_name: veritone-shopping-list-db
+    restart: always
+    environment:
+      - POSTGRES_USER=veritoneuser
+      - POSTGRES_PASSWORD=veritonepassword
+      - POSTGRES_DB=veritonedb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      # pg_isready is a standard liveness check
+      # It's lightweight and reliable
+      test: ["CMD-SHELL", "pg_isready -U veritoneuser -d veritonedb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile.dev
+    container_name: veritone-shopping-list-server
+    working_dir: /workspace/apps/server
+    # run as non-root
+    user: app
+    ports:
+      - "${PORT:-3001}:3001"
+    env_file:
+      - .env.development
+    # Bind mount your repo -> live code inside the container (hot reload)
+    # Anonymous volume on /workspace/node_modules to hide host modules and use the container's own node_modules (prevents OS/ABI mismatches)
+      # Telling Docker to not use the node_modules from host computer but use the dedicated node_modules folder inside the container
+      # Ensures that they are compiled for the correct operating system and architecture
+    # volumes:
+    #   - .:/workspace
+    #   - /workspace/node_modules
+    # Mount ONLY sources, not the whole repo, and do NOT mount node_modules
+    volumes:
+      - ./apps/server:/workspace/apps/server
+      - ./shared:/workspace/shared
+    
+    # Prevents the server from trying to connect before Postgres is listening
+    # This removes "ECONNREFUSED" boots
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "const http=require('http');const p=process.env.PORT||3001;http.get('http://localhost:'+p+'/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      start_period: 15s
+
+volumes:
+  pgdata:

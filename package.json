@@ -1,0 +1,28 @@
+{
+  "name": "veritone-shopping-list-monorepo",
+  "workspaces": [
+    "apps/*",
+    "shared"
+  ],
+  "scripts": {
+    "dev:docker": "docker compose up --build",
+    "dev:server": "npm run -w @app/server dev",
+    "test:server": "npm run -w @app/server test",
+    "dev:web": "npm run -w @app/web dev",
+    "dev": "npm run dev:server & npm run dev:web",
+    "down": "docker compose down -v",
+    "typecheck": "tsc -b",
+    "build": "tsc -b --force",
+    "clean": "tsc -b --clean && rimraf **/dist **/tsconfig.tsbuildinfo"
+  },
+  "devDependencies": {
+    "rimraf": "6.0.1",
+    "typescript": "5.6.2"
+  },
+  "packageManager": "npm@10.9.2",
+  "overrides": {
+    "zod": "4.1.11",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
