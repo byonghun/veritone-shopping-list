@@ -77,27 +77,37 @@ jobs:
       matrix:
         target: [shared, web, server]
       fail-fast: false
-    if: >
-      (matrix.target == 'shared'  && (needs.changes.outputs.shared_changed == 'true'  || github.event_name == 'push')) ||
-      (matrix.target == 'web'     && (needs.changes.outputs.web_changed == 'true'     || github.event_name == 'push')) ||
-      (matrix.target == 'server'  && (needs.changes.outputs.server_changed == 'true'  || github.event_name == 'push'))
     steps:
       - uses: actions/checkout@v4
 
       - name: Use Node 22.x
+        if: >
+          (matrix.target == 'shared'  && (needs.changes.outputs.shared_changed == 'true'  || github.event_name == 'push')) ||
+          (matrix.target == 'web'     && (needs.changes.outputs.web_changed == 'true'     || github.event_name == 'push')) ||
+          (matrix.target == 'server'  && (needs.changes.outputs.server_changed == 'true'  || github.event_name == 'push'))
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
       - name: Install dependencies (root)
+        if: >
+          (matrix.target == 'shared'  && (needs.changes.outputs.shared_changed == 'true'  || github.event_name == 'push')) ||
+          (matrix.target == 'web'     && (needs.changes.outputs.web_changed == 'true'     || github.event_name == 'push')) ||
+          (matrix.target == 'server'  && (needs.changes.outputs.server_changed == 'true'  || github.event_name == 'push'))
         run: npm install --no-audit --no-fund
 
       - name: Build shared (once)
-        if: ${{ matrix.target != 'shared' }}
+        if: >
+          (matrix.target != 'shared') &&
+          ((needs.changes.outputs.web_changed == 'true' || needs.changes.outputs.server_changed == 'true' || github.event_name == 'push'))
         run: npm run -w @app/shared build --if-present
 
       - name: Typecheck (${{ matrix.target }})
+        if: >
+          (matrix.target == 'shared'  && (needs.changes.outputs.shared_changed == 'true'  || github.event_name == 'push')) ||
+          (matrix.target == 'web'     && (needs.changes.outputs.web_changed == 'true'     || github.event_name == 'push')) ||
+          (matrix.target == 'server'  && (needs.changes.outputs.server_changed == 'true'  || github.event_name == 'push'))
         run: |
           if [ "${{ matrix.target }}" = "shared" ]; then
             npm run -w @app/shared typecheck --if-present || npx tsc -b --noEmit
@@ -108,6 +118,10 @@ jobs:
           fi
 
       - name: Build (${{ matrix.target }})
+        if: >
+          (matrix.target == 'shared'  && (needs.changes.outputs.shared_changed == 'true'  || github.event_name == 'push')) ||
+          (matrix.target == 'web'     && (needs.changes.outputs.web_changed == 'true'     || github.event_name == 'push')) ||
+          (matrix.target == 'server'  && (needs.changes.outputs.server_changed == 'true'  || github.event_name == 'push'))
         run: |
           if [ "${{ matrix.target }}" = "shared" ]; then
             npm run -w @app/shared build --if-present || npx tsc -b
@@ -118,6 +132,10 @@ jobs:
           fi
 
       - name: Test (${{ matrix.target }})
+        if: >
+          (matrix.target == 'shared'  && (needs.changes.outputs.shared_changed == 'true'  || github.event_name == 'push')) ||
+          (matrix.target == 'web'     && (needs.changes.outputs.web_changed == 'true'     || github.event_name == 'push')) ||
+          (matrix.target == 'server'  && (needs.changes.outputs.server_changed == 'true'  || github.event_name == 'push'))
         env:
           NODE_ENV: test
           RL_READ: "10"
