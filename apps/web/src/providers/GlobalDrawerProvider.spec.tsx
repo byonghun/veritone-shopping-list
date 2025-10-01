@@ -156,7 +156,9 @@ describe("GlobalDrawerProvider (drawer-focused)", () => {
     fireEvent.click(screen.getByTestId("open-a"));
     expect(screen.getByTestId("drawer")).toBeInTheDocument();
 
-    const headerClose = document.querySelector("button.w-\\[70px\\].h-full") as HTMLButtonElement | null;
+    const headerClose = document.querySelector(
+      "button.w-\\[70px\\].h-full",
+    ) as HTMLButtonElement | null;
     expect(headerClose).not.toBeNull();
 
     if (headerClose) fireEvent.click(headerClose);

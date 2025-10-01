@@ -14,8 +14,7 @@ import {
 import { GlobalDialogContextType, GlobalDialogProps } from "../types/dialog";
 import { cn } from "../utils";
 
-export const GlobalDialogContext =
-  createContext<GlobalDialogContextType | null>(null);
+export const GlobalDialogContext = createContext<GlobalDialogContextType | null>(null);
 
 interface GlobalDialogProviderProps {
   children: ReactNode;
@@ -23,9 +22,7 @@ interface GlobalDialogProviderProps {
 
 const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
-  const [dialogProps, setDialogProps] = useState<GlobalDialogProps>(
-    DEFAULT_GLOBAL_DIALOG_PROPS
-  );
+  const [dialogProps, setDialogProps] = useState<GlobalDialogProps>(DEFAULT_GLOBAL_DIALOG_PROPS);
 
   const {
     title,
@@ -66,9 +63,7 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
           }}
         >
           <DialogHeader>
-            <DialogTitle
-              className={cn("flex items-center", headerTextClassName)}
-            >
+            <DialogTitle className={cn("flex items-center", headerTextClassName)}>
               {title}
             </DialogTitle>
             {description && (
@@ -78,16 +73,14 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
             )}
           </DialogHeader>
           <DialogFooter>
-            {!isErrorType && <DialogClose asChild>
-              <Button variant="secondary" className="hover:opacity-80">
-                {closeBtnLabel}
-              </Button>
-            </DialogClose>}
-            <Button
-              variant="default"
-              onClick={onClick}
-              className={cn(isErrorType && "bg-red-600")}
-            >
+            {!isErrorType && (
+              <DialogClose asChild>
+                <Button variant="secondary" className="hover:opacity-80">
+                  {closeBtnLabel}
+                </Button>
+              </DialogClose>
+            )}
+            <Button variant="default" onClick={onClick} className={cn(isErrorType && "bg-red-600")}>
               {btnLabel}
             </Button>
           </DialogFooter>

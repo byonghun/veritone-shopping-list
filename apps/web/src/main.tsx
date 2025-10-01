@@ -31,5 +31,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </GlobalDialogProvider>
       </QueryClientProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

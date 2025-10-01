@@ -32,13 +32,7 @@ describe("Textarea", () => {
     const onChange = jest.fn();
 
     render(
-      <Textarea
-        aria-label="Props"
-        placeholder="Add notes"
-        rows={6}
-        disabled
-        onChange={onChange}
-      />
+      <Textarea aria-label="Props" placeholder="Add notes" rows={6} disabled onChange={onChange} />,
     );
 
     const ta = screen.getByPlaceholderText("Add notes") as HTMLTextAreaElement;

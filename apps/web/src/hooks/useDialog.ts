@@ -4,8 +4,7 @@ import { GlobalDialogContext } from "../providers/GlobalDialogProvider";
 export const useDialog = () => {
   const context = useContext(GlobalDialogContext);
 
-  if (!context)
-    throw new Error("useDialog must be used within the GlobalDialogProvider");
+  if (!context) throw new Error("useDialog must be used within the GlobalDialogProvider");
 
   return context;
 };

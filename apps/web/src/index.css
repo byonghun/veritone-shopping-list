@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {}
-#root button { cursor: pointer !important; } 
+:root {
+}
+#root button {
+  cursor: pointer !important;
+}
 
 @layer components {
   .page-wrapper {
@@ -25,6 +28,6 @@
   }
 
   .item-btn {
-    @apply h-6 w-6 flex items-center justify-center hover:opacity-80
+    @apply h-6 w-6 flex items-center justify-center hover:opacity-80;
   }
 }

@@ -17,8 +17,8 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
     alias: {
-      "@app/shared": path.resolve(__dirname, "../../shared/src")
-    }
+      "@app/shared": path.resolve(__dirname, "../../shared/src"),
+    },
   },
   module: {
     rules: [
@@ -30,14 +30,8 @@ module.exports = {
           options: {
             cacheDirectory: true,
             presets: [
-              [
-                "@babel/preset-env",
-                { targets: { esmodules: true }, modules: false },
-              ],
-              [
-                "@babel/preset-react",
-                { runtime: "automatic", development: false },
-              ],
+              ["@babel/preset-env", { targets: { esmodules: true }, modules: false }],
+              ["@babel/preset-react", { runtime: "automatic", development: false }],
               ["@babel/preset-typescript", {}],
             ],
           },
@@ -71,7 +65,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       "process.env.API_BASE_URL": JSON.stringify(
-        process.env.API_BASE_URL || "http://localhost:3001"
+        process.env.API_BASE_URL || "http://localhost:3001",
       ),
     }),
   ],

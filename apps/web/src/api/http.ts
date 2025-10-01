@@ -12,10 +12,7 @@ export class HttpError extends Error {
   }
 }
 
-export async function http<T>(
-  path: string,
-  opts: HttpOptions = {}
-): Promise<T> {
+export async function http<T>(path: string, opts: HttpOptions = {}): Promise<T> {
   const res = await fetch(path, {
     method: opts.method ?? "GET",
     headers: {
@@ -33,12 +30,7 @@ export async function http<T>(
   if (!res.ok) {
     const code = isJson ? payload.code : undefined;
     const details = isJson ? payload.details : undefined;
-    throw new HttpError(
-      res.status,
-      isJson ? payload.message : String(payload),
-      code,
-      details
-    );
+    throw new HttpError(res.status, isJson ? payload.message : String(payload), code, details);
   }
   return payload as T;
 }

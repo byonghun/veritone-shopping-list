@@ -1,6 +1,6 @@
 import { describe, it, expect } from "@jest/globals";
 import request from "supertest";
-import { app } from "../../../src/app"
+import { app } from "../../../src/app";
 
 describe("App wiring (HTTP integration)", () => {
   it("GET /healthz returns ok and a timestamp", async () => {
@@ -9,7 +9,7 @@ describe("App wiring (HTTP integration)", () => {
       expect.objectContaining({
         ok: true,
         ts: expect.any(String),
-      })
+      }),
     );
     // ts should be ISO-ish
     expect(new Date(res.body.ts).toString()).not.toBe("Invalid Date");

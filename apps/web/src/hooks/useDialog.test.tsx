@@ -37,13 +37,11 @@ describe("useDialog", () => {
     render(
       <ErrorBoundary onError={(e) => (captured = e)}>
         <Consumer />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     expect(captured).toBeDefined();
-    expect(captured!.message).toBe(
-      "useDialog must be used within the GlobalDialogProvider"
-    );
+    expect(captured!.message).toBe("useDialog must be used within the GlobalDialogProvider");
 
     errSpy.mockRestore();
   });
@@ -54,7 +52,7 @@ describe("useDialog", () => {
     render(
       <GlobalDialogContext.Provider value={mockValue}>
         <Consumer />
-      </GlobalDialogContext.Provider>
+      </GlobalDialogContext.Provider>,
     );
 
     expect(screen.getByTestId("value")).toHaveTextContent("42");

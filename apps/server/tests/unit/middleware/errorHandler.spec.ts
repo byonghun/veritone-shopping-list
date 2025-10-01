@@ -26,7 +26,7 @@ describe("ErrorHandler middleware", () => {
         // ex: "INTERNAL_SERVER_ERROR"
         error: expect.any(String),
         message: expect.any(String),
-      })
+      }),
     );
   });
 });

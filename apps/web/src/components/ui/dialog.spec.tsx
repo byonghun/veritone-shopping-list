@@ -18,7 +18,7 @@ describe("Dialog (Radix wrapper)", () => {
           <DialogTitle>Title text</DialogTitle>
           <DialogDescription>Description text</DialogDescription>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.queryByRole("dialog")).toBeNull();
@@ -48,7 +48,7 @@ describe("Dialog (Radix wrapper)", () => {
         <DialogContent showCloseButton={false} aria-describedby={undefined}>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe("Dialog (Radix wrapper)", () => {
           <DialogDescription>Body</DialogDescription>
           <DialogClose>Close</DialogClose>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     const content = document.querySelector('[data-slot="dialog-content"]') as HTMLElement;

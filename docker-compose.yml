@@ -51,8 +51,8 @@ services:
       - .env.development
     # Bind mount your repo -> live code inside the container (hot reload)
     # Anonymous volume on /workspace/node_modules to hide host modules and use the container's own node_modules (prevents OS/ABI mismatches)
-      # Telling Docker to not use the node_modules from host computer but use the dedicated node_modules folder inside the container
-      # Ensures that they are compiled for the correct operating system and architecture
+    # Telling Docker to not use the node_modules from host computer but use the dedicated node_modules folder inside the container
+    # Ensures that they are compiled for the correct operating system and architecture
     # volumes:
     #   - .:/workspace
     #   - /workspace/node_modules
@@ -60,7 +60,7 @@ services:
     volumes:
       - ./apps/server:/workspace/apps/server
       - ./shared:/workspace/shared
-    
+
     # Prevents the server from trying to connect before Postgres is listening
     # This removes "ECONNREFUSED" boots
     depends_on:
@@ -72,7 +72,7 @@ services:
           "CMD",
           "node",
           "-e",
-          "const http=require('http');const p=process.env.PORT||3001;http.get('http://localhost:'+p+'/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
+          "const http=require('http');const p=process.env.PORT||3001;http.get('http://localhost:'+p+'/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))",
         ]
       interval: 5s
       timeout: 2s

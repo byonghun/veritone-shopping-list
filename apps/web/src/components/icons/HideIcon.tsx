@@ -6,7 +6,7 @@ const HideIcon: FC<SvgIconProps> = ({
   height = "24",
   fill = "none",
   fillColor = "#555F7C",
-  className = ""
+  className = "",
 }) => {
   return (
     <svg

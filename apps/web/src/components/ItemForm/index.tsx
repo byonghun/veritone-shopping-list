@@ -1,25 +1,16 @@
 import { FC } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import {
-  ItemDTO,
-  ItemSchema,
-  type ItemFormInput,
-  type ItemFormOutput,
-} from "@app/shared";
+import { ItemDTO, ItemSchema, type ItemFormInput, type ItemFormOutput } from "@app/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { DEFAULT_ITEM, MAX_DESCRIPTION } from "../../constants/drawer";
 import { Button } from "../../components/ui/button";
 import { Checkbox } from "../../components/ui/checkbox";
-import {
-  DrawerClose,
-  DrawerDescription,
-  DrawerFooter,
-} from "../../components/ui/drawer";
+import { DrawerClose, DrawerDescription, DrawerFooter } from "../../components/ui/drawer";
 import { Input } from "../../components/ui/input";
 import { Select } from "../../components/ui/select";
 import { Textarea } from "../../components/ui/textarea";
-import { GlobalDrawerType } from '../../types/drawer';
+import { GlobalDrawerType } from "../../types/drawer";
 import { cn } from "../../utils";
 
 interface ItemFormProps {
@@ -90,12 +81,10 @@ const ItemForm: FC<ItemFormProps> = ({
             <DrawerDescription
               className={cn(
                 "text-base leading-[22px] text-secondaryFont mt-2",
-                descriptionTextClassName
+                descriptionTextClassName,
               )}
             >
-              {isUpdateMode
-                ? "Edit your item below"
-                : "Add your new item below"}
+              {isUpdateMode ? "Edit your item below" : "Add your new item below"}
             </DrawerDescription>
             {isDirty && (
               <button
@@ -109,21 +98,11 @@ const ItemForm: FC<ItemFormProps> = ({
           </div>
         </div>
 
-        <form
-          id="item-form"
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form id="item-form" className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <Input
-              id="item-name"
-              placeholder="Item Name"
-              {...register("itemName")}
-            />
+            <Input id="item-name" placeholder="Item Name" {...register("itemName")} />
             {errors.itemName && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.itemName.message}
-              </p>
+              <p className="mt-1 text-sm text-red-600">{errors.itemName.message}</p>
             )}
           </div>
 
@@ -138,9 +117,7 @@ const ItemForm: FC<ItemFormProps> = ({
               <span
                 className={cn(
                   "text-xs absolute bottom-3 right-3",
-                  descriptionValue.length > MAX_DESCRIPTION
-                    ? "text-red-600"
-                    : "text-secondaryFont"
+                  descriptionValue.length > MAX_DESCRIPTION ? "text-red-600" : "text-secondaryFont",
                 )}
                 aria-live="polite"
               >
@@ -148,9 +125,7 @@ const ItemForm: FC<ItemFormProps> = ({
               </span>
             </div>
             {errors.description && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.description.message}
-              </p>
+              <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
             )}
           </div>
 
@@ -171,9 +146,7 @@ const ItemForm: FC<ItemFormProps> = ({
               )}
             />
             {errors.quantity && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.quantity.message}
-              </p>
+              <p className="mt-1 text-sm text-red-600">{errors.quantity.message}</p>
             )}
           </div>
 
@@ -195,7 +168,7 @@ const ItemForm: FC<ItemFormProps> = ({
                       htmlFor="item-purchased"
                       className={cn(
                         "text-placeholderGray text-base leading-[22px] font-nunito",
-                        value && "text-primaryFont"
+                        value && "text-primaryFont",
                       )}
                     >
                       Purchased
@@ -211,20 +184,14 @@ const ItemForm: FC<ItemFormProps> = ({
       <DrawerFooter className="bg-white w-full flex">
         <div className="flex gap-4 w-full justify-end pr-2 font-nunito mb-2">
           <DrawerClose asChild>
-            <Button
-              variant="secondary"
-              className="h-9 font-normal hover:opacity-80"
-            >
+            <Button variant="secondary" className="h-9 font-normal hover:opacity-80">
               Cancel
             </Button>
           </DrawerClose>
 
           <Button
             variant="default"
-            className={cn(
-              "h-9 font-normal w-[85px]",
-              isUpdateMode && "w-[100px]"
-            )}
+            className={cn("h-9 font-normal w-[85px]", isUpdateMode && "w-[100px]")}
             form="item-form"
             type="submit"
             disabled={isSubmitting || !isValid || (!isDirty && isUpdateMode)}
@@ -234,8 +201,8 @@ const ItemForm: FC<ItemFormProps> = ({
                 ? "Updating..."
                 : "Saving..."
               : isUpdateMode
-              ? "Save Item"
-              : "Add Task"}
+                ? "Save Item"
+                : "Add Task"}
           </Button>
         </div>
       </DrawerFooter>

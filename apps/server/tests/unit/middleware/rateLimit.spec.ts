@@ -1,9 +1,6 @@
 import { describe, it, expect } from "@jest/globals";
 import express, { type Request, type Response } from "express";
-import rateLimit, {
-  type ValueDeterminingMiddleware,
-  Options,
-} from "express-rate-limit";
+import rateLimit, { type ValueDeterminingMiddleware, Options } from "express-rate-limit";
 import { EventEmitter } from "events";
 import request from "supertest";
 
@@ -42,12 +39,8 @@ function makeAppWithFixedKey(): express.Application {
     handler,
   });
 
-  app.get("/read", tinyReadLimiter, (_req, res) =>
-    res.status(200).json({ ok: true })
-  );
-  app.post("/write", tinyWriteLimiter, (_req, res) =>
-    res.status(201).json({ created: true })
-  );
+  app.get("/read", tinyReadLimiter, (_req, res) => res.status(200).json({ ok: true }));
+  app.post("/write", tinyWriteLimiter, (_req, res) => res.status(201).json({ created: true }));
 
   return app;
 }
@@ -99,10 +92,9 @@ describe("rateLimit middleware (HTTP limiters) with fixed key", () => {
 });
 
 describe("sseConnectionGuard (concurrency cap)", () => {
-  const { sseConnectionGuard } =
-    require("../../../src/middleware/rateLimit") as {
-      sseConnectionGuard: (req: Request, res: Response, next: Function) => void;
-    };
+  const { sseConnectionGuard } = require("../../../src/middleware/rateLimit") as {
+    sseConnectionGuard: (req: Request, res: Response, next: Function) => void;
+  };
 
   it("allows up to 5 concurrent connections per client and returns 429 on the 6th", () => {
     // stable key

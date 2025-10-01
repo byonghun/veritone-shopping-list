@@ -38,9 +38,8 @@ export class PrismaItemsRepo implements ItemsRepo {
       data: {
         itemName: patch.itemName?.trim() || undefined,
         description:
-          patch.description !== undefined ? (patch.description?.trim() || null) : undefined,
-        quantity:
-          patch.quantity !== undefined ? (patch.quantity ?? exists.quantity) : undefined,
+          patch.description !== undefined ? patch.description?.trim() || null : undefined,
+        quantity: patch.quantity !== undefined ? (patch.quantity ?? exists.quantity) : undefined,
         purchased: patch.purchased ?? undefined,
       },
     });

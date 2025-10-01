@@ -61,7 +61,7 @@ describe("http()", () => {
         message: "Invalid input",
         code: "E_INVALID",
         details: { field: "name", reason: "required" },
-      })
+      }),
     );
   });
 
@@ -80,7 +80,7 @@ describe("http()", () => {
         message: "Server exploded",
         code: undefined,
         details: undefined,
-      })
+      }),
     );
   });
 

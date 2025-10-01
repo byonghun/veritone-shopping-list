@@ -28,7 +28,7 @@ describe("ArrowIcon", () => {
         fill="currentColor"
         fillColor="#ff0000"
         className="icon-large"
-      />
+      />,
     );
 
     const svg = container.querySelector("svg") as SVGElement;

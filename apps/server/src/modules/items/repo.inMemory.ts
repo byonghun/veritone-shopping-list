@@ -11,9 +11,7 @@ export class InMemoryItemsRepo implements ItemsRepo {
 
   async listAll(): Promise<Item[]> {
     // MVP: return everything (creation-desc to keep newest first)
-    return Array.from(this.items.values()).sort((a, b) =>
-      b.createdAt.localeCompare(a.createdAt)
-    );
+    return Array.from(this.items.values()).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 
   async get(id: ItemId): Promise<Item | undefined> {
@@ -48,9 +46,7 @@ export class InMemoryItemsRepo implements ItemsRepo {
           ? patch.description.trim() || undefined
           : current.description,
       quantity:
-        patch.quantity !== undefined
-          ? Math.max(1, Number(patch.quantity))
-          : current.quantity,
+        patch.quantity !== undefined ? Math.max(1, Number(patch.quantity)) : current.quantity,
       purchased: patch.purchased ?? current.purchased,
       updatedAt: nowISO(),
     };

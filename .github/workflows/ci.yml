@@ -2,7 +2,7 @@ name: CI (PR & main)
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - "apps/**"
       - "shared/**"
@@ -12,7 +12,7 @@ on:
       - ".prettierrc*"
       - ".github/workflows/ci.yml"
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - "apps/**"
       - "shared/**"

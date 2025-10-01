@@ -26,7 +26,7 @@ const Item: FC<ItemProps> = ({
     <div
       className={cn(
         "w-full sm:h-[87px] p-4 px-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px] min-h-[87px] transition-colors",
-        purchased && "bg-drawerBorderGray/[0.17] border-transparent"
+        purchased && "bg-drawerBorderGray/[0.17] border-transparent",
       )}
     >
       <div className="flex gap-[18px] items-center">
@@ -39,14 +39,11 @@ const Item: FC<ItemProps> = ({
             onTogglePurchased(id, checkedState);
           }}
         />
-        <div
-          id="item-content"
-          className="flex flex-col font-nunito gap-[3px] pr-4 max-w-prose"
-        >
+        <div id="item-content" className="flex flex-col font-nunito gap-[3px] pr-4 max-w-prose">
           <h3
             className={cn(
               "font-semibold text-base leading-5",
-              purchased && "line-through text-brand"
+              purchased && "line-through text-brand",
             )}
           >
             {`${(quantity ?? 1) > 1 ? `${quantity}x` : ""} ${itemName}`}
@@ -55,7 +52,7 @@ const Item: FC<ItemProps> = ({
             <p
               className={cn(
                 "text-listDescriptionGray text-sm font-semibold line-clamp-3",
-                purchased && "line-through"
+                purchased && "line-through",
               )}
             >
               {description}
@@ -64,18 +61,10 @@ const Item: FC<ItemProps> = ({
         </div>
       </div>
       <div id="item-actions" className="flex gap-5">
-        <button
-          aria-label="Edit button"
-          onClick={() => onEdit(id)}
-          className="item-btn"
-        >
+        <button aria-label="Edit button" onClick={() => onEdit(id)} className="item-btn">
           <EditIcon />
         </button>
-        <button
-          aria-label="Delete button"
-          onClick={() => onDelete(id)}
-          className="item-btn"
-        >
+        <button aria-label="Delete button" onClick={() => onDelete(id)} className="item-btn">
           <TrashIcon />
         </button>
       </div>

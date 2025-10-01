@@ -25,14 +25,12 @@ describe("HomePage", () => {
     render(
       <MemoryRouter>
         <HomePage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(document.getElementById("home-page")).toBeInTheDocument();
     expect(screen.getByText("Home Page")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Lets start your list" })
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Lets start your list" })).toBeInTheDocument();
   });
 
   it("navigates to /items when the button is clicked", () => {
@@ -42,12 +40,10 @@ describe("HomePage", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <HomePage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
-    fireEvent.click(
-      screen.getByRole("button", { name: "Lets start your list" })
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Lets start your list" }));
 
     expect(navigateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith("/items");

@@ -12,7 +12,14 @@ import globals from "globals";
 export default [
   // 0) Ignores (replaces .eslintignore)
   {
-    ignores: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/coverage/**", ".next/**", "out/**"],
+    ignores: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/coverage/**",
+      ".next/**",
+      "out/**",
+    ],
   },
 
   // 0.5) Global linter options
@@ -52,13 +59,16 @@ export default [
       "react/jsx-uses-react": "off",
       "react/prop-types": "off",
       "no-undef": "off",
-      "no-empty": ["warn", { "allowEmptyCatch": true }],
+      "no-empty": ["warn", { allowEmptyCatch: true }],
       "import/order": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-explicit-any": ["warn", { fixToUnknown: true, ignoreRestArgs: true }],
-      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }]
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
     },
     settings: {
       // react: { version: "detect" },
@@ -111,11 +121,14 @@ export default [
       "import/order": "off",
       "@typescript-eslint/no-explicit-any": ["warn", { fixToUnknown: true, ignoreRestArgs: true }],
       "no-undef": "off",
-      "no-empty": ["warn", { "allowEmptyCatch": true }],
+      "no-empty": ["warn", { allowEmptyCatch: true }],
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unsafe-function-type": "off",
       "@typescript-eslint/ban-ts-comment": ["warn", { "ts-ignore": "allow-with-description" }],
-      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }]
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
     },
     settings: {
       "import/resolver": {

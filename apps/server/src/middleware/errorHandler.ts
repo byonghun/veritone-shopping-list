@@ -9,9 +9,7 @@ type ErrorBody =
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ZodError) {
-    return res
-      .status(400)
-      .json({ error: "BAD_REQUEST", message: "Validation failed" });
+    return res.status(400).json({ error: "BAD_REQUEST", message: "Validation failed" });
   }
 
   if ((err as any)?.status === 429) {
@@ -21,9 +19,7 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   }
 
   const status = (err as { status?: number } | undefined)?.status ?? 500;
-  const message =
-    (err as { message?: string } | undefined)?.message ??
-    "Internal Server Error";
+  const message = (err as { message?: string } | undefined)?.message ?? "Internal Server Error";
 
   const body: any = {
     error: status === 500 ? "INTERNAL" : "ERROR",

@@ -7,18 +7,14 @@ import { AMOUNT_LIMIT } from "../../constants/drawer";
 function Harness({
   initialOpen = false,
   initialValue,
-}: { initialOpen?: boolean; initialValue?: number | undefined }) {
+}: {
+  initialOpen?: boolean;
+  initialValue?: number | undefined;
+}) {
   const [open, setOpen] = React.useState(initialOpen);
   const [value, setValue] = React.useState<number | undefined>(initialValue);
 
-  return (
-    <Select
-      open={open}
-      onOpenChange={setOpen}
-      value={value}
-      onClick={(v) => setValue(v)}
-    />
-  );
+  return <Select open={open} onOpenChange={setOpen} value={value} onClick={(v) => setValue(v)} />;
 }
 
 function openSelect() {

@@ -6,8 +6,7 @@ if (!globalThis.TextEncoder) {
   (globalThis as any).TextEncoder = TextEncoder;
 }
 if (!globalThis.TextDecoder) {
-  (globalThis as any).TextDecoder =
-    TextDecoder as unknown as typeof globalThis.TextDecoder;
+  (globalThis as any).TextDecoder = TextDecoder as unknown as typeof globalThis.TextDecoder;
 }
 
 if (!window.matchMedia) {

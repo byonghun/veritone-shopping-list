@@ -28,14 +28,8 @@ module.exports = {
           options: {
             cacheDirectory: true,
             presets: [
-              [
-                "@babel/preset-env",
-                { targets: { esmodules: true }, modules: false },
-              ],
-              [
-                "@babel/preset-react",
-                { runtime: "automatic", development: true },
-              ],
+              ["@babel/preset-env", { targets: { esmodules: true }, modules: false }],
+              ["@babel/preset-react", { runtime: "automatic", development: true }],
               ["@babel/preset-typescript", {}],
             ],
           },
@@ -62,7 +56,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       "process.env.API_BASE_URL": JSON.stringify(
-        process.env.API_BASE_URL || "http://localhost:3001"
+        process.env.API_BASE_URL || "http://localhost:3001",
       ),
     }),
   ],
@@ -89,10 +83,7 @@ module.exports = {
       watch: true,
     },
     watchFiles: {
-      paths: [
-        path.resolve(__dirname, "src/index.html"),
-        path.resolve(__dirname, "public/**/*"),
-      ],
+      paths: [path.resolve(__dirname, "src/index.html"), path.resolve(__dirname, "public/**/*")],
       options: { usePolling: false },
     },
   },

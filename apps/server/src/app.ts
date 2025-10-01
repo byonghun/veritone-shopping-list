@@ -1,9 +1,4 @@
-import express, {
-  type NextFunction,
-  type Application,
-  type Request,
-  type Response,
-} from "express";
+import express, { type NextFunction, type Application, type Request, type Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 
@@ -44,7 +39,7 @@ const corsOptions: cors.CorsOptions = {
   maxAge: 86400,
   optionsSuccessStatus: 204,
   // let cors() terminate OPTIONS itself
-  preflightContinue: false
+  preflightContinue: false,
 };
 
 app.use(cors(corsOptions));
@@ -70,9 +65,7 @@ app.use(`/api/${API_VERSION}/sse`, sseRouter);
 app.use(`/api/${API_VERSION}/items`, itemsRoutes);
 
 app.use((_req: Request, res: Response) =>
-  res
-    .status(404)
-    .json({ error: "NOT_FOUND" as const, message: "Route not found" })
+  res.status(404).json({ error: "NOT_FOUND" as const, message: "Route not found" }),
 );
 app.use(errorHandler);
 

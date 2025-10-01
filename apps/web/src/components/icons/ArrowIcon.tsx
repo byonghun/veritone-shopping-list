@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC } from "react";
 
 import { SvgIconProps } from "../../types/icons";
 
@@ -7,7 +7,7 @@ const ArrowIcon: FC<SvgIconProps> = ({
   height = "5",
   fill = "none",
   fillColor = "#555F7C",
-  className = ""
+  className = "",
 }) => {
   return (
     <svg
@@ -23,4 +23,4 @@ const ArrowIcon: FC<SvgIconProps> = ({
   );
 };
 
-export default ArrowIcon
+export default ArrowIcon;

@@ -11,18 +11,10 @@ interface CustomSelectProps {
   onClick: (value: number) => void;
 }
 
-const Select: FC<CustomSelectProps> = ({
-  open,
-  onOpenChange,
-  value,
-  onClick,
-}) => {
+const Select: FC<CustomSelectProps> = ({ open, onOpenChange, value, onClick }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const listboxId = useId();
-  const options = useMemo(
-    () => Array.from({ length: AMOUNT_LIMIT }, (_, i) => i + 1),
-    []
-  );
+  const options = useMemo(() => Array.from({ length: AMOUNT_LIMIT }, (_, i) => i + 1), []);
 
   useEffect(() => {
     if (!open) return;
@@ -49,7 +41,7 @@ const Select: FC<CustomSelectProps> = ({
           "text-base font-nunito px-3 text-placeholderGray flex justify-between items-center",
           "active:border-brand transition-colors z-50",
           open && "border-brand border",
-          value && "text-primaryFont"
+          value && "text-primaryFont",
         )}
         onClick={(e) => {
           e.preventDefault();
@@ -58,9 +50,7 @@ const Select: FC<CustomSelectProps> = ({
         }}
       >
         <p>{`${value ?? "How Many?"}`}</p>
-        <ArrowIcon
-          className={cn("transition-transform", open && "rotate-180")}
-        />
+        <ArrowIcon className={cn("transition-transform", open && "rotate-180")} />
       </button>
 
       <div
@@ -71,7 +61,7 @@ const Select: FC<CustomSelectProps> = ({
           "origin-top transition duration-200 ease-out will-change-[transform,opacity] mt-[1px]",
           open
             ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
-            : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
+            : "opacity-0 -translate-y-1 scale-95 pointer-events-none",
         )}
         aria-hidden={!open}
       >
