@@ -49,7 +49,7 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
 
   const onClick = () => {
     setOpen(false);
-    onConfirm && onConfirm();
+    onConfirm?.();
   };
 
   return (

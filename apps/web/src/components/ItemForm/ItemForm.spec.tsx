@@ -139,7 +139,6 @@ function renderForm(
   overrides?: Partial<React.ComponentProps<typeof ItemForm>>
 ) {
   const props: React.ComponentProps<typeof ItemForm> = {
-    description: "Add your new item below",
     selectOpen: false,
     setSelectOpen: () => {},
     onClose: () => {},
@@ -157,13 +156,6 @@ const getSubmitBtn = () =>
 /* ───────────── Tests ───────────── */
 
 describe("ItemForm", () => {
-  it("renders and shows provided description", () => {
-    renderForm({ description: "Hello description" });
-    expect(screen.getByTestId("drawer-description")).toHaveTextContent(
-      "Hello description"
-    );
-  });
-
   it("create mode: requires itemName, allows selecting quantity, normalizes defaults, calls onConfirm and onClose", async () => {
     const onConfirm = jest.fn();
     const onClose = jest.fn();

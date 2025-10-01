@@ -126,7 +126,7 @@ describe("sseConnectionGuard (concurrency cap)", () => {
     });
     expect(next).toHaveBeenCalledTimes(5);
 
-    open[0].emit("close");
+    open[0]!.emit("close");
     const afterClose = makeMockRes();
     sseConnectionGuard(req, afterClose, next);
     expect(next).toHaveBeenCalledTimes(6);

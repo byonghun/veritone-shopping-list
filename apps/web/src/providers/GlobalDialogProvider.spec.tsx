@@ -10,19 +10,13 @@ jest.mock("../components/ui/button", () => ({
 }));
 
 jest.mock("../components/ui/dialog", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require("react");
 
   function omitDomUnsafeProps<P extends Record<string, any>>(props: P) {
     const {
-      onOpenAutoFocus,
-      onCloseAutoFocus,
-      onEscapeKeyDown,
-      onPointerDownOutside,
-      onInteractOutside,
-      open,
-      onOpenChange,
-      modal,
-      showCloseButton,
+      onOpenAutoFocus: _a,
+      showCloseButton: _b,
       ...rest
     } = props as any;
     return rest as P;
