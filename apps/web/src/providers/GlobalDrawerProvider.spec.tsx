@@ -1,30 +1,9 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import GlobalDrawerProvider, {
   GlobalDrawerContext,
 } from "./GlobalDrawerProvider";
 
-// ── helpers to guarantee all updates are wrapped in act ───────────────────────
-const actClick = async (el: Element | Node | Window) =>
-  act(async () => {
-    fireEvent.click(el as any);
-  });
-
-const actChange = async (
-  el: Element | Node,
-  target: Record<string, unknown>
-) =>
-  act(async () => {
-    fireEvent.change(el as any, { target });
-  });
-
-// ── mocks ────────────────────────────────────────────────────────────────────
 jest.mock("../components/ui/drawer", () => {
   const React = require("react");
   const omitDomUnsafeProps = (props: any) => {
@@ -46,162 +25,80 @@ jest.mock("../components/ui/drawer", () => {
   return {
     __esModule: true,
     Drawer: ({ open, children }: any) =>
-      open ? <div data-testid="mock-drawer">{children}</div> : null,
+      open ? <div data-testid="drawer">{children}</div> : null,
     DrawerContent: (props: any) => {
       const { className, children } = props || {};
       const rest = omitDomUnsafeProps(props);
       return (
-        <div data-slot="drawer-content" data-class={className} {...rest}>
+        <div data-testid="drawer-content" data-class={className} {...rest}>
           {children}
         </div>
       );
     },
     DrawerHeader: ({ className, children }: any) => (
-      <div data-slot="drawer-header" data-class={className}>
-        {children}
-      </div>
-    ),
-    DrawerFooter: ({ className, children }: any) => (
-      <div data-slot="drawer-footer" data-class={className}>
+      <div data-testid="drawer-header" data-class={className}>
         {children}
       </div>
     ),
     DrawerTitle: ({ className, children }: any) => (
-      <h2 data-slot="drawer-title" className={className}>
+      <h2 data-testid="drawer-title" className={className}>
         {children}
       </h2>
     ),
-    DrawerDescription: ({ className, children }: any) => (
-      <p data-slot="drawer-description" className={className}>
-        {children}
-      </p>
-    ),
-    DrawerClose: ({ asChild, children, ...rest }: any) =>
-      asChild
-        ? React.cloneElement(children, {
-            "data-slot": "drawer-close",
-            ...children.props,
-          })
-        : (
-          <button data-slot="drawer-close" {...omitDomUnsafeProps(rest)}>
-            {children}
-          </button>
-        ),
-    DrawerPortal: ({ children }: any) => <>{children}</>,
-    DrawerOverlay: () => <div data-slot="drawer-overlay" />,
-    DrawerTrigger: ({ children }: any) => (
-      <button data-slot="drawer-trigger">{children}</button>
-    ),
   };
 });
 
-jest.mock("../components/ui/button", () => ({
-  __esModule: true,
-  Button: (props: any) => <button {...props} />,
-}));
+let ITEM_FORM_MOUNT_COUNT = 0;
 
-// forward ref so RHF register() works
-jest.mock("../components/ui/input", () => {
+jest.mock("../components/ItemForm", () => {
   const React = require("react");
-  return {
-    __esModule: true,
-    Input: React.forwardRef(function InputMock(
-      props: any,
-      ref: React.ForwardedRef<HTMLInputElement>
-    ) {
-      return <input ref={ref} data-slot="input" {...props} />;
-    }),
-  };
+  function ItemFormMock(props: any) {
+    const [mounts, setMounts] = React.useState(0);
+
+    React.useEffect(() => {
+      ITEM_FORM_MOUNT_COUNT += 1;
+      setMounts(ITEM_FORM_MOUNT_COUNT);
+    }, []);
+
+    const { type, description, descriptionTextClassName, defaultValues } =
+      props;
+
+    return (
+      <div data-testid="item-form">
+        <div data-testid="item-form-type">{type ?? "undefined"}</div>
+        <div data-testid="item-form-desc" className={descriptionTextClassName}>
+          {description}
+        </div>
+        <div data-testid="item-form-id">{defaultValues?.id ?? "no-id"}</div>
+        <div data-testid="item-form-mounts">{mounts}</div>
+      </div>
+    );
+  }
+  return { __esModule: true, default: ItemFormMock };
 });
 
-// forward ref so RHF register() works
-jest.mock("../components/ui/textarea", () => {
-  const React = require("react");
-  return {
-    __esModule: true,
-    Textarea: React.forwardRef(function TextareaMock(
-      props: any,
-      ref: React.ForwardedRef<HTMLTextAreaElement>
-    ) {
-      return <textarea ref={ref} data-slot="textarea" {...props} />;
-    }),
-  };
-});
-
-jest.mock("../components/ui/checkbox", () => ({
-  __esModule: true,
-  Checkbox: ({ onCheckedChange, ...rest }: any) => (
-    <input
-      type="checkbox"
-      data-slot="checkbox"
-      onChange={(e) => onCheckedChange?.(e.target.checked)}
-      {...rest}
-    />
-  ),
-}));
-
-// keep type="button" so option clicks don't submit the form
-jest.mock("../components/ui/select", () => ({
-  __esModule: true,
-  Select: ({
-    value,
-    onClick,
-  }: {
-    value?: number;
-    onClick: (v: number) => void;
-  }) => (
-    <div>
-      <div data-testid="select-current">{value ?? ""}</div>
-      <button type="button" data-testid="select-1" onClick={() => onClick(1)}>
-        Select 1
-      </button>
-      <button type="button" data-testid="select-3" onClick={() => onClick(3)}>
-        Select 3
-      </button>
-    </div>
-  ),
-}));
-
-// ── harness ──────────────────────────────────────────────────────────────────
 function Consumer({
-  onConfirmRef,
+  propsA,
+  propsB,
+  propsC,
 }: {
-  onConfirmRef?: React.MutableRefObject<jest.Mock | undefined>;
+  propsA: any;
+  propsB: any;
+  propsC: any;
 }) {
   const ctx = React.useContext(GlobalDrawerContext)!;
 
   return (
     <div>
-      <button
-        data-testid="open-create"
-        onClick={() =>
-          ctx.openDrawer({
-            type: "create",
-            onConfirm: onConfirmRef?.current,
-          } as any)
-        }
-      >
-        open-create
+      <button data-testid="open-a" onClick={() => ctx.openDrawer(propsA)}>
+        open-a
       </button>
-
-      <button
-        data-testid="open-update"
-        onClick={() =>
-          ctx.openDrawer({
-            type: "update",
-            defaultValues: {
-              itemName: "Bread",
-              description: "Whole",
-              quantity: 2,
-              purchased: false,
-            },
-            onConfirm: onConfirmRef?.current,
-          } as any)
-        }
-      >
-        open-update
+      <button data-testid="open-b" onClick={() => ctx.openDrawer(propsB)}>
+        open-b
       </button>
-
+      <button data-testid="open-c" onClick={() => ctx.openDrawer(propsC)}>
+        open-c
+      </button>
       <button data-testid="close" onClick={() => ctx.closeDrawer()}>
         close
       </button>
@@ -209,136 +106,121 @@ function Consumer({
   );
 }
 
-function renderWithProvider(ui: React.ReactElement) {
-  return render(<GlobalDrawerProvider>{ui}</GlobalDrawerProvider>);
-}
+const baseDefaults = {
+  id: "",
+  itemName: "",
+  description: "",
+  quantity: undefined,
+  purchased: false,
+  createdAt: undefined,
+  updatedAt: undefined,
+};
 
-// ── tests ─────────────────────────────────────────────────────────────────────
-describe("GlobalDrawerProvider", () => {
-  it("opens in create mode and submits after filling required fields", async () => {
-    const onConfirmRef = { current: jest.fn() as jest.Mock | undefined };
-    renderWithProvider(<Consumer onConfirmRef={onConfirmRef} />);
-
-    await actClick(screen.getByTestId("open-create"));
-    expect(screen.getByTestId("mock-drawer")).toBeInTheDocument();
-
-    const nameInput = screen.getByPlaceholderText("Item Name");
-    const descInput = screen.getByPlaceholderText("Description");
-
-    await actChange(nameInput, { name: "itemName", value: "Milk" });
-    await actChange(descInput, { name: "description", value: "ok" });
-    await actClick(screen.getByTestId("select-1"));
-
-    const submitBtn = screen.getByRole("button", { name: /add task/i });
-    await waitFor(() => expect(submitBtn).not.toBeDisabled());
-
-    await actClick(submitBtn);
-
-    await waitFor(() => expect(onConfirmRef.current).toHaveBeenCalledTimes(1));
-    const payload = onConfirmRef.current!.mock.calls[0][0];
-    expect(payload.itemName).toBe("Milk");
-    expect(payload.quantity).toBe(1);
-    expect(payload.purchased).toBe(false);
-    expect(screen.queryByTestId("mock-drawer")).toBeNull();
+describe("GlobalDrawerProvider (drawer-focused)", () => {
+  beforeEach(() => {
+    ITEM_FORM_MOUNT_COUNT = 0;
   });
 
-  it("selects quantity via Select and passes value through", async () => {
-    const onConfirmRef = { current: jest.fn() as jest.Mock | undefined };
-    renderWithProvider(<Consumer onConfirmRef={onConfirmRef} />);
+  function renderWithProvider() {
+    const propsA = {
+      type: "create" as const,
+      description: "Create something",
+      descriptionTextClassName: "desc-class",
+      defaultValues: { ...baseDefaults, id: "" },
+      onConfirm: jest.fn(),
+    };
 
-    await actClick(screen.getByTestId("open-create"));
-    await actChange(screen.getByPlaceholderText("Item Name"), {
-      name: "itemName",
-      value: "Eggs",
-    });
+    const propsB = {
+      type: "update" as const,
+      description: "Update something",
+      descriptionTextClassName: "desc-class-b",
+      defaultValues: { ...baseDefaults, id: "" },
+      onConfirm: jest.fn(),
+    };
 
-    await actClick(screen.getByTestId("select-3"));
-    expect(screen.getByTestId("select-current").textContent).toBe("3");
+    const propsC = {
+      type: "update" as const,
+      description: "Update other",
+      descriptionTextClassName: "desc-class-c",
+      defaultValues: { ...baseDefaults, id: "abc" },
+      onConfirm: jest.fn(),
+    };
 
-    const submitBtn = screen.getByRole("button", { name: /add task/i });
-    await waitFor(() => expect(submitBtn).not.toBeDisabled());
-
-    await actClick(submitBtn);
-
-    await waitFor(() => expect(onConfirmRef.current).toHaveBeenCalledTimes(1));
-    expect(onConfirmRef.current!.mock.calls[0][0].quantity).toBe(3);
-  });
-
-  it("update mode shows purchased checkbox; 'Save Item' disabled until dirty; submits after change", async () => {
-    const onConfirmRef = { current: jest.fn() as jest.Mock | undefined };
-    renderWithProvider(<Consumer onConfirmRef={onConfirmRef} />);
-
-    await actClick(screen.getByTestId("open-update"));
-
-    const purchased = screen.getByLabelText("Purchased");
-    expect(purchased).toBeInTheDocument();
-
-    const submitBtn = screen.getByRole("button", { name: /save item/i });
-    expect(submitBtn).toBeDisabled();
-
-    await actClick(screen.getByTestId("select-1"));
-
-    await waitFor(() => expect(submitBtn).not.toBeDisabled());
-
-    await actClick(submitBtn);
-    await waitFor(() => expect(onConfirmRef.current).toHaveBeenCalledTimes(1));
-  });
-
-  it("shows Clear Form when dirty and resets fields on click", async () => {
-    renderWithProvider(<Consumer />);
-
-    await actClick(screen.getByTestId("open-create"));
-
-    const nameInput = screen.getByPlaceholderText(
-      "Item Name"
-    ) as HTMLInputElement;
-
-    await actChange(nameInput, { name: "itemName", value: "Tea" });
-    await actClick(screen.getByTestId("select-1"));
-
-    const clearBtn = await waitFor(() =>
-      screen.getByRole("button", { name: "Clear Form" })
+    return render(
+      <GlobalDrawerProvider>
+        <Consumer propsA={propsA} propsB={propsB} propsC={propsC} />
+        <div data-testid="outside-child">outside</div>
+      </GlobalDrawerProvider>
     );
+  }
 
-    await actClick(clearBtn);
-    expect(nameInput.value).toBe("");
+  it("renders children and keeps drawer closed by default", () => {
+    renderWithProvider();
+    expect(screen.getByTestId("outside-child")).toHaveTextContent("outside");
+    expect(screen.queryByTestId("drawer")).toBeNull();
   });
 
-  it("closeDrawer() clears dirty form and next open is clean", async () => {
-    renderWithProvider(<Consumer />);
+  it("openDrawer opens the drawer and passes props to ItemForm", async () => {
+    renderWithProvider();
 
-    await actClick(screen.getByTestId("open-create"));
-    const nameInput = screen.getByPlaceholderText(
-      "Item Name"
-    ) as HTMLInputElement;
+    fireEvent.click(screen.getByTestId("open-a"));
+    expect(screen.getByTestId("drawer")).toBeInTheDocument();
 
-    await actChange(nameInput, { name: "itemName", value: "Butter" });
-    await actClick(screen.getByTestId("close"));
+    expect(screen.getByTestId("item-form-type")).toHaveTextContent("create");
+    expect(screen.getByTestId("item-form-desc")).toHaveTextContent(
+      "Create something"
+    );
+    expect(screen.getByTestId("item-form-id")).toHaveTextContent("");
 
-    expect(screen.queryByTestId("mock-drawer")).toBeNull();
-
-    await actClick(screen.getByTestId("open-create"));
-    // form should be reset (empty), not "Butter"
     await waitFor(() =>
-      expect(
-        (screen.getByPlaceholderText("Item Name") as HTMLInputElement).value
-      ).toBe("")
+      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("1")
     );
   });
 
-  it("header close button (icon-only) closes the drawer", async () => {
-    renderWithProvider(<Consumer />);
+  it("header close button closes the drawer", () => {
+    renderWithProvider();
 
-    await actClick(screen.getByTestId("open-create"));
+    fireEvent.click(screen.getByTestId("open-a"));
+    expect(screen.getByTestId("drawer")).toBeInTheDocument();
 
     const headerClose = document.querySelector(
-      "button.w-\\[70px\\]"
+      "button.w-\\[70px\\].h-full"
     ) as HTMLButtonElement | null;
     expect(headerClose).not.toBeNull();
 
-    if (headerClose) {
-      await actClick(headerClose);
-    }
-    expect(screen.queryByTestId("mock-drawer")).toBeNull();
+    if (headerClose) fireEvent.click(headerClose);
+    expect(screen.queryByTestId("drawer")).toBeNull();
+  });
+
+  it("closeDrawer from context closes the drawer", () => {
+    renderWithProvider();
+
+    fireEvent.click(screen.getByTestId("open-a"));
+    expect(screen.getByTestId("drawer")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("close"));
+    expect(screen.queryByTestId("drawer")).toBeNull();
+  });
+
+  it("remounts ItemForm when the keyed scenario changes (type or id), and not when unchanged", async () => {
+    renderWithProvider();
+
+    fireEvent.click(screen.getByTestId("open-a"));
+    await waitFor(() =>
+      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("1")
+    );
+
+    fireEvent.click(screen.getByTestId("open-b"));
+    await waitFor(() =>
+      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("2")
+    );
+
+    fireEvent.click(screen.getByTestId("open-b"));
+    expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("2");
+
+    fireEvent.click(screen.getByTestId("open-c"));
+    await waitFor(() =>
+      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("3")
+    );
   });
 });
