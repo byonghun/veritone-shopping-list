@@ -9,6 +9,8 @@
     "dev:server": "npm run -w @app/server dev",
     "test:server": "npm run -w @app/server test",
     "dev:web": "npm run -w @app/web dev",
+    "test:web": "npm run -w @app/web test",
+    "test": "npm run test:server & npm run test:web",
     "dev": "npm run dev:server & npm run dev:web",
     "down": "docker compose down -v",
     "typecheck": "tsc -b",
