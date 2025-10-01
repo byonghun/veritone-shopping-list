@@ -130,6 +130,7 @@ const ItemForm: FC<ItemFormProps> = ({
               <Textarea
                 id="item-description"
                 placeholder="Description"
+                className="resize-none"
                 {...register("description")}
               />
               <span
