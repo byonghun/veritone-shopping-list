@@ -1,5 +1,3 @@
-// eslint.config.mjs — ESLint v9 flat config for your monorepo
-
 import js from "@eslint/js";
 import tseslint from "typescript-eslint"; // meta package: provides parser, plugin, and flat presets
 import reactPlugin from "eslint-plugin-react";
