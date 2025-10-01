@@ -13,9 +13,12 @@
     "down": "docker compose down -v",
     "typecheck": "tsc -b",
     "build": "tsc -b --force",
-    "clean": "tsc -b --clean && rimraf **/dist **/tsconfig.tsbuildinfo"
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "eslint-config-prettier": "9.1.2",
+    "prettier": "3.6.2",
     "rimraf": "6.0.1",
     "typescript": "5.6.2"
   },
