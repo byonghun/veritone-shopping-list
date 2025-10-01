@@ -164,11 +164,11 @@ jobs:
       matrix:
         include:
           - app: web
-            context: ./apps/web
+            context: .
             file: ./apps/web/Dockerfile.dev
             tag: web:pr-${{ github.event.number }}
           - app: server
-            context: ./apps/server
+            context: .
             file: ./apps/server/Dockerfile.dev
             tag: server:pr-${{ github.event.number }}
       fail-fast: false
