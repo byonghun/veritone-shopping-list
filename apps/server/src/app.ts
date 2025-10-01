@@ -6,7 +6,9 @@ import express, {
 } from "express";
 import cors from "cors";
 import morgan from "morgan";
+
 import { errorHandler } from "./middleware/errorHandler";
+import { globalLimiter } from "./middleware/rateLimit";
 import { itemsRoutes } from "./modules/items/routes";
 import { sseRouter } from "./sse";
 
@@ -33,13 +35,16 @@ const corsOptions: cors.CorsOptions = {
     if (!origin || allowlist.has(origin)) return cb(null, true);
     cb(new Error(`CORS blocked: ${origin}`));
   },
-  credentials: false, // set true ONLY if you send cookies from the browser
+  // set true ONLY if you send cookies from the browser
+  credentials: false,
   methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
   exposedHeaders: ["ETag"],
-  maxAge: 86400,          // cache preflight
+  // cache preflight
+  maxAge: 86400,
   optionsSuccessStatus: 204,
-  preflightContinue: false // let cors() terminate OPTIONS itself
+  // let cors() terminate OPTIONS itself
+  preflightContinue: false
 };
 
 app.use(cors(corsOptions));
@@ -52,13 +57,17 @@ app.get("/healthz", (_req: Request, res) => {
   res.json({ ok: true as const, ts: new Date().toISOString() });
 });
 
-app.use("/api/v1", setApiVersion(API_VERSION));
+// Note: Global limiter is applied before routing
+// And after /healthz to keep health without limit
+app.use(globalLimiter);
+
+app.use(`/api/${API_VERSION}`, setApiVersion(API_VERSION));
 
 // Mount SSE under /api/v1/sse  (→ /api/v1/sse/items)
-app.use("/api/v1/sse", sseRouter);
+app.use(`/api/${API_VERSION}/sse`, sseRouter);
 
 // Mount MVP CRUD at /api/v1/items
-app.use("/api/v1/items", itemsRoutes);
+app.use(`/api/${API_VERSION}/items`, itemsRoutes);
 
 app.use((_req: Request, res: Response) =>
   res

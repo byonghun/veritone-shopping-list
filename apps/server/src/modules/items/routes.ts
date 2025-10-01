@@ -1,12 +1,28 @@
 import { Router } from "express";
+import type { ItemId } from "@app/shared";
 import { ItemsController } from "./controller";
+import { readLimiter, writeLimiter } from "../../middleware/rateLimit";
 import { asyncHandler } from "../../utils/asyncHandler";
 
 export const itemsRoutes = Router();
 
-// MVP CRUD — no query params on list
-itemsRoutes.get("/",      asyncHandler(ItemsController.list));
-itemsRoutes.post("/",     asyncHandler(ItemsController.create));
-itemsRoutes.get("/:id",   asyncHandler(ItemsController.get));
-itemsRoutes.patch("/:id", asyncHandler(ItemsController.update));
-itemsRoutes.delete("/:id",asyncHandler(ItemsController.remove));
+// READ
+itemsRoutes.get("/", readLimiter, asyncHandler(ItemsController.list));
+itemsRoutes.get(
+  "/:id",
+  readLimiter,
+  asyncHandler<{id: ItemId}>(ItemsController.get)
+);
+
+// WRITE
+itemsRoutes.post("/", writeLimiter, asyncHandler(ItemsController.create));
+itemsRoutes.patch(
+  "/:id",
+  writeLimiter,
+  asyncHandler<{ id: ItemId }>(ItemsController.update)
+);
+itemsRoutes.delete(
+  "/:id",
+  writeLimiter,
+  asyncHandler<{ id: ItemId }>(ItemsController.remove)
+);
