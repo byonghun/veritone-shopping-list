@@ -73,7 +73,6 @@ const ItemsContainer = () => {
     openDrawer({
       type: "create",
       defaultValues: DEFAULT_ITEM,
-      // TODO: Needs to update TItemUpdate to TItemCreate, without purchased
       onConfirm: async (item: ItemFormOutput) => {
         const tempId = `temp-${Date.now()}`;
 
@@ -134,7 +133,7 @@ const ItemsContainer = () => {
             type: "error",
             title: "Failed to update selected item.",
             description,
-            btnLabel: "Close"
+            btnLabel: "Close",
           });
         }
       },
@@ -162,7 +161,7 @@ const ItemsContainer = () => {
             type: "error",
             title: "Failed to delete item.",
             description,
-            btnLabel: "Close"
+            btnLabel: "Close",
           });
         }
       },
@@ -232,7 +231,11 @@ const ItemsContainer = () => {
                 {checkList}
               </span>
             </h2>
-            <Button variant="default" onClick={onDrawerOpen} className="w-[90px]">
+            <Button
+              variant="default"
+              onClick={onDrawerOpen}
+              className="w-[90px]"
+            >
               Add Item
             </Button>
           </div>

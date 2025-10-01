@@ -27,7 +27,6 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
 
   const {
     type,
-    description = "Add your new item below",
     descriptionTextClassName,
     defaultValues,
     onConfirm,
@@ -77,7 +76,6 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
             <ItemForm
               key={formKey}
               type={type}
-              description={description}
               descriptionTextClassName={descriptionTextClassName}
               defaultValues={defaultValues}
               onConfirm={onConfirm}

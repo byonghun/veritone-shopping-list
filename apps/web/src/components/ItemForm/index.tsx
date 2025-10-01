@@ -23,7 +23,6 @@ import { GlobalDrawerType } from '../../types/drawer';
 import { cn } from "../../utils";
 
 interface ItemFormProps {
-  description: string;
   descriptionTextClassName?: string;
   selectOpen: boolean;
   setSelectOpen: (open: boolean) => void;
@@ -35,7 +34,6 @@ interface ItemFormProps {
 
 const ItemForm: FC<ItemFormProps> = ({
   type,
-  description,
   descriptionTextClassName,
   defaultValues = DEFAULT_ITEM,
   onConfirm,
@@ -85,7 +83,9 @@ const ItemForm: FC<ItemFormProps> = ({
     <>
       <div className="pl-[30px] pt-7 pr-6 flex-1">
         <div className="flex flex-col font-nunito font-normal mb-4">
-          <h2 className="text-lg leading-6 text-primaryFont">Add an Item</h2>
+          <h2 className="text-lg leading-6 text-primaryFont">
+            {isUpdateMode ? "Edit an item" : "Add an Item"}
+          </h2>
           <div className="flex items-center justify-between">
             <DrawerDescription
               className={cn(
@@ -93,7 +93,9 @@ const ItemForm: FC<ItemFormProps> = ({
                 descriptionTextClassName
               )}
             >
-              {description}
+              {isUpdateMode
+                ? "Edit your item below"
+                : "Add your new item below"}
             </DrawerDescription>
             {isDirty && (
               <button

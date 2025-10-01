@@ -7,7 +7,6 @@ export type GlobalDrawerProps = {
   btnLabel?: string;
   className?: string;
   closeBtnLabel?: string;
-  description?: string;
   descriptionTextClassName?: string;
   headerTextClassName?: string;
   triggerLabel?: string;
