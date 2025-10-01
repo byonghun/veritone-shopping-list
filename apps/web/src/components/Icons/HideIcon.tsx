@@ -1,8 +1,7 @@
 import { FC } from "react";
-
 import { SvgIconProps } from "../../types/icons";
 
-const EditIcon: FC<SvgIconProps> = ({
+const HideIcon: FC<SvgIconProps> = ({
   width = "24",
   height = "24",
   fill = "none",
@@ -19,11 +18,11 @@ const EditIcon: FC<SvgIconProps> = ({
       className={className}
     >
       <path
-        d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM5.92 19H5V18.08L14.06 9.02L14.98 9.94L5.92 19ZM20.71 5.63L18.37 3.29C18.17 3.09 17.92 3 17.66 3C17.4 3 17.15 3.1 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63Z"
+        d="M5.59 7.41L10.18 12L5.59 16.59L7 18L13 12L7 6L5.59 7.41ZM16 6H18V18H16V6Z"
         fill={fillColor}
       />
     </svg>
   );
 };
 
-export default EditIcon;
+export default HideIcon;

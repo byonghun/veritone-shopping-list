@@ -32,9 +32,7 @@ describe("cn (clsx + tailwind-merge)", () => {
   it("keeps responsive/variant-prefixed classes separate and resolves conflicts within the same variant", () => {
     expect(cn("p-4", "md:p-2")).toBe("p-4 md:p-2");
     expect(cn("md:p-2", "md:p-4")).toBe("md:p-4");
-    expect(cn("hover:text-red-500", "hover:text-blue-500")).toBe(
-      "hover:text-blue-500"
-    );
+    expect(cn("hover:text-red-500", "hover:text-blue-500")).toBe("hover:text-blue-500");
   });
 
   it("handles arbitrary values and keeps the last conflicting size", () => {

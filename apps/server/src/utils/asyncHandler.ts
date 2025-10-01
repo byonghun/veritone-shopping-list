@@ -11,18 +11,18 @@ export function asyncHandler<
   ResBody = any,
   ReqBody = any,
   ReqQuery extends ParsedQs = ParsedQs,
-  Locals extends Record<string, any> = Record<string, any>
+  Locals extends Record<string, any> = Record<string, any>,
 >(
   fn: (
     req: Request<P, ResBody, ReqBody, ReqQuery, Locals>,
     res: Response<ResBody, Locals>,
-    next: NextFunction
-  ) => Promise<any> | any
+    next: NextFunction,
+  ) => Promise<any> | any,
 ) {
   return (
     req: Request<P, ResBody, ReqBody, ReqQuery, Locals>,
     res: Response<ResBody, Locals>,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

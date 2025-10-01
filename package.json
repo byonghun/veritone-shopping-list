@@ -13,11 +13,27 @@
     "down": "docker compose down -v",
     "typecheck": "tsc -b",
     "build": "tsc -b --force",
-    "clean": "tsc -b --clean && rimraf **/dist **/tsconfig.tsbuildinfo"
+    "clean": "tsc -b --clean && rimraf **/dist **/tsconfig.tsbuildinfo",
+    "lint": "eslint .",
+    "lint:web": "eslint \"apps/web/**/*.{ts,tsx,js,jsx}\"",
+    "lint:server": "eslint \"apps/server/**/*.{ts,tsx,js,jsx}\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "8.45.0",
+    "@typescript-eslint/parser": "8.45.0",
+    "eslint": "9.36.0",
+    "eslint-config-prettier": "9.1.2",
+    "eslint-import-resolver-typescript": "4.4.4",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-tailwindcss": "3.16.0",
+    "prettier": "3.6.2",
     "rimraf": "6.0.1",
-    "typescript": "5.6.2"
+    "typescript": "5.6.2",
+    "typescript-eslint": "8.45.0"
   },
   "packageManager": "npm@10.9.2",
   "overrides": {

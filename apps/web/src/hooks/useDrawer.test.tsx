@@ -37,13 +37,11 @@ describe("useDrawer", () => {
     render(
       <ErrorBoundary onError={(e) => (captured = e)}>
         <Consumer />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     expect(captured).toBeDefined();
-    expect(captured!.message).toBe(
-      "useDrawer must be used within the GlobalDrawerProvider"
-    );
+    expect(captured!.message).toBe("useDrawer must be used within the GlobalDrawerProvider");
 
     errSpy.mockRestore();
   });
@@ -54,7 +52,7 @@ describe("useDrawer", () => {
     render(
       <GlobalDrawerContext.Provider value={mockValue}>
         <Consumer />
-      </GlobalDrawerContext.Provider>
+      </GlobalDrawerContext.Provider>,
     );
 
     expect(screen.getByTestId("value")).toHaveTextContent("123");

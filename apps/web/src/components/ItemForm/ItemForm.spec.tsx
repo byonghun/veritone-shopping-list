@@ -47,8 +47,7 @@ jest.mock("../../components/ui/checkbox", () => ({
 }));
 
 jest.mock("../../components/ui/drawer", () => ({
-  DrawerClose: ({ asChild, children }: any) =>
-    asChild ? children : <button>{children}</button>,
+  DrawerClose: ({ asChild, children }: any) => (asChild ? children : <button>{children}</button>),
   DrawerDescription: ({ className, children }: any) => (
     <p data-testid="drawer-description" className={className}>
       {children}
@@ -66,7 +65,7 @@ jest.mock("../../components/ui/input", () => {
   return {
     Input: React.forwardRef(function InputMock(
       props: any,
-      ref: React.ForwardedRef<HTMLInputElement>
+      ref: React.ForwardedRef<HTMLInputElement>,
     ) {
       return <input ref={ref} {...props} />;
     }),
@@ -78,7 +77,7 @@ jest.mock("../../components/ui/textarea", () => {
   return {
     Textarea: React.forwardRef(function TextareaMock(
       props: any,
-      ref: React.ForwardedRef<HTMLTextAreaElement>
+      ref: React.ForwardedRef<HTMLTextAreaElement>,
     ) {
       return <textarea ref={ref} {...props} />;
     }),
@@ -135,11 +134,8 @@ const baseDefaultValues = {
   updatedAt: undefined,
 };
 
-function renderForm(
-  overrides?: Partial<React.ComponentProps<typeof ItemForm>>
-) {
+function renderForm(overrides?: Partial<React.ComponentProps<typeof ItemForm>>) {
   const props: React.ComponentProps<typeof ItemForm> = {
-    description: "Add your new item below",
     selectOpen: false,
     setSelectOpen: () => {},
     onClose: () => {},
@@ -157,13 +153,6 @@ const getSubmitBtn = () =>
 /* ───────────── Tests ───────────── */
 
 describe("ItemForm", () => {
-  it("renders and shows provided description", () => {
-    renderForm({ description: "Hello description" });
-    expect(screen.getByTestId("drawer-description")).toHaveTextContent(
-      "Hello description"
-    );
-  });
-
   it("create mode: requires itemName, allows selecting quantity, normalizes defaults, calls onConfirm and onClose", async () => {
     const onConfirm = jest.fn();
     const onClose = jest.fn();

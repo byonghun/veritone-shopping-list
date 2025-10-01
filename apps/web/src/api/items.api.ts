@@ -9,8 +9,7 @@ export const ItemsClient = {
   listAll: () => httpGet<ItemsResponse>(ITEMS_URL),
   update: (id: string, input: ItemFormOutput) =>
     httpPatch<ItemDTO>(`${ITEMS_URL}/${encodeURIComponent(id)}`, input),
-  remove: (id: string) =>
-    httpDelete<void>(`${ITEMS_URL}/${encodeURIComponent(id)}`),
+  remove: (id: string) => httpDelete<void>(`${ITEMS_URL}/${encodeURIComponent(id)}`),
 };
 
 // http wrappers

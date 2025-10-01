@@ -18,7 +18,7 @@ function openRawGet(path: string): Promise<{ socket: net.Socket; status: number;
         // resolve on first header chunk
         const m = data.match(/HTTP\/1\.1 (\d{3})/);
         if (m) {
-          const status = parseInt(m[1], 10);
+          const status = parseInt(m[1]!, 10);
           resolve({ socket: client, status, raw: data });
           // Keep the socket open for SSE unless 429
           if (status === 429) {

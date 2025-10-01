@@ -9,9 +9,7 @@ jest.mock("../ui/checkbox", () => ({
       data-testid="item-checkbox"
       aria-label={props["aria-label"]}
       checked={!!props.checked}
-      onChange={(e) =>
-        props.onCheckedChange?.((e.target as HTMLInputElement).checked)
-      }
+      onChange={(e) => props.onCheckedChange?.((e.target as HTMLInputElement).checked)}
     />
   ),
 }));
@@ -54,9 +52,7 @@ describe("Item", () => {
   });
 
   it("renders description only when provided", () => {
-    const { rerender } = render(
-      <Item {...baseProps} description="Organic whole milk" />
-    );
+    const { rerender } = render(<Item {...baseProps} description="Organic whole milk" />);
     expect(screen.getByText("Organic whole milk")).toBeInTheDocument();
 
     rerender(<Item {...baseProps} description={undefined} />);
@@ -77,13 +73,7 @@ describe("Item", () => {
 
   it("calls onTogglePurchased with the toggled state", () => {
     const onTogglePurchased = jest.fn();
-    render(
-      <Item
-        {...baseProps}
-        purchased={false}
-        onTogglePurchased={onTogglePurchased}
-      />
-    );
+    render(<Item {...baseProps} purchased={false} onTogglePurchased={onTogglePurchased} />);
 
     const checkbox = screen.getByTestId("item-checkbox");
     fireEvent.click(checkbox); // our mock will send next checked = true

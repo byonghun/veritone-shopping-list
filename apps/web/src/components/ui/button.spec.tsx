@@ -34,7 +34,7 @@ describe("Button (shadcn + cva)", () => {
     render(
       <Button type="submit" disabled onClick={handleClick}>
         Submit
-      </Button>
+      </Button>,
     );
 
     const btn = screen.getByRole("button", { name: "Submit" });
@@ -49,7 +49,7 @@ describe("Button (shadcn + cva)", () => {
     render(
       <Button asChild size="lg" variant="link">
         <a href="/x">Go</a>
-      </Button>
+      </Button>,
     );
 
     const link = screen.getByRole("link", { name: "Go" });
@@ -69,18 +69,15 @@ describe("Button (shadcn + cva)", () => {
     ["secondary", "bg-secondary"],
     ["ghost", "hover:bg-accent"],
     ["link", "underline-offset-4"],
-  ] as const)(
-    "applies variant=%s classes",
-    (variant, expectedToken) => {
-      render(
-        <Button variant={variant} data-testid={`btn-${variant}`}>
-          v
-        </Button>
-      );
-      const el = screen.getByTestId(`btn-${variant}`);
-      expect(el.getAttribute("class") || "").toContain(expectedToken);
-    }
-  );
+  ] as const)("applies variant=%s classes", (variant, expectedToken) => {
+    render(
+      <Button variant={variant} data-testid={`btn-${variant}`}>
+        v
+      </Button>,
+    );
+    const el = screen.getByTestId(`btn-${variant}`);
+    expect(el.getAttribute("class") || "").toContain(expectedToken);
+  });
 
   it.each([
     ["default", "h-9"],
@@ -91,7 +88,7 @@ describe("Button (shadcn + cva)", () => {
     render(
       <Button size={size} data-testid={`btn-${size}`}>
         s
-      </Button>
+      </Button>,
     );
     const el = screen.getByTestId(`btn-${size}`);
     expect(el.getAttribute("class") || "").toContain(expectedToken);

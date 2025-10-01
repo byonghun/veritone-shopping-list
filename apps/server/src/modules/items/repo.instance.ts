@@ -3,9 +3,7 @@ import type { ItemsRepo } from "./repo";
 import { itemsRepo as inMemory } from "./repo.inMemory";
 
 const IS_TEST =
-  process.env.NODE_ENV === "test" ||
-  typeof process.env.JEST_WORKER_ID !== "undefined";
-
+  process.env.NODE_ENV === "test" || typeof process.env.JEST_WORKER_ID !== "undefined";
 
 async function canReachDb(): Promise<boolean> {
   if (!process.env.DATABASE_URL) return false;
@@ -13,7 +11,7 @@ async function canReachDb(): Promise<boolean> {
   try {
     const { prisma } = await import("../../db/prisma");
     const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("db-timeout")), 1500)
+      setTimeout(() => reject(new Error("db-timeout")), 1500),
     );
     await Promise.race([prisma.$queryRaw`SELECT 1`, timeout]);
     return true;

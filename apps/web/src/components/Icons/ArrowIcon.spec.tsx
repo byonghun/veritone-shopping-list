@@ -1,42 +1,41 @@
 import { render } from "@testing-library/react";
-import HideIcon from "./HideIcon";
+import ArrowIcon from "./ArrowIcon";
 
-describe("HideIcon", () => {
+describe("ArrowIcon", () => {
   it("renders an SVG with default attributes and path fill", () => {
-    const { container } = render(<HideIcon />);
+    const { container } = render(<ArrowIcon />);
     const svg = container.querySelector("svg") as SVGElement;
-    expect(svg).toBeInTheDocument();
+    expect(svg).toBeTruthy();
 
-    expect(svg.getAttribute("width")).toBe("24");
-    expect(svg.getAttribute("height")).toBe("24");
-    expect(svg.getAttribute("viewBox")).toBe("0 0 24 24");
+    expect(svg.getAttribute("width")).toBe("10");
+    expect(svg.getAttribute("height")).toBe("5");
+    expect(svg.getAttribute("viewBox")).toBe("0 0 10 5");
     expect(svg.getAttribute("fill")).toBe("none");
+
     expect(svg.classList.length).toBe(0);
 
     const path = svg.querySelector("path") as SVGPathElement;
-    expect(path).toBeInTheDocument();
-    expect(path.getAttribute("d")).toBe(
-      "M5.59 7.41L10.18 12L5.59 16.59L7 18L13 12L7 6L5.59 7.41ZM16 6H18V18H16V6Z"
-    );
+    expect(path).toBeTruthy();
+    expect(path.getAttribute("d")).toBe("M0 0L5 5L10 0H0Z");
     expect(path.getAttribute("fill")).toBe("#555F7C");
   });
 
   it("applies custom width/height/fill/fillColor and className", () => {
     const { container } = render(
-      <HideIcon
-        width="32"
-        height="32"
+      <ArrowIcon
+        width="20"
+        height="10"
         fill="currentColor"
         fillColor="#ff0000"
-        className="icon-lg"
-      />
+        className="icon-large"
+      />,
     );
 
     const svg = container.querySelector("svg") as SVGElement;
-    expect(svg.getAttribute("width")).toBe("32");
-    expect(svg.getAttribute("height")).toBe("32");
+    expect(svg.getAttribute("width")).toBe("20");
+    expect(svg.getAttribute("height")).toBe("10");
     expect(svg.getAttribute("fill")).toBe("currentColor");
-    expect(svg.classList.contains("icon-lg")).toBe(true);
+    expect(svg.classList.contains("icon-large")).toBe(true);
 
     const path = svg.querySelector("path") as SVGPathElement;
     expect(path.getAttribute("fill")).toBe("#ff0000");

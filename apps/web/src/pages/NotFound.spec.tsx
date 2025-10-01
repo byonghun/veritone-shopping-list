@@ -25,7 +25,7 @@ describe("NotFoundPage", () => {
     render(
       <MemoryRouter>
         <NotFoundPage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(document.getElementById("not-found-page")).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe("NotFoundPage", () => {
     render(
       <MemoryRouter initialEntries={["/random"]}>
         <NotFoundPage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Lets start your list" }));

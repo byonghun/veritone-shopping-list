@@ -14,15 +14,10 @@ function withIp<T extends request.Test>(req: T, ip: string): T {
   return req.set("X-Forwarded-For", ip).set("X-Real-IP", ip);
 }
 
-async function createItem(
-  ip: string,
-  itemName = "Milk",
-  quantity = 1,
-  description?: string
-) {
+async function createItem(ip: string, itemName = "Milk", quantity = 1, description?: string) {
   const res = await withIp(
     request(app).post("/api/v1/items").set("Content-Type", "application/json"),
-    ip
+    ip,
   )
     .send({ itemName, quantity, description })
     .expect(201);
@@ -49,7 +44,7 @@ describe("Items routes CRUD tests", () => {
         itemName: "Bananas",
         quantity: 6,
         purchased: false,
-      })
+      }),
     );
   });
 
@@ -67,7 +62,7 @@ describe("Items routes CRUD tests", () => {
         description: "Dozen",
         quantity: 12,
         purchased: false,
-      })
+      }),
     );
   });
 
@@ -76,10 +71,8 @@ describe("Items routes CRUD tests", () => {
     const created = await createItem(ip, "Milk", 1, "2%");
 
     const patchRes = await withIp(
-      request(app)
-        .patch(`/api/v1/items/${created.id}`)
-        .set("Content-Type", "application/json"),
-      ip
+      request(app).patch(`/api/v1/items/${created.id}`).set("Content-Type", "application/json"),
+      ip,
     )
       .send({
         itemName: "Milk",
@@ -97,7 +90,7 @@ describe("Items routes CRUD tests", () => {
         description: "Whole",
         quantity: 3,
         purchased: true,
-      })
+      }),
     );
   });
 
@@ -116,7 +109,7 @@ describe("Items routes CRUD tests", () => {
 
     const res = await withIp(
       request(app).post("/api/v1/items").set("Content-Type", "application/json"),
-      ip
+      ip,
     )
       .send({ quantity: 1, description: "no itemName" })
       .expect(400);
@@ -126,7 +119,7 @@ describe("Items routes CRUD tests", () => {
         error: "BAD_REQUEST",
         message: "Validation failed",
         issues: expect.any(Array),
-      })
+      }),
     );
   });
 
@@ -135,7 +128,7 @@ describe("Items routes CRUD tests", () => {
 
     const res = await withIp(
       request(app).post("/api/v1/items").set("Content-Type", "application/json"),
-      ip
+      ip,
     )
       .send({ itemName: "Grapes", quantity: "twelve" })
       .expect(400);
@@ -158,14 +151,16 @@ describe("Items routes CRUD tests", () => {
 
     const created = await withIp(
       request(app).post("/api/v1/items").set("Content-Type", "application/json"),
-      ip
+      ip,
     )
       .send({ itemName: "Apples", quantity: 4 })
       .expect(201);
 
     const bad = await withIp(
-      request(app).patch(`/api/v1/items/${created.body.id}`).set("Content-Type", "application/json"),
-      ip
+      request(app)
+        .patch(`/api/v1/items/${created.body.id}`)
+        .set("Content-Type", "application/json"),
+      ip,
     )
       .send({ purchased: "yes", quantity: "many" })
       .expect(400);
@@ -174,7 +169,7 @@ describe("Items routes CRUD tests", () => {
       expect.objectContaining({
         error: "BAD_REQUEST",
         message: "Validation failed",
-      })
+      }),
     );
   });
 });

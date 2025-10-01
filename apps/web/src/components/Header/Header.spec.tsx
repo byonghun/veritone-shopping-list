@@ -19,9 +19,7 @@ describe("Header", () => {
   });
 
   it("renders CTA button with correct label and aria-label", () => {
-    (useNavigate as unknown as jest.Mock).mockReturnValue(
-      jest.fn()
-    );
+    (useNavigate as unknown as jest.Mock).mockReturnValue(jest.fn());
     (useLocation as unknown as jest.Mock).mockReturnValue({
       pathname: "/items",
     });
@@ -29,7 +27,7 @@ describe("Header", () => {
     render(
       <MemoryRouter>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const btn = screen.getByRole("button", { name: "Home button" }); // matches aria-label
@@ -39,9 +37,7 @@ describe("Header", () => {
 
   it("navigates to ROUTES.home when clicked and not already on home", () => {
     const navigateSpy = jest.fn();
-    (useNavigate as unknown as jest.Mock).mockReturnValue(
-      navigateSpy
-    );
+    (useNavigate as unknown as jest.Mock).mockReturnValue(navigateSpy);
     (useLocation as unknown as jest.Mock).mockReturnValue({
       pathname: "/items",
     });
@@ -49,7 +45,7 @@ describe("Header", () => {
     render(
       <MemoryRouter initialEntries={["/items"]}>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Home button" }));
@@ -60,9 +56,7 @@ describe("Header", () => {
 
   it("does not navigate when already on home", () => {
     const navigateSpy = jest.fn();
-    (useNavigate as unknown as jest.Mock).mockReturnValue(
-      navigateSpy
-    );
+    (useNavigate as unknown as jest.Mock).mockReturnValue(navigateSpy);
     (useLocation as unknown as jest.Mock).mockReturnValue({
       pathname: ROUTES.home,
     });
@@ -70,7 +64,7 @@ describe("Header", () => {
     render(
       <MemoryRouter initialEntries={[ROUTES.home]}>
         <Header />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Home button" }));

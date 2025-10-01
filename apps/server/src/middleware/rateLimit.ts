@@ -1,5 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
-import rateLimit, { ipKeyGenerator, Options, type ValueDeterminingMiddleware } from "express-rate-limit";
+import rateLimit, {
+  ipKeyGenerator,
+  Options,
+  type ValueDeterminingMiddleware,
+} from "express-rate-limit";
 
 const READ_LIMIT = Number(process.env.RL_READ || 120);
 const WRITE_LIMIT = Number(process.env.RL_WRITE || 20);
@@ -7,7 +11,7 @@ const WRITE_LIMIT = Number(process.env.RL_WRITE || 20);
 // Note: Always returns a string and is IPv6-safe per express-rate-limit validation
 export const keyGenerator: ValueDeterminingMiddleware<string> = (
   req: Request,
-  res: Response
+  res: Response,
   // @ts-ignore
 ) => ipKeyGenerator(req, res);
 

@@ -4,14 +4,16 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "target": "es2022",
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "baseUrl": ".",
+    "types": ["node", "jest"],
     "paths": {
       "@app/shared": ["../../shared/src/index"],
       "@app/shared/*": ["../../shared/src/*"]
     }
   },
   "references": [{ "path": "../../shared" }],
-  "include": ["src"]
+  "include": ["src", "tests", "prisma/**/*.ts"],
+  "exclude": ["dist", "node_modules"]
 }

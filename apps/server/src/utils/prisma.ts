@@ -1,4 +1,4 @@
-import { Item } from "../modules/items/domain";
+import { Item } from "@app/shared";
 
 export function mapPrismaItemToDomain(row: {
   id: string;

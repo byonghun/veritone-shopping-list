@@ -4,34 +4,24 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import { cn } from "../../utils";
 
-function Dialog({
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
-function DialogTrigger({
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+function DialogTrigger({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 
-function DialogPortal({
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+function DialogPortal({ ...props }: React.ComponentProps<typeof DialogPrimitive.Portal>) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
 
-function DialogClose({
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
 type DialogOverlayRef = React.ElementRef<typeof DialogPrimitive.Overlay>;
-type DialogOverlayProps = React.ComponentPropsWithoutRef<
-  typeof DialogPrimitive.Overlay
->;
+type DialogOverlayProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>;
 
 const DialogOverlay = React.forwardRef<DialogOverlayRef, DialogOverlayProps>(
   ({ className, ...props }, ref) => {
@@ -42,12 +32,12 @@ const DialogOverlay = React.forwardRef<DialogOverlayRef, DialogOverlayProps>(
           "fixed inset-0 z-50 bg-black/30",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
-          className
+          className,
         )}
         {...props}
       />
     );
-  }
+  },
 );
 DialogOverlay.displayName = "DialogOverlay";
 
@@ -66,7 +56,7 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-[4px] border p-[30px] shadow-dialog duration-200 md:top-[310px] md:max-w-[410px] h-[240px] font-nunito",
-          className
+          className,
         )}
         {...props}
       >
@@ -99,26 +89,17 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn(
-        "flex gap-2 sm:flex-row justify-end items-end",
-        className
-      )}
+      className={cn("flex gap-2 sm:flex-row justify-end items-end", className)}
       {...props}
     />
   );
 }
 
-function DialogTitle({
-  className,
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn(
-        "text-lg leading-6 font-semibold text-primaryFont",
-        className
-      )}
+      className={cn("text-lg leading-6 font-semibold text-primaryFont", className)}
       {...props}
     />
   );
@@ -131,10 +112,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn(
-        "max-w-[350px] text-sm leading-6 text-secondaryFont text-start",
-        className
-      )}
+      className={cn("max-w-[350px] text-sm leading-6 text-secondaryFont text-start", className)}
       {...props}
     />
   );

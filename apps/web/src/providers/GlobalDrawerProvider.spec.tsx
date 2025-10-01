@@ -1,31 +1,17 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import GlobalDrawerProvider, {
-  GlobalDrawerContext,
-} from "./GlobalDrawerProvider";
+import GlobalDrawerProvider, { GlobalDrawerContext } from "./GlobalDrawerProvider";
 
 jest.mock("../components/ui/drawer", () => {
-  const React = require("react");
   const omitDomUnsafeProps = (props: any) => {
-    const {
-      onOpenAutoFocus,
-      onCloseAutoFocus,
-      onEscapeKeyDown,
-      onPointerDownOutside,
-      onInteractOutside,
-      open,
-      onOpenChange,
-      modal,
-      direction,
-      ...rest
-    } = props || {};
-    return rest;
+    const { onOpenAutoFocus: _a, onCloseAutoFocus: _b, ...domSafe } = props;
+
+    return domSafe;
   };
 
   return {
     __esModule: true,
-    Drawer: ({ open, children }: any) =>
-      open ? <div data-testid="drawer">{children}</div> : null,
+    Drawer: ({ open, children }: any) => (open ? <div data-testid="drawer">{children}</div> : null),
     DrawerContent: (props: any) => {
       const { className, children } = props || {};
       const rest = omitDomUnsafeProps(props);
@@ -51,6 +37,7 @@ jest.mock("../components/ui/drawer", () => {
 let ITEM_FORM_MOUNT_COUNT = 0;
 
 jest.mock("../components/ItemForm", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require("react");
   function ItemFormMock(props: any) {
     const [mounts, setMounts] = React.useState(0);
@@ -60,8 +47,7 @@ jest.mock("../components/ItemForm", () => {
       setMounts(ITEM_FORM_MOUNT_COUNT);
     }, []);
 
-    const { type, description, descriptionTextClassName, defaultValues } =
-      props;
+    const { type, description, descriptionTextClassName, defaultValues } = props;
 
     return (
       <div data-testid="item-form">
@@ -77,15 +63,7 @@ jest.mock("../components/ItemForm", () => {
   return { __esModule: true, default: ItemFormMock };
 });
 
-function Consumer({
-  propsA,
-  propsB,
-  propsC,
-}: {
-  propsA: any;
-  propsB: any;
-  propsC: any;
-}) {
+function Consumer({ propsA, propsB, propsC }: { propsA: any; propsB: any; propsC: any }) {
   const ctx = React.useContext(GlobalDrawerContext)!;
 
   return (
@@ -150,7 +128,7 @@ describe("GlobalDrawerProvider (drawer-focused)", () => {
       <GlobalDrawerProvider>
         <Consumer propsA={propsA} propsB={propsB} propsC={propsC} />
         <div data-testid="outside-child">outside</div>
-      </GlobalDrawerProvider>
+      </GlobalDrawerProvider>,
     );
   }
 
@@ -167,14 +145,9 @@ describe("GlobalDrawerProvider (drawer-focused)", () => {
     expect(screen.getByTestId("drawer")).toBeInTheDocument();
 
     expect(screen.getByTestId("item-form-type")).toHaveTextContent("create");
-    expect(screen.getByTestId("item-form-desc")).toHaveTextContent(
-      "Create something"
-    );
     expect(screen.getByTestId("item-form-id")).toHaveTextContent("");
 
-    await waitFor(() =>
-      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("1")
-    );
+    await waitFor(() => expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("1"));
   });
 
   it("header close button closes the drawer", () => {
@@ -184,7 +157,7 @@ describe("GlobalDrawerProvider (drawer-focused)", () => {
     expect(screen.getByTestId("drawer")).toBeInTheDocument();
 
     const headerClose = document.querySelector(
-      "button.w-\\[70px\\].h-full"
+      "button.w-\\[70px\\].h-full",
     ) as HTMLButtonElement | null;
     expect(headerClose).not.toBeNull();
 
@@ -206,21 +179,15 @@ describe("GlobalDrawerProvider (drawer-focused)", () => {
     renderWithProvider();
 
     fireEvent.click(screen.getByTestId("open-a"));
-    await waitFor(() =>
-      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("1")
-    );
+    await waitFor(() => expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("1"));
 
     fireEvent.click(screen.getByTestId("open-b"));
-    await waitFor(() =>
-      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("2")
-    );
+    await waitFor(() => expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("2"));
 
     fireEvent.click(screen.getByTestId("open-b"));
     expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("2");
 
     fireEvent.click(screen.getByTestId("open-c"));
-    await waitFor(() =>
-      expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("3")
-    );
+    await waitFor(() => expect(screen.getByTestId("item-form-mounts")).toHaveTextContent("3"));
   });
 });

@@ -1,11 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{ts,tsx,js,jsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       boxShadow: {
@@ -23,7 +19,7 @@ export default {
         drawerHeaderBg: "#FAFAFA",
         drawerBorderGray: "#D5DFE9",
         placeholderGray: "#9CA8BA",
-        listDescriptionGray: "#7D7A7A"
+        listDescriptionGray: "#7D7A7A",
       },
       fontFamily: {
         dosis: ['"Dosis"', "Trebuchet MS", "Arial", "ui-sans-serif", "system-ui", "sans-serif"],

@@ -1,10 +1,5 @@
 import type { Request, Response } from "express";
-import {
-  ItemIdSchema,
-  ItemInputSchemaServer,
-  type ItemId,
-  type ItemFormInput,
-} from "@app/shared";
+import { ItemIdSchema, ItemInputSchemaServer, type ItemId, type ItemFormInput } from "@app/shared";
 
 import { ItemsService } from "./service.instance";
 import { sseBroadcastItems } from "../../sse";
@@ -29,19 +24,14 @@ export const ItemsController = {
     }
     const item = await ItemsService.get(params.data.id);
     if (!item) {
-      res
-        .status(404)
-        .json({ error: "NOT_FOUND" as const, message: "Item not found" });
+      res.status(404).json({ error: "NOT_FOUND" as const, message: "Item not found" });
       return;
     }
     res.json(item);
   },
 
   /** POST /api/v1/items */
-  async create(
-    req: Request<unknown, unknown, ItemFormInput>,
-    res: Response
-  ): Promise<void> {
+  async create(req: Request<unknown, unknown, ItemFormInput>, res: Response): Promise<void> {
     const parsed = ItemInputSchemaServer.safeParse(req.body);
     if (!parsed.success) {
       res.status(400).json({
@@ -61,10 +51,7 @@ export const ItemsController = {
   },
 
   /** PATCH /api/v1/items/:id */
-  async update(
-    req: Request<{ id: ItemId }, unknown, ItemFormInput>,
-    res: Response
-  ): Promise<void> {
+  async update(req: Request<{ id: ItemId }, unknown, ItemFormInput>, res: Response): Promise<void> {
     const params = ItemIdSchema.safeParse(req.params);
     if (!params.success) {
       res.status(400).json({
@@ -85,9 +72,7 @@ export const ItemsController = {
     }
     const updated = await ItemsService.update(params.data.id, patch.data);
     if (!updated) {
-      res
-        .status(404)
-        .json({ error: "NOT_FOUND" as const, message: "Item not found" });
+      res.status(404).json({ error: "NOT_FOUND" as const, message: "Item not found" });
       return;
     }
 
@@ -110,9 +95,7 @@ export const ItemsController = {
     }
     const ok = await ItemsService.delete(params.data.id);
     if (!ok) {
-      res
-        .status(404)
-        .json({ error: "NOT_FOUND" as const, message: "Item not found" });
+      res.status(404).json({ error: "NOT_FOUND" as const, message: "Item not found" });
       return;
     }
 

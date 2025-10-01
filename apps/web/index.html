@@ -1,39 +1,47 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="A simple shopping list app." />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="description" content="A simple shopping list app." />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <!-- Preconnect early to font servers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <!-- Preconnect early to font servers -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Preload the Google Fonts stylesheet non-blocking -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&display=optional"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&display=optional"
+      />
+    </noscript>
 
-  <!-- Preload the Google Fonts stylesheet non-blocking -->
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&display=optional"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&display=optional">
-  </noscript>
+    <title>Shopping List</title>
+  </head>
 
-  <title>Shopping List</title>
-</head>
-
-<body class="bg-white min-h-dvh h-full flex flex-col">
-  <div id="root" class="flex-1"></div>
-  <footer class="w-full h-12 text-sm text-[#6b7280] flex items-start justify-center mt-auto">
-    <!-- Icons8 license attribution -->
-    <a target="_blank" rel="noopener noreferrer" href="https://icons8.com/icon/wFlitpRAdn3I/shopping-cart"
-      class="mr-1">Shopping Cart</a>
-    icon by
-    <a target="_blank" rel="noopener noreferrer" href="https://icons8.com" class="ml-1">Icons8</a>
-  </footer>
-</body>
-
+  <body class="bg-white min-h-dvh h-full flex flex-col">
+    <div id="root" class="flex-1"></div>
+    <footer class="w-full h-12 text-sm text-[#6b7280] flex items-start justify-center mt-auto">
+      <!-- Icons8 license attribution -->
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://icons8.com/icon/wFlitpRAdn3I/shopping-cart"
+        class="mr-1"
+        >Shopping Cart</a
+      >
+      icon by
+      <a target="_blank" rel="noopener noreferrer" href="https://icons8.com" class="ml-1">Icons8</a>
+    </footer>
+  </body>
 </html>

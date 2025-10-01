@@ -1,11 +1,4 @@
-import {
-  describe,
-  it,
-  expect,
-  beforeEach,
-  afterEach,
-  jest,
-} from "@jest/globals";
+import { describe, it, expect, beforeEach, afterEach, jest } from "@jest/globals";
 import { itemsRepoInstance } from "../../../src/modules/items/repo.instance";
 import { InMemoryItemsRepo } from "../../../src/modules/items/repo.inMemory";
 
@@ -48,20 +41,15 @@ describe("Confirms test environment never uses Prisma and uses in-memory repo", 
 
     // Spy to detect accidental import of prisma repo
     const repoPrismaImport = jest.fn();
-    await jest.unstable_mockModule(
-      "../../../src/modules/items/repo.prisma",
-      () => {
-        repoPrismaImport();
-        return { __esModule: true, prismaItemsRepo: {} };
-      }
-    );
+    await jest.unstable_mockModule("../../../src/modules/items/repo.prisma", () => {
+      repoPrismaImport();
+      return { __esModule: true, prismaItemsRepo: {} };
+    });
 
     const { itemsRepoInstance, initItemsRepo } = await import(
       "../../../src/modules/items/repo.instance"
     );
-    const { InMemoryItemsRepo } = await import(
-      "../../../src/modules/items/repo.inMemory"
-    );
+    const { InMemoryItemsRepo } = await import("../../../src/modules/items/repo.inMemory");
 
     await initItemsRepo(); // should no-op in test env
 
@@ -88,20 +76,15 @@ describe("Confirms test environment never uses Prisma and uses in-memory repo", 
 
     // Set a spy on repo.prisma import to ensure it’s NOT loaded
     const repoPrismaImport = jest.fn();
-    await jest.unstable_mockModule(
-      "../../../src/modules/items/repo.prisma",
-      () => {
-        repoPrismaImport();
-        return { __esModule: true, prismaItemsRepo: {} };
-      }
-    );
+    await jest.unstable_mockModule("../../../src/modules/items/repo.prisma", () => {
+      repoPrismaImport();
+      return { __esModule: true, prismaItemsRepo: {} };
+    });
 
     const { itemsRepoInstance, initItemsRepo } = await import(
       "../../../src/modules/items/repo.instance"
     );
-    const { InMemoryItemsRepo } = await import(
-      "../../../src/modules/items/repo.inMemory"
-    );
+    const { InMemoryItemsRepo } = await import("../../../src/modules/items/repo.inMemory");
 
     await initItemsRepo();
 

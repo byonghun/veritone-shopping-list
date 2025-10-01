@@ -23,26 +23,19 @@ describe("Drawer (Vaul wrapper)", () => {
             <DrawerClose>Close</DrawerClose>
           </DrawerFooter>
         </DrawerContent>
-      </Drawer>
+      </Drawer>,
     );
 
     expect(document.querySelector('[data-slot="drawer-content"]')).toBeNull();
 
     fireEvent.click(screen.getByRole("button", { name: "Open Drawer" }));
-    const content = document.querySelector(
-      '[data-slot="drawer-content"]'
-    ) as HTMLElement;
+    const content = document.querySelector('[data-slot="drawer-content"]') as HTMLElement;
     expect(content).toBeInTheDocument();
 
-    expect(screen.getByText("My Drawer")).toHaveAttribute(
-      "data-slot",
-      "drawer-title"
-    );
+    expect(screen.getByText("My Drawer")).toHaveAttribute("data-slot", "drawer-title");
 
     fireEvent.click(screen.getByText("Close"));
-    const closeContent = document.querySelector(
-      '[data-slot="drawer-content"]'
-    ) as HTMLElement;
+    const closeContent = document.querySelector('[data-slot="drawer-content"]') as HTMLElement;
     expect(closeContent).toBeInTheDocument();
     expect(closeContent).toHaveAttribute("data-state", "closed");
   });
@@ -54,12 +47,10 @@ describe("Drawer (Vaul wrapper)", () => {
           <DrawerTitle>Right Drawer</DrawerTitle>
           <DrawerDescription>Test body</DrawerDescription>
         </DrawerContent>
-      </Drawer>
+      </Drawer>,
     );
 
-    const content = document.querySelector(
-      '[data-slot="drawer-content"]'
-    ) as HTMLElement;
+    const content = document.querySelector('[data-slot="drawer-content"]') as HTMLElement;
     expect(content).toBeInTheDocument();
     expect(content.getAttribute("data-vaul-drawer-direction")).toBe("right");
   });
@@ -71,12 +62,10 @@ describe("Drawer (Vaul wrapper)", () => {
           <DrawerTitle>Title</DrawerTitle>
           <DrawerDescription>Body</DrawerDescription>
         </DrawerContent>
-      </Drawer>
+      </Drawer>,
     );
 
-    const content = document.querySelector(
-      '[data-slot="drawer-content"]'
-    ) as HTMLElement;
+    const content = document.querySelector('[data-slot="drawer-content"]') as HTMLElement;
     const cls = content.getAttribute("class") || "";
     expect(cls).toContain("content-extra");
     expect(cls).toContain("group/drawer-content");

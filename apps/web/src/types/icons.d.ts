@@ -3,5 +3,5 @@ export interface SvgIconProps {
   height?: string;
   fill?: string;
   fillColor?: string;
-  className?: string
+  className?: string;
 }

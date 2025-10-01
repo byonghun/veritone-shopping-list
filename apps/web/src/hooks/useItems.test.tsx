@@ -24,10 +24,7 @@ function Harness() {
       <div data-testid="len">{query.data?.items?.length ?? 0}</div>
       <div data-testid="keys">{JSON.stringify(keys.items)}</div>
 
-      <button
-        data-testid="create"
-        onClick={() => create.mutate({ itemName: "Milk" } as any)}
-      />
+      <button data-testid="create" onClick={() => create.mutate({ itemName: "Milk" } as any)} />
       <button
         data-testid="update"
         onClick={() => update.mutate({ id: "1", data: { itemName: "Eggs" } as any })}
@@ -57,9 +54,7 @@ describe("useItems", () => {
 
   it("runs the initial listAll() query and exposes keys.items=['items']", async () => {
     const first = { items: [{ id: "a" }] };
-    (ItemsClient.listAll as jest.Mock)
-      .mockResolvedValueOnce(first)
-      .mockResolvedValue(first);
+    (ItemsClient.listAll as jest.Mock).mockResolvedValueOnce(first).mockResolvedValue(first);
 
     renderWithClient(<Harness />);
 

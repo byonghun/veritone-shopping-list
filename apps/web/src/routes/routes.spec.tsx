@@ -20,7 +20,7 @@ describe("AppRoutes", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <AppRoutes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByTestId("home-page")).toBeInTheDocument();
     expect(screen.queryByTestId("items-page")).toBeNull();
@@ -31,7 +31,7 @@ describe("AppRoutes", () => {
     render(
       <MemoryRouter initialEntries={["/items"]}>
         <AppRoutes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByTestId("items-page")).toBeInTheDocument();
     expect(screen.queryByTestId("home-page")).toBeNull();
@@ -42,7 +42,7 @@ describe("AppRoutes", () => {
     render(
       <MemoryRouter initialEntries={["/404"]}>
         <AppRoutes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByTestId("not-found-page")).toBeInTheDocument();
   });
@@ -51,7 +51,7 @@ describe("AppRoutes", () => {
     render(
       <MemoryRouter initialEntries={["/does-not-exist"]}>
         <AppRoutes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByTestId("not-found-page")).toBeInTheDocument();
   });

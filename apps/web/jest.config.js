@@ -30,11 +30,9 @@ export default {
     "^@app/shared/(.*)$": "<rootDir>/../../shared/src/$1",
 
     // Mocks for CSS & static assets (we'll add these files next)
-    "^.+\\.module\\.(css|scss|sass)$":
-      "<rootDir>/tests/__mocks__/styleModuleMock.js",
+    "^.+\\.module\\.(css|scss|sass)$": "<rootDir>/tests/__mocks__/styleModuleMock.js",
     "^.+\\.(css|scss|sass)$": "<rootDir>/tests/__mocks__/styleMock.js",
-    "^.+\\.(svg|png|jpg|jpeg|gif|webp|avif|ico)$":
-      "<rootDir>/tests/__mocks__/fileMock.js",
+    "^.+\\.(svg|png|jpg|jpeg|gif|webp|avif|ico)$": "<rootDir>/tests/__mocks__/fileMock.js",
   },
   setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
   testMatch: [
@@ -46,6 +44,6 @@ export default {
     "<rootDir>/src/**/*.{ts,tsx,js,jsx}",
     "!<rootDir>/src/main.tsx",
     "!<rootDir>/src/**/*.d.ts",
-    "!<rootDir>/src/api/items.api.ts"
+    "!<rootDir>/src/api/items.api.ts",
   ],
 };

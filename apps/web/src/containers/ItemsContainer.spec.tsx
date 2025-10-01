@@ -65,13 +65,7 @@ jest.mock("../components/LoadingIndicator", () => ({
 
 jest.mock("../components/ErrorCard", () => ({
   __esModule: true,
-  default: ({
-    onClick,
-    errorMessage,
-  }: {
-    onClick: () => void;
-    errorMessage: string;
-  }) => (
+  default: ({ onClick, errorMessage }: { onClick: () => void; errorMessage: string }) => (
     <div data-testid="error-card">
       <p>{errorMessage}</p>
       <button onClick={onClick}>Try again</button>
@@ -87,17 +81,14 @@ jest.mock("../components/ui/button", () => ({
 jest.mock("../components/Item", () => ({
   __esModule: true,
   default: (props: any) => {
-    const { id, itemName, purchased, onEdit, onDelete, onTogglePurchased } =
-      props;
+    const { id, itemName, purchased, onEdit, onDelete, onTogglePurchased } = props;
     return (
       <div data-testid={`item-${id}`}>
         <span data-testid={`name-${id}`}>{itemName}</span>
         <span data-testid={`purchased-${id}`}>{String(purchased)}</span>
         <button onClick={() => onEdit(id)}>edit</button>
         <button onClick={() => onDelete(id)}>delete</button>
-        <button onClick={() => onTogglePurchased(id, !purchased)}>
-          toggle
-        </button>
+        <button onClick={() => onTogglePurchased(id, !purchased)}>toggle</button>
       </div>
     );
   },
@@ -253,9 +244,7 @@ describe("ItemsContainer", () => {
   });
 
   it("Delete flow: opens confirm dialog; confirm removes item (optimistic + server)", async () => {
-    setSuccess([
-      { id: "d1", itemName: "Yogurt", purchased: false, quantity: 1 },
-    ]);
+    setSuccess([{ id: "d1", itemName: "Yogurt", purchased: false, quantity: 1 }]);
     mockRemove.mutateAsync.mockResolvedValueOnce(undefined);
 
     render(<ItemsContainer />);
@@ -310,9 +299,7 @@ describe("ItemsContainer", () => {
 
     render(<ItemsContainer />);
 
-    await actClick(
-      screen.getByRole("button", { name: /add your first item/i })
-    );
+    await actClick(screen.getByRole("button", { name: /add your first item/i }));
     const args = openDrawerMock.mock.calls[0][0];
 
     await act(async () => {

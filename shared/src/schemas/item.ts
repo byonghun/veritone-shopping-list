@@ -16,10 +16,7 @@ const itemNameField = z
   .max(ITEM_NAME_MAX, `Item name must be less than ${ITEM_NAME_MAX} characters.`);
 
 const descriptionField = (max: number) =>
-  z
-    .string()
-    .max(max, `Item description can not exceed ${max} characters.`)
-    .optional();
+  z.string().max(max, `Item description can not exceed ${max} characters.`).optional();
 
 const descriptionUpdateField = (max: number) =>
   z
@@ -35,9 +32,7 @@ const quantityField = (min: number, max: number) =>
 
 const purchasedField = z.boolean().optional();
 
-export const ItemIdSchema = z
-  .object({ id: ItemId })
-  .strict();
+export const ItemIdSchema = z.object({ id: ItemId }).strict();
 
 export const ItemInputSchemaServer = z
   .object({

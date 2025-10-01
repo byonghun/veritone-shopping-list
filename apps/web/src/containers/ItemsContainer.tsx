@@ -33,7 +33,7 @@ const ItemsContainer = () => {
       setItems(snap.items);
       if (!hasLoadedOnce) setHasLoadedOnce(true);
     },
-    [hasLoadedOnce]
+    [hasLoadedOnce],
   );
   useItemsSSE(onSnapshot);
 
@@ -53,11 +53,7 @@ const ItemsContainer = () => {
         <div className="min-h-[160px] flex items-center justify-center">
           <ErrorCard
             onClick={() => query.refetch()}
-            errorMessage={
-              query.error instanceof Error
-                ? query.error.message
-                : "Unknown error"
-            }
+            errorMessage={query.error instanceof Error ? query.error.message : "Unknown error"}
           />
         </div>
       </section>
@@ -90,9 +86,7 @@ const ItemsContainer = () => {
         });
         try {
           const created = await create.mutateAsync(item);
-          setItems((prevItems) =>
-            prevItems.map((item) => (item.id === tempId ? created : item))
-          );
+          setItems((prevItems) => prevItems.map((item) => (item.id === tempId ? created : item)));
         } catch (err) {
           const description = await getErrorDescription(err);
           setItems(snapshot);
@@ -144,8 +138,7 @@ const ItemsContainer = () => {
     openDialog({
       type: "delete",
       title: "Delete Item?",
-      description:
-        "Are you sure you want to delete this item? This can not be undone.",
+      description: "Are you sure you want to delete this item? This can not be undone.",
       onConfirm: async () => {
         let snapshot: ItemDTO[] = [];
         setItems((prevItems) => {
@@ -172,9 +165,7 @@ const ItemsContainer = () => {
     let snapshot: ItemDTO[] = [];
     setItems((prevItems) => {
       snapshot = prevItems;
-      return prevItems.map((item) =>
-        item.id === id ? { ...item, purchased: checked } : item
-      );
+      return prevItems.map((item) => (item.id === id ? { ...item, purchased: checked } : item));
     });
 
     const item = items.find((item) => item.id === id) as ItemFormOutput;
@@ -207,11 +198,7 @@ const ItemsContainer = () => {
         <div className="card-wrapper md:mt-[110px]">
           <div className="card-content">
             <p className="card-text">Your shopping list is empty :(</p>
-            <Button
-              variant="default"
-              onClick={onDrawerOpen}
-              className="min-w-[151px] mt-1"
-            >
+            <Button variant="default" onClick={onDrawerOpen} className="min-w-[151px] mt-1">
               Add your first item
             </Button>
           </div>
@@ -225,17 +212,13 @@ const ItemsContainer = () => {
               <span
                 className={cn(
                   "text-sm ml-2 text-listDescriptionGray min-w-[110px]",
-                  isCompleted && "text-green-600"
+                  isCompleted && "text-green-600",
                 )}
               >
                 {checkList}
               </span>
             </h2>
-            <Button
-              variant="default"
-              onClick={onDrawerOpen}
-              className="w-[90px]"
-            >
+            <Button variant="default" onClick={onDrawerOpen} className="w-[90px]">
               Add Item
             </Button>
           </div>

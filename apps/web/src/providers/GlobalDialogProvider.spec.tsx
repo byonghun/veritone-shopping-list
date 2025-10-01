@@ -1,8 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import GlobalDialogProvider, {
-  GlobalDialogContext,
-} from "./GlobalDialogProvider";
+import GlobalDialogProvider, { GlobalDialogContext } from "./GlobalDialogProvider";
 
 jest.mock("../components/ui/button", () => ({
   __esModule: true,
@@ -10,21 +8,11 @@ jest.mock("../components/ui/button", () => ({
 }));
 
 jest.mock("../components/ui/dialog", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require("react");
 
   function omitDomUnsafeProps<P extends Record<string, any>>(props: P) {
-    const {
-      onOpenAutoFocus,
-      onCloseAutoFocus,
-      onEscapeKeyDown,
-      onPointerDownOutside,
-      onInteractOutside,
-      open,
-      onOpenChange,
-      modal,
-      showCloseButton,
-      ...rest
-    } = props as any;
+    const { onOpenAutoFocus: _a, showCloseButton: _b, ...rest } = props as any;
     return rest as P;
   }
 
@@ -38,9 +26,7 @@ jest.mock("../components/ui/dialog", () => {
       const rest = omitDomUnsafeProps(props);
       return (
         <div data-slot="dialog-content" data-class={className} {...rest}>
-          {showCloseButton ? (
-            <button data-slot="dialog-close" aria-label="Close ×" />
-          ) : null}
+          {showCloseButton ? <button data-slot="dialog-close" aria-label="Close ×" /> : null}
           {children}
         </div>
       );
@@ -77,9 +63,7 @@ jest.mock("../components/ui/dialog", () => {
           {children}
         </button>
       ),
-    DialogTrigger: ({ children }: any) => (
-      <button data-slot="dialog-trigger">{children}</button>
-    ),
+    DialogTrigger: ({ children }: any) => <button data-slot="dialog-trigger">{children}</button>,
     DialogOverlay: () => <div data-slot="dialog-overlay" />,
     DialogPortal: ({ children }: any) => <>{children}</>,
   };

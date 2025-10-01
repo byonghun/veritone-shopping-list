@@ -1,0 +1,27 @@
+# node / package managers
+node_modules/
+**/node_modules/
+package-lock.json
+
+# builds / outputs
+dist/
+**/dist/
+build/
+**/build/
+coverage/
+out/
+
+# caches / temp
+.tmp/
+temp/
+tmp/
+.cache/
+**/*.tsbuildinfo
+
+# generated images/assets/reports
+apps/web/stats.json
+
+# misc
+*.log
+*.tgz
+*.tar.gz

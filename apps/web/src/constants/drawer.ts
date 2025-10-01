@@ -15,5 +15,5 @@ export const DEFAULT_ITEM: ItemDTO = {
 
 export const DEFAULT_GLOBAL_DRAWER_PROPS: GlobalDrawerProps = {
   defaultValues: DEFAULT_ITEM,
-  onConfirm: () => {}
-}
+  onConfirm: () => {},
+};
