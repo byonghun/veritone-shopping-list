@@ -1,9 +1,10 @@
 name: CI (PR & main)
 
+# Triggers: when should this workflow run?
 on:
-  pull_request:
+  pull_request: # Run on pull requests targeting main
     branches: [main]
-    paths:
+    paths: # Only if these paths change
       - "apps/**"
       - "shared/**"
       - "tsconfig*.json"
@@ -11,7 +12,7 @@ on:
       - ".eslintrc.*"
       - ".prettierrc*"
       - ".github/workflows/ci.yml"
-  push:
+  push: # Run on direct pushes to main
     branches: [main]
     paths:
       - "apps/**"
@@ -19,11 +20,13 @@ on:
       - "tsconfig*.json"
       - "package.json"
 
+# Prevent overlapping runs for the same branch/PR
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # Job: detect which workspaces changed
   changes:
     name: Detect changed workspaces
     runs-on: ubuntu-latest
@@ -47,6 +50,7 @@ jobs:
               - 'apps/server/**'
               - 'shared/**'
 
+  # Job: lint + prettier
   quality:
     name: Lint & Prettier check
     needs: changes
@@ -69,6 +73,7 @@ jobs:
       - name: Prettier (check)
         run: npm run format:check
 
+  # Job: build, typecheck, test for each target (matrix)
   build_typecheck_test:
     name: Build, Typecheck, Test (${{ matrix.target }})
     needs: [changes, quality]
@@ -149,6 +154,7 @@ jobs:
             npm run -w @app/server test -- --passWithNoTests
           fi
 
+  # Job: Docker smoke builds for PRs
   docker_smoke_build:
     name: Docker smoke build (${{ matrix.app }})
     needs: build_typecheck_test
@@ -178,6 +184,7 @@ jobs:
           load: true
           tags: ${{ matrix.tag }}
 
+  # Job: Upload built web app as an artifact
   web_artifact:
     name: Upload web build artifact
     needs: build_typecheck_test
