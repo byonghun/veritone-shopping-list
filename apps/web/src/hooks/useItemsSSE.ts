@@ -8,15 +8,19 @@ export function useItemsSSE(onSnapshot: (s: UIItemsSnapshot) => void) {
     // Opens a long-lived connection using server-sent events
     // to the same web origin that served the page.
     const eventSource = new EventSource("/api/v1/sse/items");
-    const handler = (event: MessageEvent) => {
+    const handleSnapshot: EventListener = (event) => {
+      const msg = event as MessageEvent<string>;
       try {
-        onSnapshot(JSON.parse(event.data));
-      } catch {}
+        const data = JSON.parse(msg.data) as UIItemsSnapshot;
+        onSnapshot(data);
+      } catch {
+        // ignore malformed payloads
+      }
     };
     // Note: Handler function that runs whenever a named server-sent event arrives
-    eventSource.addEventListener("snapshot", handler);
+    eventSource.addEventListener("snapshot", handleSnapshot);
     return () => {
-      eventSource.removeEventListener("snapshot", handler as any);
+      eventSource.removeEventListener("snapshot", handleSnapshot);
       eventSource.close();
     };
   }, [onSnapshot]);

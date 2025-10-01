@@ -41,7 +41,7 @@ const ItemForm: FC<ItemFormProps> = ({
     formState: { errors, isSubmitting, isValid, isDirty },
     watch,
     reset,
-  } = useForm<ItemFormInput, any, ItemFormOutput>({
+  } = useForm<ItemFormInput, undefined, ItemFormOutput>({
     resolver: zodResolver(ItemSchema),
     mode: "onChange",
     defaultValues,

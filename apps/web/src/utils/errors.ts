@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { ApiErrorBody } from "@app/shared";
+import type { ApiErrorBody } from "@app/shared";
 
 function isAxiosError(e: unknown): e is {
   isAxiosError: true;
