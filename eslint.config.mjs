@@ -20,7 +20,7 @@ export default [
       "**/*.{test,spec}.{ts,tsx,js,jsx}",
       "**/__tests__/**",
       "**/setupTests.ts",
-      "**/src/utils/errors.ts"
+      "**/src/utils/errors.ts",
     ],
   },
 
