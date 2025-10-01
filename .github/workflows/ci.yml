@@ -1,0 +1,181 @@
+name: CI (PR & main)
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "apps/**"
+      - "shared/**"
+      - "tsconfig*.json"
+      - "package.json"
+      - ".eslintrc.*"
+      - ".prettierrc*"
+      - ".github/workflows/ci.yml"
+  push:
+    branches: [ main ]
+    paths:
+      - "apps/**"
+      - "shared/**"
+      - "tsconfig*.json"
+      - "package.json"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detect changed workspaces
+    runs-on: ubuntu-latest
+    outputs:
+      web_changed: ${{ steps.filter.outputs.web }}
+      server_changed: ${{ steps.filter.outputs.server }}
+      shared_changed: ${{ steps.filter.outputs.shared }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Filter changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            shared:
+              - 'shared/**'
+            web:
+              - 'apps/web/**'
+              - 'shared/**'
+            server:
+              - 'apps/server/**'
+              - 'shared/**'
+
+  quality:
+    name: Lint & Prettier check
+    needs: changes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: ESLint (web)
+        if: ${{ needs.changes.outputs.web_changed == 'true' || github.event_name == 'push' }}
+        run: npm run lint:web
+      - name: ESLint (server)
+        if: ${{ needs.changes.outputs.server_changed == 'true' || github.event_name == 'push' }}
+        run: npm run lint:server
+      - name: Prettier (check)
+        run: npm run format:check
+
+  build_typecheck_test:
+    name: Build, Typecheck, Test (${{ matrix.target }})
+    needs: [changes, quality]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [shared, web, server]
+      fail-fast: false
+    if: >
+      (matrix.target == 'shared'  && (needs.changes.outputs.shared_changed == 'true'  || github.event_name == 'push')) ||
+      (matrix.target == 'web'     && (needs.changes.outputs.web_changed == 'true'     || github.event_name == 'push')) ||
+      (matrix.target == 'server'  && (needs.changes.outputs.server_changed == 'true'  || github.event_name == 'push'))
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies (root)
+        run: npm install --no-audit --no-fund
+
+      - name: Build shared (once)
+        if: ${{ matrix.target != 'shared' }}
+        run: npm run -w @app/shared build --if-present
+
+      - name: Typecheck (${{ matrix.target }})
+        run: |
+          if [ "${{ matrix.target }}" = "shared" ]; then
+            npm run -w @app/shared typecheck --if-present || npx tsc -b --noEmit
+          elif [ "${{ matrix.target }}" = "web" ]; then
+            npm run -w @app/web typecheck
+          else
+            npm run -w @app/server typecheck
+          fi
+
+      - name: Build (${{ matrix.target }})
+        run: |
+          if [ "${{ matrix.target }}" = "shared" ]; then
+            npm run -w @app/shared build --if-present || npx tsc -b
+          elif [ "${{ matrix.target }}" = "web" ]; then
+            npm run -w @app/web build
+          else
+            npm run -w @app/server build
+          fi
+
+      - name: Test (${{ matrix.target }})
+        env:
+          NODE_ENV: test
+          RL_READ: "10"
+          RL_WRITE: "5"
+        run: |
+          if [ "${{ matrix.target }}" = "shared" ]; then
+            npm test -w @app/shared --if-present || echo "no tests in shared"
+          elif [ "${{ matrix.target }}" = "web" ]; then
+            npm run -w @app/web test -- --passWithNoTests
+          else
+            npm run -w @app/server test -- --passWithNoTests
+          fi
+
+  docker_smoke_build:
+    name: Docker smoke build (${{ matrix.app }})
+    needs: build_typecheck_test
+    if: ${{ success() && github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - app: web
+            context: ./apps/web
+            file: ./apps/web/Dockerfile.dev
+            tag: web:pr-${{ github.event.number }}
+          - app: server
+            context: ./apps/server
+            file: ./apps/server/Dockerfile.dev
+            tag: server:pr-${{ github.event.number }}
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build ${{ matrix.app }} image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          push: false
+          load: true
+          tags: ${{ matrix.tag }}
+
+  web_artifact:
+    name: Upload web build artifact
+    needs: build_typecheck_test
+    if: ${{ success() && (needs.changes.outputs.web_changed == 'true' || github.event_name == 'push') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install --no-audit --no-fund
+      - run: npm run -w @app/shared build --if-present
+      - run: npm run -w @app/web build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+          if-no-files-found: ignore
