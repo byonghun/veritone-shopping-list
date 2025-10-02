@@ -26,6 +26,7 @@ describe("Items Service file test", () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      deleteAll: jest.fn(),
     };
   });
 
@@ -96,5 +97,21 @@ describe("Items Service file test", () => {
 
     expect(repo.delete).toHaveBeenCalledWith("gone");
     expect(ok).toBe(true);
+  });
+
+  it("deleteAll delegates to repo and returns deletedCount", async () => {
+    repo.deleteAll.mockResolvedValueOnce({ deletedCount: 3 });
+
+    const S = createItemsService(repo);
+    const result = await S.deleteAll();
+
+    expect(repo.deleteAll).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({ deletedCount: 3 });
+
+    // second call with zero, to cover both paths
+    repo.deleteAll.mockResolvedValueOnce({ deletedCount: 0 });
+    const result2 = await S.deleteAll();
+    expect(repo.deleteAll).toHaveBeenCalledTimes(2);
+    expect(result2).toEqual({ deletedCount: 0 });
   });
 });

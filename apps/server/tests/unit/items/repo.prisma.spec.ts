@@ -24,6 +24,7 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      deleteMany: jest.fn()
     },
   } as any;
 
@@ -82,5 +83,16 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
 
     prismaMock.item.delete.mockRejectedValueOnce(new Error("not found"));
     await expect(repo.delete("id-2")).resolves.toBe(false);
+  });
+
+  it("deleteAll calls prisma.deleteMany and returns deletedCount", async () => {
+    prismaMock.item.deleteMany.mockResolvedValueOnce({ count: 2 });
+    const repo = new PrismaItemsRepo(prismaMock);
+    await expect(repo.deleteAll()).resolves.toEqual({ deletedCount: 2 });
+    expect(prismaMock.item.deleteMany).toHaveBeenCalledTimes(1);
+
+    prismaMock.item.deleteMany.mockResolvedValueOnce({ count: 0 });
+    await expect(repo.deleteAll()).resolves.toEqual({ deletedCount: 0 });
+    expect(prismaMock.item.deleteMany).toHaveBeenCalledTimes(2);
   });
 });

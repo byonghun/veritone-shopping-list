@@ -62,4 +62,21 @@ describe("InMemoryItemsRepo (unit)", () => {
     expect(got).toBeUndefined();
     expect(upd).toBeUndefined();
   });
+
+  it("deleteAll clears all items and returns deletedCount", async () => {
+    await repo.create({ itemName: "Apples", quantity: 3 });
+    await repo.create({ itemName: "Bananas", quantity: 6 });
+
+    const before = await repo.listAll();
+    expect(before.length).toBe(2);
+
+    const result = await repo.deleteAll();
+    expect(result).toEqual({ deletedCount: 2 });
+
+    const after = await repo.listAll();
+    expect(after.length).toBe(0);
+
+    const resultAgain = await repo.deleteAll();
+    expect(resultAgain).toEqual({ deletedCount: 0 });
+  });
 });

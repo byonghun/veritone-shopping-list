@@ -172,4 +172,38 @@ describe("Items routes CRUD tests", () => {
       }),
     );
   });
+
+  it("DELETE /api/v1/items deletes all items and leaves list empty (204 + empty list)", async () => {
+    const ip = nextTestIp();
+
+    const a = await createItem(ip, "Apples", 3);
+    const b = await createItem(ip, "Bananas", 6);
+    expect(a.id).toBeDefined();
+    expect(b.id).toBeDefined();
+
+    const delAllRes = await withIp(request(app).delete("/api/v1/items"), ip).expect(204);
+    expect(delAllRes.headers["x-api-version"]).toBe("v1");
+
+    const listRes = await withIp(request(app).get("/api/v1/items"), ip).expect(200);
+    expect(listRes.body).toEqual({ items: [], count: 0 });
+
+    await withIp(request(app).get(`/api/v1/items/${a.id}`), ip).expect(404);
+    await withIp(request(app).get(`/api/v1/items/${b.id}`), ip).expect(404);
+  });
+
+  it("DELETE /api/v1/items is idempotent when list is already empty", async () => {
+    const ip = nextTestIp();
+
+    const firstList = await withIp(request(app).get("/api/v1/items"), ip).expect(200);
+    expect(firstList.body).toEqual({ items: [], count: 0 });
+
+    const delAllRes1 = await withIp(request(app).delete("/api/v1/items"), ip).expect(204);
+    expect(delAllRes1.headers["x-api-version"]).toBe("v1");
+
+    const delAllRes2 = await withIp(request(app).delete("/api/v1/items"), ip).expect(204);
+    expect(delAllRes2.headers["x-api-version"]).toBe("v1");
+
+    const finalList = await withIp(request(app).get("/api/v1/items"), ip).expect(200);
+    expect(finalList.body).toEqual({ items: [], count: 0 });
+  });
 });
