@@ -15,5 +15,5 @@
   },
   "references": [{ "path": "../../shared" }],
   "include": ["src", "tests", "prisma/**/*.ts"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules"],
 }
