@@ -6,7 +6,6 @@
     "target": "es2022",
     "rootDir": ".",
     "outDir": "dist",
-    "baseUrl": ".",
     "types": ["node", "jest"],
     "paths": {
       "@app/shared": ["../../shared/src/index"],

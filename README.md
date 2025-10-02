@@ -10,6 +10,7 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
+- [Performance & Accessibility](#performance--accessibility)
 - [Basic Repo Layout](#repo-layout)
 - [Prerequisites](#prerequisites)
 - [Quick Start (Local Dev)](#quick-start-local-dev)
@@ -21,9 +22,10 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 - [Testing](#testing)
 - [Lint & Format](#lint--format)
 - [Typecheck & Build](#typecheck--build)
-- [Docker (Dev Images)](#docker-dev-images)
+- [Docker Quick Start (Dev Images)](#docker-quick-start-dev-images)
 - [Artifacts (Web Build)](#artifacts-web-build)
 - [CI (Github Actions)](#ci-github-actions)
+- [Non-root Guarantee](#non-root-guarantee)
 - [Credits](#credits)
 
 ## Tech Stack
@@ -34,8 +36,23 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 - **Testing**: Jest, React Testing Library, Supertest
 - **Tooling**: npm workspaces, ESLint v9 (flat config), Prettier, Husky
 - **CI**: GitHub Actions (lint, test, typecheck, build, Docker smoke builds, artifact upload)
-- **Container Images**: `postgres:16-alpine`, `nginx:1.27-x-alpine`
+- **Container Images**: `postgres:16-alpine`, `nginxinc/nginx-unprivileged:1.27.4-alpine`
 - **Fonts**: `@fontsource/dosis` and `@fontsource/nunito`
+
+## Performance & Accessibility (Lighthouse)
+
+_Audited inside Docker on 2025-10-02 at commit `3cf15ba8cc`, Chrome 128. Scores can vary by machine._
+
+| Target      | Performance | Accessibility | Best Practices | SEO |
+| ----------- | ----------- | ------------- | -------------- | --- |
+| **Mobile**  | 98          | 95            | 100            | 100 |
+| **Desktop** | 100         | 95            | 100            | 100 |
+
+**Reports:** [Desktop](docs/lighthouse/desktop.html) · [Mobile](docs/lighthouse/mobile.html)
+
+**Screenshots:**
+![Desktop](docs/lighthouse/desktop.png)  
+![Mobile](docs/lighthouse/mobile.png)
 
 ## Repo Layout
 
@@ -64,6 +81,10 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 ```bash
 # Install deps
 npm install
+
+# (optional) regenerates Prisma client
+npm run -w @app/server prisma:generate
+npm run -w @app/server prisma:migrate:dev
 
 # Run Server (port 3001)
 npm run dev:server
@@ -104,8 +125,8 @@ cp apps/web/.env.example apps/web/.env
 
 ```json
 {
-  "dev:docker": "docker compose up --build",
-  "down": "docker compose down -v",
+  "docker:up": "docker compose up --build",
+  "docker:down": "docker compose down -v",
 
   "dev:server": "npm run -w @app/server dev",
   "dev:web": "npm run -w @app/web dev",
@@ -171,7 +192,7 @@ npm run -w @app/web build
 npm run -w @app/server build
 ```
 
-## Docker (Dev Images)
+## Docker Quick Start (Dev Images)
 
 Run both **server** and **web** in Docker with one command:
 
@@ -184,6 +205,8 @@ To stop and clean up volumes (DB data, etc.):
 ```bash
 npm run docker:down
 ```
+
+> Note: `.env.development` is committed intentionally for the challenge to enable one-command startup. Values are development-only and not used in production.
 
 ## Artifacts (Web Build)
 
@@ -209,6 +232,12 @@ CI runs on PRs and pushes to main:
 3. Typechecks, builds, runs tests (per workspace)
 4. Builds Docker images (PR only, smoke test)
 5. Uploads web artifact
+
+## Non-root guarantee
+
+- **Web** runs as user 101 (`nginxinc/nginx-unprivileged`) on 8080.
+- **Server** runs as user app (non-root) on 3001.
+- No privileged ports are used. Containers do not require root to run.
 
 ## Credits
 

@@ -12,6 +12,9 @@ on:
       - ".eslintrc.*"
       - ".prettierrc*"
       - ".github/workflows/ci.yml"
+      - "**/Dockerfile"
+      - "**/Dockerfile.*"
+      - "README.md"
   push: # Run on direct pushes to main
     branches: [main]
     paths:

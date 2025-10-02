@@ -8,7 +8,6 @@
     "noUncheckedIndexedAccess": true,
     "esModuleInterop": true, // smoother CJS/ESM interop for defs like "express"
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true, // speeds up builds by not type-checking node_modules
-    "baseUrl": "."
+    "skipLibCheck": true // speeds up builds by not type-checking node_modules
   }
 }
