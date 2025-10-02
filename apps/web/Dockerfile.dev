@@ -29,12 +29,16 @@ FROM nginx:1.27.4-alpine AS runtime
 # Pull patched base libs in the final image
 RUN apk -U --no-cache upgrade
 
+# Run nginx as non-root user and use an unprivileged port (8080)
+# The nginx image already has a "nginx" user (uid 101)
+USER nginx
+
 # Replace default nginx site with our config
 RUN rm -f /etc/nginx/conf.d/default.conf
 COPY apps/web/nginx.conf /etc/nginx/conf.d/web.conf
 
 # Copy built app SPA to nginx’s html dir
-COPY --from=builder /workspace/apps/web/dist/ /usr/share/nginx/html/
+COPY --chown=nginx:nginx --from=builder /workspace/apps/web/dist/ /usr/share/nginx/html/
 
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
