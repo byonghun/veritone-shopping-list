@@ -104,4 +104,14 @@ export const ItemsController = {
 
     res.status(204).send();
   },
+
+  /** DELETE /api/v1/items (bulk) */
+  async deleteAll(_req: Request, res: Response): Promise<void> {
+    await ItemsService.deleteAll();
+
+    const items = await ItemsService.listAll();
+    sseBroadcastItems({ items });
+
+    res.status(204).send();
+  },
 } as const;
