@@ -24,7 +24,7 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
-      deleteMany: jest.fn()
+      deleteMany: jest.fn(),
     },
   } as any;
 
