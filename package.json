@@ -5,14 +5,14 @@
     "shared"
   ],
   "scripts": {
-    "dev:docker": "docker compose up --build",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down -v",
     "dev:server": "npm run -w @app/server dev",
-    "test:server": "npm run -w @app/server test",
     "dev:web": "npm run -w @app/web dev",
+    "dev": "npm run dev:server & npm run dev:web",
+    "test:server": "npm run -w @app/server test",
     "test:web": "npm run -w @app/web test",
     "test": "npm run test:server & npm run test:web",
-    "dev": "npm run dev:server & npm run dev:web",
-    "down": "docker compose down -v",
     "typecheck": "tsc -b",
     "build": "tsc -b --force",
     "clean": "tsc -b --clean && rimraf **/dist **/tsconfig.tsbuildinfo",
@@ -21,7 +21,7 @@
     "lint:server": "eslint \"apps/server/**/*.{ts,tsx,js,jsx}\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "is-ci || husky install"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "8.45.0",

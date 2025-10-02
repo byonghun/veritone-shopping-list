@@ -15,6 +15,7 @@ services:
       timeout: 2s
       retries: 20
       start_period: 10s
+
   db:
     # Smallest size, great for simple Node.js services
     image: postgres:16-alpine
@@ -49,18 +50,10 @@ services:
       - "${PORT:-3001}:3001"
     env_file:
       - .env.development
-    # Bind mount your repo -> live code inside the container (hot reload)
-    # Anonymous volume on /workspace/node_modules to hide host modules and use the container's own node_modules (prevents OS/ABI mismatches)
-    # Telling Docker to not use the node_modules from host computer but use the dedicated node_modules folder inside the container
-    # Ensures that they are compiled for the correct operating system and architecture
-    # volumes:
-    #   - .:/workspace
-    #   - /workspace/node_modules
     # Mount ONLY sources, not the whole repo, and do NOT mount node_modules
     volumes:
       - ./apps/server:/workspace/apps/server
       - ./shared:/workspace/shared
-
     # Prevents the server from trying to connect before Postgres is listening
     # This removes "ECONNREFUSED" boots
     depends_on:
@@ -78,6 +71,24 @@ services:
       timeout: 2s
       retries: 20
       start_period: 15s
+
+  migrator:
+    # One-shot container: runs Prisma migrations inside Docker, then exits
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile.dev
+    container_name: veritone-shopping-list-migrator
+    working_dir: /workspace/apps/server
+    user: app
+    environment:
+      # IMPORTANT: use the service name "db", not localhost
+      DATABASE_URL: postgresql://veritoneuser:veritonepassword@db:5432/veritonedb?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    # Run migrations non-interactively, then stop
+    command: ["npm", "run", "-w", "@app/server", "prisma:migrate:deploy"]
+    restart: "no"
 
 volumes:
   pgdata:
