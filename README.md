@@ -10,7 +10,7 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
-- [Performance & Accessibility](#performance--accessibility)
+- [Performance & Accessibility (Lighthouse)](#performance--accessibility-lighthouse)
 - [Basic Repo Layout](#repo-layout)
 - [Prerequisites](#prerequisites)
 - [Quick Start (Local Dev)](#quick-start-local-dev)
