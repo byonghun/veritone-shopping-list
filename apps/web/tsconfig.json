@@ -14,7 +14,8 @@
     "paths": {
       "@app/shared": ["../../shared/src/index.ts"],
       "@app/shared/*": ["../../shared/src/*"]
-    }
+    },
+    "ignoreDeprecations": "6.0"
   },
   "include": [
     "src",
