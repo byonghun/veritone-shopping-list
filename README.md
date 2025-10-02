@@ -1,84 +1,215 @@
-# veritone-shopping-list
+# Veritone Shopping List (Monorepo)
 
-Shopping List App
+A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend, sharing utilities through a shared package.
 
-## What this repo contains
+- `apps/web` - React app (Webpack 5, Jest + RTL, Tailwind)
+- `apps/server` - Express API (Jest, Supertest, Prisma)
+- `shared` - Shared TS and schemas code used by both apps
+- **Tooling** - npm workspaces, ESLint v9 flat config, Prettier, GitHub Actions CI, Docker
 
-### - Apps
+## Table of Contents
 
-- `apps/server`: Node/Express API (Dockerized for local/dev).
+- [Tech Stack](#tech-stack)
+- [Basic Repo Layout](#repo-layout)
+- [Prerequisites](#prerequisites)
+- [Quick Start (Local Dev)](#quick-start-local-dev)
+- [Environment Variables](#environment-variables)
+- [Scripts (Root)](#scripts-root)
+- [App-specific Commands](#app-specific-commands)
+  - [Web](#web)
+  - [Server](#server)
+- [Testing](#testing)
+- [Lint & Format](#lint--format)
+- [Typecheck & Build](#typecheck--build)
+- [Docker (Dev Images)](#docker-dev-images)
+- [Artifacts (Web Build)](#artifacts-web-build)
+- [CI (Github Actions)](#ci-github-actions)
+- [Credits](#credits)
 
-### - Infra
+## Tech Stack
 
-- Dockerfiles for web + server, `docker-compose.yml` for local.
-- `apps/web/nginx.conf` with SPA fallback, caching, and `/healthz`.
-
-## Third Pary components & attributions
-
-#### This project depends on open-source software
-
-- **Runtime/build**: Node.js, Webpack, Babel, TypScript
-- **Frontend**: React, React Router, Tailwind CSS, shadcn/ui, Radix UI
+- **Language**: TypeScript (ES2022 target)
+- **Frontend**: React 18, Webpack 5, TailwindCSS
+- **Backend**: Node 22, Express, Prisma
+- **Testing**: Jest, React Testing Library, Supertest
+- **Tooling**: npm workspaces, ESLint v9 (flat config), Prettier, Husky
+- **CI**: GitHub Actions (lint, test, typecheck, build, Docker smoke builds, artifact upload)
+- **Container Images**: `postgres:16-alpine`, `nginx:1.27-x-alpine`
 - **Fonts**: `@fontsource/dosis` and `@fontsource/nunito`
-- **Container images**: `postgres:16-alpine`, `nginx:1.27-x-alpine`
 
-## Backend
+## Repo Layout
 
-### Prerequisites
+```pgsql
+.
+├─ apps/
+│  ├─ web/                 # React SPA
+│  └─ server/              # Express API
+├─ shared/                 # Shared TS utilities/types
+├─ .github/workflows/ci.yml
+├─ eslint.config.mjs
+├─ tsconfig.base.json
+├─ package.json
+└─ .prettierrc
+```
 
-- Docker Desktop
-  - macOS - `brew install --cask docker`
-  - Windows 10/11 (WSL2 recommended) - `winget install -e --id Docker.DockerDesktop`
-- Node.js >=18.0.0
-- Npm 10.9.2
+## Prerequisites
 
-### Environment Variables
+- Node.js v22+
+- npm v10+
+- (Optional) Docker 24+
+- (Optional) PostgreSQL if running API locally with Prisma
+
+## Quick Start (Local Dev)
+
+```bash
+# Install deps
+npm install
+
+# Run Server (port 3001)
+npm run dev:server
+
+# Run Web (port 3000)
+npm run dev:web
+
+# Run both together (parellel)
+npm run dev
 
 ```
-cp .env.example .env.development
-# Edit values as needed:
+
+## Environment Variables
+
+### Root `.env.example`
+
+```env
+NODE_ENV=development
 PORT=3001
+DATABASE_URL=postgresql://veritoneuser:veritonepassword@db:5432/veritonedb?schema=public
+```
+
+### Web `.env.example`
+
+```env
+NODE_ENV=development
 API_BASE_URL=http://localhost:3001
 ```
 
-### Quick Start (Docker)
+Copy and adjust as needed
 
-```
-# Build + run dev stack (hot reload via tsx)
-# db + server + web
-npm run dev:docker
-# or
-docker compose up --build
+```bash
+cp .env.example .env
+cp apps/web/.env.example apps/web/.env
 ```
 
-### Quick Start Backend (Locally)
+## Scripts (Root)
 
+```json
+{
+  "dev:docker": "docker compose up --build",
+  "down": "docker compose down -v",
+
+  "dev:server": "npm run -w @app/server dev",
+  "dev:web": "npm run -w @app/web dev",
+  "dev": "npm run dev:server & npm run dev:web",
+
+  "test:server": "npm run -w @app/server test",
+  "test:web": "npm run -w @app/web test",
+  "test": "npm run test:server && npm run test:web",
+
+  "lint": "eslint .",
+  "format": "prettier . --write",
+  "format:check": "prettier . --check",
+
+  "typecheck": "tsc -b",
+  "build": "tsc -b --force",
+  "clean": "tsc -b --clean && rimraf **/dist"
+}
 ```
-# Run locally, hot reload via tsx
-cd apps/server
-npm run dev
+
+## App-specific Commands
+
+### Web
+
+```json
+npm run -w @app/web dev
+npm run -w @app/web build
+npm run -w @app/web test
 ```
 
-### Quick Start Frontend (Locally)
+### Server
 
+```json
+npm run -w @app/server dev
+npm run -w @app/server build
+npm run -w @app/server test
+npm run -w @app/server prisma:generate
 ```
-# Run locally, hot reload via tsx
-cd apps/web
 
-# Dev server with Hot Module Replacement (HMR)
-npm run dev
+## Testing
 
-# Production build to dist/
-npm run build
+- Run all tests: `npm run test`
+- Web only: `npm run test:web`
+- Server only: `npm run test:server`
+- CI runs tests with `--passWithNoTests` so empty suites don’t fail.
 
-# Same as dev
-npm run start
+## Lint & Format
 
-# Analyze the production bundle
-# Creates stats.json file
-npm run analyze
+- Run ESLint: `npm run lint`
+- Run Prettier Check: `npm run format:check`
+- Fix Formatting: `npm run format`
 
-# Run to visually see analysis
-# Must run after stats.json is created via `npm run analyze`
-npx webpack-bundle-analyze stats.json
+## Typecheck & Build
+
+```bash
+npm run typecheck   # Validate types only
+npm run build       # Build all workspaces
 ```
+
+Per app:
+
+```bash
+npm run -w @app/web build
+npm run -w @app/server build
+```
+
+## Docker (Dev Images)
+
+Run both **server** and **web** in Docker with one command:
+
+```bash
+npm run docker:up
+```
+
+To stop and clean up volumes (DB data, etc.):
+
+```bash
+npm run docker:down
+```
+
+## Artifacts (Web Build)
+
+CI uploads the web build (`apps/web/dist`) as an artifact named `web-dist`.
+
+To test locally:
+Note: Server must be running
+
+```bash
+unzip web-dist.zip -d web-dist
+# serve must be installed globally
+# npm i -g serve
+npx serve -s web-dist -l 5000
+open http://localhost:5000
+```
+
+## CI (Github Actions)
+
+CI runs on PRs and pushes to main:
+
+1. Detects changed workspaces
+2. Lints + Prettier check
+3. Typechecks, builds, runs tests (per workspace)
+4. Builds Docker images (PR only, smoke test)
+5. Uploads web artifact
+
+# Credits
+
+- Icons by [Icons8](https://icons8.com)
