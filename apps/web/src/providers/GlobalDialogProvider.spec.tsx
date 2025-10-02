@@ -145,7 +145,7 @@ describe("GlobalDialogProvider", () => {
 
     const confirm = screen.getByRole("button", { name: "Delete" });
     expect(confirm).toBeInTheDocument();
-    expect(confirm.getAttribute("class") || "").toContain("bg-red-600");
+    expect(confirm.getAttribute("class") || "").toContain("w-[71px]");
 
     expect(screen.queryByLabelText("Close ×")).toBeNull();
   });

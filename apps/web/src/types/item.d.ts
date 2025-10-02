@@ -28,3 +28,5 @@ export type ItemsResponse = {
   items: TItem[];
   count: number;
 };
+
+export type ItemsType = "active" | "completed";

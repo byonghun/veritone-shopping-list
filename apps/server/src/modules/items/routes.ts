@@ -14,3 +14,4 @@ itemsRoutes.get("/:id", readLimiter, asyncHandler<{ id: ItemId }>(ItemsControlle
 itemsRoutes.post("/", writeLimiter, asyncHandler(ItemsController.create));
 itemsRoutes.patch("/:id", writeLimiter, asyncHandler<{ id: ItemId }>(ItemsController.update));
 itemsRoutes.delete("/:id", writeLimiter, asyncHandler<{ id: ItemId }>(ItemsController.remove));
+itemsRoutes.delete("/", writeLimiter, asyncHandler(ItemsController.deleteAll));

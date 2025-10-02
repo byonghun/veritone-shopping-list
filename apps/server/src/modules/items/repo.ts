@@ -9,4 +9,5 @@ export interface ItemsRepo {
   create(input: ItemFormInput): Promise<Item>;
   update(id: ItemId, patch: ItemFormInput): Promise<Item | undefined>;
   delete(id: ItemId): Promise<boolean>;
+  deleteAll(): Promise<{ deletedCount: number }>;
 }

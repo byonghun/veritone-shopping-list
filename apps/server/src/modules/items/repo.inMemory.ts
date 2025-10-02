@@ -58,6 +58,12 @@ export class InMemoryItemsRepo implements ItemsRepo {
   async delete(id: ItemId): Promise<boolean> {
     return this.items.delete(id);
   }
+
+  async deleteAll(): Promise<{ deletedCount: number }> {
+    const deletedCount = this.items.size;
+    this.items.clear();
+    return { deletedCount };
+  }
 }
 
 // Singleton (simple for MVP)

@@ -36,5 +36,12 @@ export function useItems() {
     },
   });
 
-  return { query, create, update, remove, keys: itemsKeys };
+  const deleteAll = useMutation({
+    mutationFn: () => ItemsClient.deleteAll(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: itemsKeys.items });
+    },
+  });
+
+  return { query, create, update, remove, deleteAll, keys: itemsKeys };
 }

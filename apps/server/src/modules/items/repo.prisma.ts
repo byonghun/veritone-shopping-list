@@ -54,4 +54,9 @@ export class PrismaItemsRepo implements ItemsRepo {
       return false;
     }
   }
+
+  async deleteAll() {
+    const { count } = await this.prisma.item.deleteMany();
+    return { deletedCount: count };
+  }
 }

@@ -32,6 +32,7 @@ let mockQuery: QueryShape;
 let mockCreate: MutShape;
 let mockUpdate: MutShape;
 let mockRemove: MutShape;
+let mockDeleteAll: MutShape;
 
 jest.mock("../hooks/useItems", () => ({
   __esModule: true,
@@ -40,11 +41,11 @@ jest.mock("../hooks/useItems", () => ({
     create: mockCreate,
     update: mockUpdate,
     remove: mockRemove,
+    deleteAll: mockDeleteAll,
     keys: { items: ["items"] as const },
   }),
 }));
 
-// SSE hook — store the last callback so tests can trigger it if needed
 let lastSSECb: ((s: { items: any[] }) => void) | undefined;
 jest.mock("../hooks/useItemsSSE", () => ({
   __esModule: true,
@@ -104,6 +105,7 @@ function setPending() {
   mockCreate = { mutateAsync: jest.fn() };
   mockUpdate = { mutateAsync: jest.fn() };
   mockRemove = { mutateAsync: jest.fn() };
+  mockDeleteAll = { mutateAsync: jest.fn() };
 }
 
 function setError(e: Error) {
@@ -117,6 +119,7 @@ function setError(e: Error) {
   mockCreate = { mutateAsync: jest.fn() };
   mockUpdate = { mutateAsync: jest.fn() };
   mockRemove = { mutateAsync: jest.fn() };
+  mockDeleteAll = { mutateAsync: jest.fn() };
 }
 
 function setSuccess(items: any[]) {
@@ -130,6 +133,7 @@ function setSuccess(items: any[]) {
   mockCreate = { mutateAsync: jest.fn() };
   mockUpdate = { mutateAsync: jest.fn() };
   mockRemove = { mutateAsync: jest.fn() };
+  mockDeleteAll = { mutateAsync: jest.fn() };
 }
 
 beforeEach(() => {
@@ -329,5 +333,59 @@ describe("ItemsContainer", () => {
     });
 
     expect(screen.getByTestId("item-s1")).toBeInTheDocument();
+  });
+
+  it("when all items are completed, shows ClearCompletedCard; confirm 'Clear list' calls deleteAll and empties list", async () => {
+    setSuccess([
+      { id: "c1", itemName: "Done A", purchased: true, quantity: 1 },
+      { id: "c2", itemName: "Done B", purchased: true, quantity: 1 },
+    ]);
+    mockDeleteAll.mutateAsync.mockResolvedValueOnce({ deletedCount: 2 });
+
+    render(<ItemsContainer />);
+
+    expect(
+      screen.getByRole("heading", { level: 3, name: /all items completed!/i }),
+    ).toBeInTheDocument();
+    const clearBtn = screen.getByRole("button", { name: /clear list/i });
+
+    await actClick(clearBtn);
+    expect(openDialogMock).toHaveBeenCalled();
+    const dlg = openDialogMock.mock.calls[0][0];
+
+    await act(async () => {
+      await dlg.onConfirm();
+    });
+
+    expect(mockDeleteAll.mutateAsync).toHaveBeenCalledTimes(1);
+
+    expect(screen.getByRole("button", { name: /add your first item/i })).toBeInTheDocument();
+  });
+
+  it("confirming 'Start new list' clears and then opens the drawer", async () => {
+    jest.useFakeTimers();
+    setSuccess([{ id: "z1", itemName: "All done", purchased: true, quantity: 1 }]);
+    mockDeleteAll.mutateAsync.mockResolvedValueOnce({ deletedCount: 1 });
+
+    render(<ItemsContainer />);
+
+    const startBtn = screen.getByRole("button", { name: /start new list/i });
+
+    await actClick(startBtn);
+    expect(openDialogMock).toHaveBeenCalled();
+    const dlg = openDialogMock.mock.calls[0][0];
+
+    await act(async () => {
+      await dlg.onConfirm();
+    });
+
+    expect(mockDeleteAll.mutateAsync).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      jest.runAllTimers();
+    });
+
+    expect(openDrawerMock).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
   });
 });

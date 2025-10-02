@@ -10,13 +10,14 @@ jest.mock("../api/items.api", () => ({
     create: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
+    deleteAll: jest.fn(),
   },
 }));
 
 import { ItemsClient } from "../api/items.api";
 
 function Harness() {
-  const { query, create, update, remove, keys } = useItems();
+  const { query, create, update, remove, deleteAll, keys } = useItems();
 
   return (
     <div>
@@ -30,6 +31,7 @@ function Harness() {
         onClick={() => update.mutate({ id: "1", data: { itemName: "Eggs" } as any })}
       />
       <button data-testid="remove" onClick={() => remove.mutate("1")} />
+      <button data-testid="deleteAll" onClick={() => deleteAll.mutate()} />
     </div>
   );
 }
@@ -131,6 +133,30 @@ describe("useItems", () => {
 
     await waitFor(() => {
       expect(ItemsClient.remove).toHaveBeenCalledWith("1");
+    });
+
+    await waitFor(() => {
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ["items"] });
+    });
+
+    await waitFor(() => {
+      expect(ItemsClient.listAll).toHaveBeenCalledTimes(2);
+    });
+  });
+  it("deleteAll.mutate calls ItemsClient.deleteAll and invalidates ['items']", async () => {
+    (ItemsClient.listAll as jest.Mock).mockResolvedValue({ items: [] });
+    (ItemsClient.deleteAll as jest.Mock).mockResolvedValue({ deletedCount: 2 });
+
+    const { invalidateSpy } = renderWithClient(<Harness />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("status").textContent).toBe("success");
+    });
+
+    fireEvent.click(screen.getByTestId("deleteAll"));
+
+    await waitFor(() => {
+      expect(ItemsClient.deleteAll).toHaveBeenCalledTimes(1);
     });
 
     await waitFor(() => {

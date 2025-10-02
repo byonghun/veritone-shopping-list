@@ -74,13 +74,13 @@ const ItemForm: FC<ItemFormProps> = ({
     <>
       <div className="pl-[30px] pt-7 pr-6 flex-1">
         <div className="flex flex-col font-nunito font-normal mb-4">
-          <h2 className="text-lg leading-6 text-primaryFont">
-            {isUpdateMode ? "Edit an item" : "Add an Item"}
+          <h2 className="text-lg leading-6 text-primaryFont font-normal">
+            {isUpdateMode ? "Edit an Item" : "Add an Item"}
           </h2>
           <div className="flex items-center justify-between">
             <DrawerDescription
               className={cn(
-                "text-base leading-[22px] text-secondaryFont mt-2",
+                "text-base leading-[22px] text-secondaryFont mt-2 font-normal",
                 descriptionTextClassName,
               )}
             >
@@ -116,7 +116,7 @@ const ItemForm: FC<ItemFormProps> = ({
               />
               <span
                 className={cn(
-                  "text-xs absolute bottom-3 right-3",
+                  "text-xs absolute bottom-3 right-3 font-normal",
                   descriptionValue.length > MAX_DESCRIPTION ? "text-red-600" : "text-secondaryFont",
                 )}
                 aria-live="polite"
@@ -184,14 +184,14 @@ const ItemForm: FC<ItemFormProps> = ({
       <DrawerFooter className="bg-white w-full flex">
         <div className="flex gap-4 w-full justify-end pr-2 font-nunito mb-2">
           <DrawerClose asChild>
-            <Button variant="secondary" className="h-9 font-normal hover:opacity-80">
+            <Button variant="secondary" className="h-9 font-normal hover:text-primaryFont/80">
               Cancel
             </Button>
           </DrawerClose>
 
           <Button
             variant="default"
-            className={cn("h-9 font-normal w-[85px]", isUpdateMode && "w-[100px]")}
+            className={cn("h-9 font-normal w-[90px]", isUpdateMode && "w-[100px]")}
             form="item-form"
             type="submit"
             disabled={isSubmitting || !isValid || (!isDirty && isUpdateMode)}

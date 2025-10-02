@@ -47,7 +47,9 @@ const GlobalDrawerProvider: FC<GlobalDrawerProviderProps> = ({ children }) => {
           <div className="flex flex-col h-full bg-white">
             <DrawerHeader className="bg-drawerHeaderBg w-full h-16 pl-[30px] border-b-[0.5px] border-drawerBorderGray">
               <div className="w-full h-full flex items-center justify-between">
-                <DrawerTitle className="text-secondaryFont font-dosis">SHOPPING LIST</DrawerTitle>
+                <DrawerTitle className="text-secondaryFont font-dosis text-lg font-semibold tracking-[0.25px] uppercase">
+                  Shopping List
+                </DrawerTitle>
                 <button onClick={closeDrawer} className="w-[70px] h-full hover:opacity-80">
                   <div className="pl-10">
                     <HideIcon />
