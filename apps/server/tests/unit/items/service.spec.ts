@@ -108,7 +108,6 @@ describe("Items Service file test", () => {
     expect(repo.deleteAll).toHaveBeenCalledTimes(1);
     expect(result).toEqual({ deletedCount: 3 });
 
-    // second call with zero, to cover both paths
     repo.deleteAll.mockResolvedValueOnce({ deletedCount: 0 });
     const result2 = await S.deleteAll();
     expect(repo.deleteAll).toHaveBeenCalledTimes(2);
