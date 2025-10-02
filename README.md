@@ -129,7 +129,7 @@ cp apps/web/.env.example apps/web/.env
 
 ### Web
 
-```json
+```bash
 npm run -w @app/web dev
 npm run -w @app/web build
 npm run -w @app/web test
@@ -137,7 +137,7 @@ npm run -w @app/web test
 
 ### Server
 
-```json
+```bash
 npm run -w @app/server dev
 npm run -w @app/server build
 npm run -w @app/server test
@@ -210,6 +210,6 @@ CI runs on PRs and pushes to main:
 4. Builds Docker images (PR only, smoke test)
 5. Uploads web artifact
 
-# Credits
+## Credits
 
 - Icons by [Icons8](https://icons8.com)
