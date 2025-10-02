@@ -13,7 +13,7 @@
     "paths": {
       "@app/shared": ["../../shared/src/index.ts"],
       "@app/shared/*": ["../../shared/src/*"]
-    },
+    }
   },
   "include": [
     "src",
