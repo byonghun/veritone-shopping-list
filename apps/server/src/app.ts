@@ -19,8 +19,9 @@ function setApiVersion(version: typeof API_VERSION) {
 const app: Application = express();
 
 const allowlist = new Set([
-  "http://localhost:3000",
-  "http://localhost:8080",
+  "http://localhost:3000", // local
+  "http://localhost:8080", // docker
+  "http://localhost:5000", // artifact
   "http://127.0.0.1:3000",
 ]);
 
