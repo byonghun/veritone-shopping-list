@@ -59,7 +59,7 @@ app.use(globalLimiter);
 
 app.use(`/api/${API_VERSION}`, setApiVersion(API_VERSION));
 
-// Mount SSE under /api/v1/sse  (→ /api/v1/sse/items)
+// Mount SSE under /api/v1/sse  (/api/v1/sse/items)
 app.use(`/api/${API_VERSION}/sse`, sseRouter);
 
 // Mount MVP CRUD at /api/v1/items
