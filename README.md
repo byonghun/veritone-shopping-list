@@ -48,8 +48,11 @@ _Audited inside Docker on 2025-10-02 at commit `3cf15ba8cc`, Chrome 128. Scores 
 | **Mobile**  | 98          | 95            | 100            | 100 |
 | **Desktop** | 100         | 95            | 100            | 100 |
 
-**Reports:** [Desktop]:(docs/lighthouse/desktop.html) · [Mobile](docs/lighthouse/mobile.html)
-**Screenshots:** ![Desktop]:(docs/lighthouse/desktop.png) ![Mobile](docs/lighthouse/mobile.png)
+**Reports:** [Desktop](docs/lighthouse/desktop.html) · [Mobile](docs/lighthouse/mobile.html)
+
+**Screenshots:**
+![Desktop](docs/lighthouse/desktop.png)  
+![Mobile](docs/lighthouse/mobile.png)
 
 ## Repo Layout
 
