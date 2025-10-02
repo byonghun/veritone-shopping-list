@@ -12,8 +12,6 @@ COPY apps/web/package.json apps/web/package.json
 
 # Install ONLY needed workspaces (shared + web)
 RUN npm ci -w @app/shared -w @app/web --include-workspace-root
-# Install all workspaces (root + web)
-# RUN npm ci --workspaces --include-workspace-root
 
 # Copy the source
 COPY . .

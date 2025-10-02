@@ -25,8 +25,7 @@ COPY package.json package-lock.json ./
 COPY shared/package.json shared/package.json
 COPY apps/server/package.json apps/server/package.json
 # Install ONLY the needed workspaces (shared + server)
-RUN npm ci --ignore-scripts -w @app/shared -w @app/server
-# RUN npm ci --workspaces --include-workspace-root
+# RUN npm ci -w @app/shared -w @app/server
 
 RUN npm ci
 
