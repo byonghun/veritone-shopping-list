@@ -39,7 +39,7 @@ const Select: FC<CustomSelectProps> = ({ open, onOpenChange, value, onClick }) =
           "focus-visible:outline-none focus-visible:border-brand",
           "w-full border border-drawerBorderGray rounded-md h-[52px] max-w-[504px]",
           "text-base font-nunito px-3 text-placeholderGray flex justify-between items-center",
-          "active:border-brand transition-colors z-50",
+          "active:border-brand transition-colors z-50 pr-[22px]",
           open && "border-brand border",
           value && "text-primaryFont",
         )}
@@ -49,7 +49,7 @@ const Select: FC<CustomSelectProps> = ({ open, onOpenChange, value, onClick }) =
           onOpenChange(!open);
         }}
       >
-        <p>{`${value ?? "How Many?"}`}</p>
+        <p className="text-base">{`${value ?? "How Many?"}`}</p>
         <ArrowIcon className={cn("transition-transform", open && "rotate-180")} />
       </button>
 
@@ -58,7 +58,7 @@ const Select: FC<CustomSelectProps> = ({ open, onOpenChange, value, onClick }) =
         role="listbox"
         className={cn(
           "absolute left-0 right-0 top-full w-full rounded-[4px] bg-white shadow-dropdown z-20",
-          "origin-top transition duration-200 ease-out will-change-[transform,opacity] mt-[1px]",
+          "origin-top transition duration-200 ease-out will-change-[transform,opacity] mt-[1px] font-normal",
           open
             ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
             : "opacity-0 -translate-y-1 scale-95 pointer-events-none",
@@ -74,7 +74,7 @@ const Select: FC<CustomSelectProps> = ({ open, onOpenChange, value, onClick }) =
               role="option"
               aria-selected={selected}
               tabIndex={-1}
-              className="flex items-center h-10 hover:bg-drawerBorderGray/30 text-primaryFont leading-5 font-normal pl-3 font-nunito"
+              className="flex items-center h-10 hover:bg-drawerBorderGray/30 text-primaryFont leading-5 pl-3"
               onPointerDown={(e) => {
                 e.preventDefault();
                 onClick(option);

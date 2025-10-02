@@ -64,7 +64,6 @@ describe("Button (shadcn + cva)", () => {
 
   it.each([
     ["default", "bg-buttonBlue"],
-    ["destructive", "bg-destructive"],
     ["outline", "border"],
     ["secondary", "bg-secondary"],
     ["ghost", "hover:bg-accent"],

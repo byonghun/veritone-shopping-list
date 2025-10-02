@@ -14,7 +14,7 @@ const Textarea = React.forwardRef<TextareaRef, TextareaProps>(function Textarea(
       ref={ref}
       data-slot="textarea"
       className={cn(
-        "focus-visible:border-brand focus-visible:outline-none w-full border border-drawerBorderGray rounded-[4px] h-[140px] max-w-[504px] text-base font-nunito text-primaryFont px-3 pt-3 placeholder:text-placeholderGray",
+        "focus-visible:border-brand focus-visible:outline-none w-full border border-drawerBorderGray rounded-[4px] h-[140px] max-w-[504px] text-base font-nunito text-primaryFont px-3 pt-3 placeholder:text-placeholderGray font-normal",
         className,
       )}
       {...props}
