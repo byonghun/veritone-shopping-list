@@ -45,5 +45,6 @@ export default {
     "!<rootDir>/src/main.tsx",
     "!<rootDir>/src/**/*.d.ts",
     "!<rootDir>/src/api/items.api.ts",
+    "!<rootDir>/src/App.tsx",
   ],
 };

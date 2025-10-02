@@ -6,7 +6,7 @@ import TrashIcon from "../Icons/TrashIcon";
 import { Checkbox } from "../ui/checkbox";
 import { cn } from "../../utils";
 
-interface ItemProps extends ItemDTO {
+export interface ItemProps extends ItemDTO {
   onTogglePurchased: (id: ItemDTO["id"], checkedState: boolean) => void;
   onEdit: (id: ItemDTO["id"]) => void;
   onDelete: (id: ItemDTO["id"]) => void;
@@ -25,10 +25,15 @@ const Item: FC<ItemProps> = ({
   return (
     <div
       className={cn(
-        "w-full sm:h-[87px] p-4 px-6 flex justify-between items-center border-[0.5px] border-drawerBorderGray rounded-[4px] min-h-[87px] transition-colors",
-        purchased && "bg-drawerBorderGray/[0.17] border-transparent",
+        "relative w-full min-h-[87px] sm:h-[87px] p-4 px-6",
+        "flex items-center justify-between rounded-[4px] border-[0.5px] border-drawerBorderGray",
+        "transform transition-all duration-200 ease-out will-change-transform",
+        purchased && "bg-drawerBorderGray/20 border-transparent scale-[0.995] animate-pop-in",
       )}
     >
+      {purchased && (
+        <div className="pointer-events-none absolute inset-0 rounded-[4px] animate-flash-once" />
+      )}
       <div className="flex gap-[18px] items-center">
         <Checkbox
           id="list-item-purchased"
@@ -61,10 +66,10 @@ const Item: FC<ItemProps> = ({
         </div>
       </div>
       <div id="item-actions" className="flex gap-5">
-        <button aria-label="Edit button" onClick={() => onEdit(id)} className="item-btn">
+        <button aria-label="Edit button" onClick={() => onEdit(id)} className={"item-btn"}>
           <EditIcon />
         </button>
-        <button aria-label="Delete button" onClick={() => onDelete(id)} className="item-btn">
+        <button aria-label="Delete button" onClick={() => onDelete(id)} className={"item-btn"}>
           <TrashIcon />
         </button>
       </div>

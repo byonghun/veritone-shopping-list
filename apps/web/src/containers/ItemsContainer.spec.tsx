@@ -344,7 +344,9 @@ describe("ItemsContainer", () => {
 
     render(<ItemsContainer />);
 
-    expect(screen.getByRole("heading", { level: 3, name: /all items completed!/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: /all items completed!/i }),
+    ).toBeInTheDocument();
     const clearBtn = screen.getByRole("button", { name: /clear list/i });
 
     await actClick(clearBtn);
@@ -357,9 +359,7 @@ describe("ItemsContainer", () => {
 
     expect(mockDeleteAll.mutateAsync).toHaveBeenCalledTimes(1);
 
-    expect(
-      screen.getByRole("button", { name: /add your first item/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /add your first item/i })).toBeInTheDocument();
   });
 
   it("confirming 'Start new list' clears and then opens the drawer", async () => {

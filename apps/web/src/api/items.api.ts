@@ -10,6 +10,7 @@ export const ItemsClient = {
   update: (id: string, input: ItemFormOutput) =>
     httpPatch<ItemDTO>(`${ITEMS_URL}/${encodeURIComponent(id)}`, input),
   remove: (id: string) => httpDelete<void>(`${ITEMS_URL}/${encodeURIComponent(id)}`),
+  deleteAll: () => httpDelete<void>(`${ITEMS_URL}`),
 };
 
 // http wrappers

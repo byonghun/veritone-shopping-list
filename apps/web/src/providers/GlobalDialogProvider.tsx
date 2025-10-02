@@ -36,6 +36,7 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
     onConfirm,
   } = dialogProps;
   const isErrorType = useMemo(() => type === "error", [type]);
+  const isClearButton = useMemo(() => btnLabel === "Clear", [btnLabel]);
 
   const openDialog = (props: GlobalDialogProps) => {
     setOpen(true);
@@ -75,12 +76,16 @@ const GlobalDialogProvider: FC<GlobalDialogProviderProps> = ({ children }) => {
           <DialogFooter>
             {!isErrorType && (
               <DialogClose asChild>
-                <Button variant="secondary" className="hover:opacity-80">
+                <Button variant="secondary" className="hover:text-primaryFont/80">
                   {closeBtnLabel}
                 </Button>
               </DialogClose>
             )}
-            <Button variant="default" onClick={onClick} className={cn(isErrorType && "bg-red-600")}>
+            <Button
+              variant={isErrorType || isClearButton ? "destructive" : "default"}
+              className={"w-[71px]"}
+              onClick={onClick}
+            >
               {btnLabel}
             </Button>
           </DialogFooter>

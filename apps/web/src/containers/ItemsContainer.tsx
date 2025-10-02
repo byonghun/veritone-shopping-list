@@ -1,25 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ItemDTO, ItemFormOutput } from "@app/shared";
 
 import ErrorCard from "../components/ErrorCard";
-import Item from "../components/Item";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { Button } from "../components/ui/button";
+import ClearCompletedCard from "../components/ClearCompletedCard";
+import ItemsList from "../components/ItemsList";
 import { DEFAULT_ITEM } from "../constants/drawer";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
 import { useItems } from "../hooks/useItems";
 import { useItemsSSE } from "../hooks/useItemsSSE";
-import { cn } from "../utils";
 import { getErrorDescription } from "../utils/errors";
 
 const ItemsContainer = () => {
   const { openDrawer } = useDrawer();
   const { openDialog } = useDialog();
-  const { query, create, update, remove } = useItems();
+  const { query, create, update, remove, deleteAll } = useItems();
 
   const [items, setItems] = useState<ItemDTO[]>([]);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+
+  const activeItems = useMemo(() => items.filter((i) => !i.purchased), [items]);
+  const completedItems = useMemo(() => items.filter((i) => i.purchased), [items]);
 
   useEffect(() => {
     if (query.isSuccess) {
@@ -60,7 +63,7 @@ const ItemsContainer = () => {
     );
   }
 
-  const emptyItems = items.length === 0;
+  const hasEmptyItems = items.length === 0;
   const purchasedCount = items.filter((item) => item.purchased).length;
   const isCompleted = purchasedCount === items.length;
   const checkList = `${purchasedCount}/${items.length} Completed`;
@@ -112,7 +115,7 @@ const ItemsContainer = () => {
           snapshot = prevItems;
           return prevItems.map((prevItem) => {
             if (prevItem.id === id) {
-              return { ...item, ...prevItem } as ItemDTO;
+              return { ...item, ...prevItem };
             }
 
             return prevItem;
@@ -161,6 +164,35 @@ const ItemsContainer = () => {
     });
   };
 
+  const onClear = (startNew?: boolean) => {
+    openDialog({
+      type: "delete",
+      btnLabel: "Clear",
+      title: "Clear Shopping List?",
+      description: "Are you sure you want to clear the entire list? This can not be undone.",
+      onConfirm: async () => {
+        let snapshot: ItemDTO[] = [];
+        setItems((prevItems) => {
+          snapshot = prevItems;
+          return [];
+        });
+        try {
+          await deleteAll.mutateAsync();
+          startNew && setTimeout(() => onDrawerOpen(), 0);
+        } catch (err) {
+          const description = await getErrorDescription(err);
+          setItems(snapshot);
+          openDialog({
+            type: "error",
+            title: "Failed to delete items.",
+            description,
+            btnLabel: "Close",
+          });
+        }
+      },
+    });
+  };
+
   const onTogglePurchased = async (id: ItemDTO["id"], checked: boolean) => {
     let snapshot: ItemDTO[] = [];
     setItems((prevItems) => {
@@ -192,50 +224,37 @@ const ItemsContainer = () => {
     }
   };
 
+  if (hasEmptyItems) {
+    return (
+      <div className="card-wrapper md:mt-[110px]">
+        <div className="card-content">
+          <p className="card-text">Your shopping list is empty :(</p>
+          <Button variant="default" onClick={onDrawerOpen} className="min-w-[151px] mt-1">
+            Add your first item
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const actionProps = {
+    onEdit,
+    onTogglePurchased,
+    onDelete,
+  };
+
   return (
-    <>
-      {emptyItems && (
-        <div className="card-wrapper md:mt-[110px]">
-          <div className="card-content">
-            <p className="card-text">Your shopping list is empty :(</p>
-            <Button variant="default" onClick={onDrawerOpen} className="min-w-[151px] mt-1">
-              Add your first item
-            </Button>
-          </div>
-        </div>
-      )}
-      {!emptyItems && (
-        <div className="flex flex-col gap-3 font-nunito max-w-[1025px] mx-auto">
-          <div id="home-nav" className="flex justify-between items-end">
-            <h2 className="font-semibold text-lg leading-6">
-              Your Items{" "}
-              <span
-                className={cn(
-                  "text-sm ml-2 text-listDescriptionGray min-w-[110px]",
-                  isCompleted && "text-green-600",
-                )}
-              >
-                {checkList}
-              </span>
-            </h2>
-            <Button variant="default" onClick={onDrawerOpen} className="w-[90px]">
-              Add Item
-            </Button>
-          </div>
-          {items.map((item) => {
-            return (
-              <Item
-                key={item.id}
-                {...item}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onTogglePurchased={onTogglePurchased}
-              />
-            );
-          })}
-        </div>
-      )}
-    </>
+    <div className="flex flex-col gap-6 w-full">
+      <div className="w-full flex flex-col gap-4">
+        <ItemsList
+          items={activeItems}
+          itemsHeaderProps={{ metaText: checkList, isCompleted, onDrawerOpen }}
+          {...actionProps}
+        />
+        {activeItems.length === 0 && <ClearCompletedCard onClear={onClear} />}
+      </div>
+      <ItemsList items={completedItems} itemsHeaderProps={{ type: "completed" }} {...actionProps} />
+    </div>
   );
 };
 
