@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import type { ItemId, ItemFormInput } from "@app/shared";
+import type { ItemId, ItemFormInput, ItemFormOutput } from "@app/shared";
 
 import type { ItemsRepo } from "./repo";
 import { mapPrismaItemToDomain } from "../../utils/prisma";
@@ -17,7 +17,7 @@ export class PrismaItemsRepo implements ItemsRepo {
     return row ? mapPrismaItemToDomain(row) : undefined;
   }
 
-  async create(input: ItemFormInput) {
+  async create(input: ItemFormOutput) {
     const row = await this.prisma.item.create({
       data: {
         itemName: input.itemName,
