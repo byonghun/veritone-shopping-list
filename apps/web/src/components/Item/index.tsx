@@ -40,9 +40,7 @@ const Item: FC<ItemProps> = ({
           name="list-item-purchased"
           aria-label={`Mark ${itemName} as purchased`}
           checked={purchased}
-          onCheckedChange={(checkedState: boolean) => {
-            onTogglePurchased(id, checkedState);
-          }}
+          onCheckedChange={(checkedState: boolean) => onTogglePurchased(id, checkedState)}
         />
         <div id="item-content" className="flex flex-col font-nunito gap-[3px] pr-4 max-w-prose">
           <h3

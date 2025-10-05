@@ -1,29 +1,3 @@
-// Notes:
-// Why this design
-// 1. Server-sent events use a single, long-lived Hypertext Transfer Protocol (Http)
-// connection per client, which is simple to implement on the server side
-// compared with full bidirectional web sockets
-// 2. The stream format is line-based and human-readable, so debugging
-// is straightforward.
-// 3. "Comment" lines (starting with a colon) and periodic pings keep intermediaries from
-// closing idle connections.
-// 4. A single broadcast function keeps your update logic in one place
-
-// Alternatives
-// 1. Web socket connections (full duplex, higher complexity)
-// 2. Short-polling or long-polling (simpler but less efficient)
-// 3. A pub/sub message broker behind the server with server-sent events
-// only at the edge
-
-// I was tasked a shopping list code challenge with no time frame, but
-// there's always a limit
-// My goal was to deploy/develop a MVP
-// If this was a real product, I'd do that same, and iterate on top of it.
-// Although, time wasn't a problem, in my opinion any application is better
-// to be developed or any feature to be deployed and iterated on.
-// There are times where over engineering can lead to missing deadlines
-// Or even not even deploying a feature due to over complication
-
 import express from "express";
 import { nanoid } from "nanoid";
 import type { ItemsSnapshot } from "@app/shared";
