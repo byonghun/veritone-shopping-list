@@ -7,6 +7,8 @@
   "scripts": {
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down -v",
+    "docker:db": "docker compose up -d db",
+    "docker:db:down": "docker compose stop db && docker compose rm -f db",
     "dev:server": "npm run -w @app/server dev",
     "dev:web": "npm run -w @app/web dev",
     "dev": "npm run dev:server & npm run dev:web",
