@@ -9,7 +9,7 @@ const server = app.listen(port, () => {
   console.log(`Server listening on port:${port}`);
 });
 
-function shutdown(signal: string) {
+function shutdown(_signal: string) {
   server.close(() => {
     console.log("Server closed. Bye!");
     process.exit(0);

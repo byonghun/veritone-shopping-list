@@ -1,9 +1,11 @@
 import express, { type NextFunction, type Application, type Request, type Response } from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 
 import { errorHandler } from "./middleware/errorHandler";
 import { globalLimiter } from "./middleware/rateLimit";
+import { authRoutes } from "./modules/auth/routes";
 import { itemsRoutes } from "./modules/items/routes";
 import { sseRouter } from "./sse";
 
@@ -46,7 +48,10 @@ const corsOptions: cors.CorsOptions = {
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
+// Note: Used to limit payload
 app.use(express.json({ limit: "1mb" }));
+// Note: enabled so auth middleware can read the session cookie
+app.use(cookieParser());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
 app.get("/healthz", (_req: Request, res) => {
@@ -61,6 +66,9 @@ app.use(`/api/${API_VERSION}`, setApiVersion(API_VERSION));
 
 // Mount SSE under /api/v1/sse  (/api/v1/sse/items)
 app.use(`/api/${API_VERSION}/sse`, sseRouter);
+
+// Auth under /api/v1/auth
+app.use(`/api/${API_VERSION}/auth`, authRoutes);
 
 // Mount MVP CRUD at /api/v1/items
 app.use(`/api/${API_VERSION}/items`, itemsRoutes);
