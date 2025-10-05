@@ -13,6 +13,8 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 - [Performance & Accessibility (Lighthouse)](#performance--accessibility-lighthouse)
 - [Basic Repo Layout](#repo-layout)
 - [Prerequisites](#prerequisites)
+- [Docker Quick Start (Dev Images)](#docker-quick-start-dev-images)
+- [Artifacts (Web Build)](#artifacts-web-build)
 - [Quick Start (Local Dev)](#quick-start-local-dev)
 - [Environment Variables](#environment-variables)
 - [Scripts (Root)](#scripts-root)
@@ -22,8 +24,6 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 - [Testing](#testing)
 - [Lint & Format](#lint--format)
 - [Typecheck & Build](#typecheck--build)
-- [Docker Quick Start (Dev Images)](#docker-quick-start-dev-images)
-- [Artifacts (Web Build)](#artifacts-web-build)
 - [CI (Github Actions)](#ci-github-actions)
 - [Non-root Guarantee](#non-root-guarantee)
 - [Credits](#credits)
@@ -76,15 +76,42 @@ _Audited inside Docker on 2025-10-02 at commit `bc95708`, Chrome 128. Scores can
 - (Optional) Docker 24+
 - (Optional) PostgreSQL if running API locally with Prisma
 
+## Docker Quick Start (Dev Images)
+
+Run both **server**, **web**, and **db** in Docker with one command:
+
+```bash
+npm run docker:up
+```
+
+To stop and clean up volumes (DB data, etc.):
+
+```bash
+npm run docker:down
+```
+
+> Note: `.env.development` is committed intentionally for the challenge to enable one-command startup. Values are development-only and not used in production.
+
+## Artifacts (Web Build)
+
+CI uploads the web build (`apps/web/dist`) as an artifact named `web-dist`.
+
+To test locally:
+Note: Server must be running
+
+```bash
+unzip web-dist.zip -d web-dist
+# serve must be installed globally
+# npm i -g serve
+npx serve -s web-dist -l 5000
+open http://localhost:5000
+```
+
 ## Quick Start (Local Dev)
 
 ```bash
 # Install deps
 npm install
-
-# (optional) regenerates Prisma client
-npm run -w @app/server prisma:generate
-npm run -w @app/server prisma:migrate:dev
 
 # Run Server (port 3001)
 npm run dev:server
@@ -94,7 +121,6 @@ npm run dev:web
 
 # Run both together (parellel)
 npm run dev
-
 ```
 
 ## Environment Variables
@@ -107,6 +133,13 @@ PORT=3001
 DATABASE_URL=postgresql://veritoneuser:veritonepassword@db:5432/veritonedb?schema=public
 ```
 
+```bash
+# In apps/server folder
+cp .env.example .env.development
+# In root of the app
+cp apps/web/.env.example apps/web/.env.development
+```
+
 ### Web `.env.example`
 
 ```env
@@ -115,10 +148,32 @@ API_BASE_URL=http://localhost:3001
 ```
 
 Copy and adjust as needed
+\*Can skip since .env.development is already pushed
 
 ```bash
+# In apps/server folder
 cp .env.example .env
+# In root of the app
 cp apps/web/.env.example apps/web/.env
+```
+
+### Server `.env.example`
+
+```env
+NODE_ENV=development
+PORT=3001
+RL_READ=120
+RL_WRITE=20
+DATABASE_URL=postgresql://veritoneuser:veritonepassword@localhost:5432/veritonedb?schema=public
+```
+
+Copy and adjust as needed
+
+```bash
+# In apps/server folder
+cp .env.example .env
+# In root of the app
+cp apps/server/.env.example apps/server/.env
 ```
 
 ## Scripts (Root)
@@ -162,7 +217,6 @@ npm run -w @app/web test
 npm run -w @app/server dev
 npm run -w @app/server build
 npm run -w @app/server test
-npm run -w @app/server prisma:generate
 ```
 
 ## Testing
@@ -190,37 +244,6 @@ Per app:
 ```bash
 npm run -w @app/web build
 npm run -w @app/server build
-```
-
-## Docker Quick Start (Dev Images)
-
-Run both **server** and **web** in Docker with one command:
-
-```bash
-npm run docker:up
-```
-
-To stop and clean up volumes (DB data, etc.):
-
-```bash
-npm run docker:down
-```
-
-> Note: `.env.development` is committed intentionally for the challenge to enable one-command startup. Values are development-only and not used in production.
-
-## Artifacts (Web Build)
-
-CI uploads the web build (`apps/web/dist`) as an artifact named `web-dist`.
-
-To test locally:
-Note: Server must be running
-
-```bash
-unzip web-dist.zip -d web-dist
-# serve must be installed globally
-# npm i -g serve
-npx serve -s web-dist -l 5000
-open http://localhost:5000
 ```
 
 ## CI (Github Actions)
