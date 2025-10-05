@@ -114,6 +114,11 @@ open http://localhost:5000
 # Install deps
 npm install
 
+# (Optional) Start up DB (Run in root of the app)
+# Local-dev fallback: if Prisma/Postgres isn’t reachable at boot, use an in-memory repo so the API can still start. This is for DEVELOPMENT ONLY.
+# Start Docker Desktop (make sure the Docker engine is running) before starting the server
+npm run docker:db
+
 # Run Server (port 3001)
 npm run dev:server
 
