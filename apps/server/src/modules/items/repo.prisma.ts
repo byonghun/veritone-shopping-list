@@ -22,7 +22,7 @@ export class PrismaItemsRepo implements ItemsRepo {
       data: {
         itemName: input.itemName,
         description: input.description?.trim() || null,
-        quantity: input.quantity ?? 1,
+        quantity: (input.quantity ?? 1) as number,
         purchased: false,
       },
     });
