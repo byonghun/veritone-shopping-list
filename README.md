@@ -73,7 +73,8 @@ _Audited inside Docker on 2025-10-02 at commit `bc95708`, Chrome 128. Scores can
 
 - Node.js v22+
 - npm v10+
-- (Optional) Docker 24+
+- Docker 24+
+- docker compose version 2.x+
 - (Optional) PostgreSQL if running API locally with Prisma
 
 ## Docker Quick Start (Dev Images)
