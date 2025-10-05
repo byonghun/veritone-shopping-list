@@ -41,7 +41,7 @@ A TypeScript monorepo with a React (Webpack) frontend and a Node/Express backend
 
 ## Performance & Accessibility (Lighthouse)
 
-_Audited inside Docker on 2025-10-02 at commit `3cf15ba8cc`, Chrome 128. Scores can vary by machine._
+_Audited inside Docker on 2025-10-02 at commit `bc95708`, Chrome 128. Scores can vary by machine._
 
 | Target      | Performance | Accessibility | Best Practices | SEO |
 | ----------- | ----------- | ------------- | -------------- | --- |
