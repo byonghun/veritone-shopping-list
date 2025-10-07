@@ -43,9 +43,9 @@ module.exports = {
             options: {
               importLoaders: 1,
               url: {
-                filter: (url) => !url.startsWith("/images/")
-              }
-            }
+                filter: (url) => !url.startsWith("/images/"),
+              },
+            },
           },
           "postcss-loader",
         ],
