@@ -8,6 +8,7 @@ export default {
         dialog: "0 4px 34px 0 rgba(0, 0, 0, 0.5)",
         drawer: "0 0 14px 0 rgba(0,0,0,0.25)",
         dropdown: "0 2px 10px 0 #00000033",
+        loginForm: "0 2px 10px 0 #4D81B733",
       },
       colors: {
         brand: "#4D81B7",

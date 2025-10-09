@@ -41,7 +41,15 @@ module.exports = {
         test: /\.css$/i,
         use: [
           MiniCssExtractPlugin.loader,
-          { loader: "css-loader", options: { importLoaders: 1 } },
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              url: {
+                filter: (url) => !url.startsWith("/images/"),
+              },
+            },
+          },
           "postcss-loader",
         ],
       },
