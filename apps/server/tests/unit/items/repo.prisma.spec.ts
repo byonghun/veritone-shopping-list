@@ -57,7 +57,7 @@ describe("PrismaItemsRepo (unit, mocked prisma)", () => {
       itemName: "Apples",
       description: "  Honeycrisp  ",
       quantity: 4,
-      purchased: false
+      purchased: false,
     });
     expect(prismaMock.item.create).toHaveBeenCalledWith({
       data: {

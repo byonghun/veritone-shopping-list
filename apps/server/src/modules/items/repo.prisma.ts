@@ -8,7 +8,7 @@ export class PrismaItemsRepo implements ItemsRepo {
   constructor(private readonly prisma: PrismaClient) {}
 
   async listAll() {
-    const rows = await this.prisma.item.findMany({ orderBy: { createdAt: "desc" } });
+    const rows = await this.prisma.item.findMany({ orderBy: { createdAt: "asc" } });
     return rows.map(mapPrismaItemToDomain);
   }
 
