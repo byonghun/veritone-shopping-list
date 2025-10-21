@@ -13,7 +13,10 @@ module.exports = {
     publicPath: "/",
     clean: true,
   },
-  devtool: "source-map",
+  // Disables source map generation entirely
+  // Benefits:
+  // - Smaller bundles & faster builds
+  devtool: false,
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
     alias: {
@@ -41,7 +44,15 @@ module.exports = {
         test: /\.css$/i,
         use: [
           MiniCssExtractPlugin.loader,
-          { loader: "css-loader", options: { importLoaders: 1 } },
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              url: {
+                filter: (url) => !url.startsWith("/images/"),
+              },
+            },
+          },
           "postcss-loader",
         ],
       },
@@ -67,6 +78,7 @@ module.exports = {
       "process.env.API_BASE_URL": JSON.stringify(
         process.env.API_BASE_URL || "http://localhost:3001",
       ),
+      "process.env.NODE_ENV": JSON.stringify("production"),
     }),
   ],
   optimization: {
