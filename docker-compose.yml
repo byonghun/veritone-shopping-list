@@ -87,8 +87,27 @@ services:
       db:
         condition: service_healthy
     # Run migrations non-interactively, then stop
-    command: ["npm", "run", "-w", "@app/server", "prisma:migrate:deploy"]
+    command: ["sh","-lc","npm run -w @app/server prisma:migrate:deploy && npm run -w @app/server prisma:seed"]
+
     restart: "no"
+  studio:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile.dev
+    container_name: veritone-shopping-list-studio
+    working_dir: /workspace/apps/server
+    user: app
+    env_file:
+      - .env.development
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["npx","prisma","studio","--browser","none","--port","5555","--schema","prisma/schema.prisma"]
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./apps/server:/workspace/apps/server
+      - ./shared:/workspace/shared
 
 volumes:
   pgdata:
