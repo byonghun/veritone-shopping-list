@@ -1,3 +1,7 @@
+// First layer for web requests (items)
+// HTTP edge for the Items domain. Validates inputs with Zod
+// Calls ItemsService formats responses and after any write it gets a fresh list
+// broadcasts to clients using Server-Sent Events
 import type { Request, Response } from "express";
 import { ItemIdSchema, ItemInputSchemaServer, type ItemId, type ItemFormInput } from "@app/shared";
 
