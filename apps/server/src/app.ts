@@ -1,9 +1,11 @@
 import express, { type NextFunction, type Application, type Request, type Response } from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 
 import { errorHandler } from "./middleware/errorHandler";
 import { globalLimiter } from "./middleware/rateLimit";
+import { authRoutes } from "./modules/auth/routes";
 import { itemsRoutes } from "./modules/items/routes";
 import { sseRouter } from "./sse";
 
@@ -60,6 +62,8 @@ app.options("*", cors(corsOptions));
 // Parses application/json bodies into req.body
 // And caps it at one megabyte to prevent abuse
 app.use(express.json({ limit: "1mb" }));
+// Note: enabled so auth middleware can read the session cookie
+app.use(cookieParser());
 // Access logs
 // dev in development shows concise and colorized logs
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
@@ -84,6 +88,9 @@ app.use(`/api/${API_VERSION}`, setApiVersion(API_VERSION));
 // Cache-Control: no-cache, no transform
 // Connection: keep-alive
 app.use(`/api/${API_VERSION}/sse`, sseRouter);
+
+// Auth under /api/v1/auth
+app.use(`/api/${API_VERSION}/auth`, authRoutes);
 
 // Mount MVP CRUD at /api/v1/items
 app.use(`/api/${API_VERSION}/items`, itemsRoutes);
