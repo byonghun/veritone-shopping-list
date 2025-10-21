@@ -1,3 +1,7 @@
+// a factory that builds a thin service around an ItemsRepo implementation
+// The service methods simply forward to the repository for now
+// The seam where you would add domain rules, validation, metrics, caching,
+// or optimistic concurrency later.
 import type { Item, ItemFormInput, ItemId } from "@app/shared";
 import type { ItemsRepo } from "./repo";
 

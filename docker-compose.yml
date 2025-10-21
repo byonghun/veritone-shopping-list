@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: apps/web/Dockerfile.dev
-    container_name: veritone-shopping-list-web
+    container_name: baskit-web
     ports:
       - "8080:8080"
     depends_on:
@@ -19,7 +19,7 @@ services:
   db:
     # Smallest size, great for simple Node.js services
     image: postgres:16-alpine
-    container_name: veritone-shopping-list-db
+    container_name: baskit-db
     restart: always
     environment:
       - POSTGRES_USER=veritoneuser
@@ -42,7 +42,7 @@ services:
     build:
       context: .
       dockerfile: apps/server/Dockerfile.dev
-    container_name: veritone-shopping-list-server
+    container_name: baskit-server
     working_dir: /workspace/apps/server
     # run as non-root
     user: app
@@ -77,7 +77,7 @@ services:
     build:
       context: .
       dockerfile: apps/server/Dockerfile.dev
-    container_name: veritone-shopping-list-migrator
+    container_name: baskit-migrator
     working_dir: /workspace/apps/server
     user: app
     environment:

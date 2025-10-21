@@ -10,7 +10,7 @@ export class InMemoryItemsRepo implements ItemsRepo {
   private readonly items = new Map<ItemId, Item>();
 
   async listAll(): Promise<Item[]> {
-    // MVP: return everything (creation-desc to keep newest first)
+    // MVP: return everything (creation-desc to keep newest last)
     return Array.from(this.items.values()).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 

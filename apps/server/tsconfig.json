@@ -1,6 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    // Emits modern JS module syntax (import & export). Doesn't transform to CommonJS
+    // Benefits:
+    // - Fits with our modern Node.js runtime
+    // - Better tree-shaking in bundlers
+    // - Fewer legacy interop edge cases
     "module": "esnext",
     "moduleResolution": "bundler",
     "target": "es2022",

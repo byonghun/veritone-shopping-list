@@ -1,6 +1,9 @@
 import { app } from "./app";
 import { initItemsRepo } from "./modules/items/repo.instance";
 
+// Top-level await to initialize persistence backend BEFORE the
+// server starts accepting traffic.
+// Note: Ensures all routes that depend on the repository are safe to call.
 await initItemsRepo();
 
 const port = Number(process.env.PORT ?? 3001);

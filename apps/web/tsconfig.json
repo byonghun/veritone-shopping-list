@@ -9,6 +9,11 @@
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    // The typescript compiler (tsc) will not emit external ".map" files
+    // alonside compiled ".js"
+    "sourceMap": false,
+    // Will not embed source maps inside the output ".js" as a base64 data: URL
+    "inlineSourceMap": false,
     "types": ["jest", "@testing-library/jest-dom"],
     "paths": {
       "@app/shared": ["../../shared/src/index.ts"],
