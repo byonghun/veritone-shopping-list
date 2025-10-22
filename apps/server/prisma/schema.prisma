@@ -1,3 +1,5 @@
+// Within apps/server run this command
+// npm run prisma:migrate:dev - --name <schema name>
 generator client {
   provider = "prisma-client-js"
 }
@@ -24,8 +26,7 @@ model User {
   emailCanonical String    @unique // Gives fast lookups and prevents case/space duplicates
   passwordHash   String // stores the Argon2 hash (never the password)
   roles          String[]  @default([]) // Flexiblity for futre RBAC (Role Based Access Control)
-  // TODO: Add isGuest feature
-  // isGuest        Boolean   @default(false) // guest users
+  isGuest        Boolean   @default(false) // guest users
   lastLoginAt    DateTime? // Supports onSuccessfulLogin hook
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt

@@ -84,7 +84,13 @@ export function createAuthService(repo: AuthRepo, config: AuthConfig) {
     /** Verify a session token and return a lightweight identity object */
     async verify(
       token: string,
-    ): Promise<{ id: string; email?: string; roles?: string[]; isGuest?: boolean; payload: JWTPayload }> {
+    ): Promise<{
+      id: string;
+      email?: string;
+      roles?: string[];
+      isGuest?: boolean;
+      payload: JWTPayload;
+    }> {
       const payload = await verifySessionJWT(token);
       return {
         id: String(payload.sub),
@@ -92,7 +98,8 @@ export function createAuthService(repo: AuthRepo, config: AuthConfig) {
         roles: Array.isArray((payload as any).roles)
           ? ((payload as any).roles as string[])
           : undefined,
-        isGuest: typeof (payload as any).isGuest === "boolean" ? (payload as any).isGuest : undefined,
+        isGuest:
+          typeof (payload as any).isGuest === "boolean" ? (payload as any).isGuest : undefined,
         payload,
       };
     },
