@@ -82,9 +82,7 @@ export function createAuthService(repo: AuthRepo, config: AuthConfig) {
     },
 
     /** Verify a session token and return a lightweight identity object */
-    async verify(
-      token: string,
-    ): Promise<{
+    async verify(token: string): Promise<{
       id: string;
       email?: string;
       roles?: string[];
