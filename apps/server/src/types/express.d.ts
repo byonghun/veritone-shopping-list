@@ -9,7 +9,7 @@ declare global {
         roles?: string[];
         payload: JWTPayload;
       };
-      user?: { id: string; email?: string; roles?: string[] };
+      user?: { id: string; email?: string; roles?: string[]; isGuest?: boolean };
     }
   }
 }

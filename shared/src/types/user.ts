@@ -4,6 +4,7 @@ export type User = {
   emailCanonical: string; // trimmed + lowercased for lookup
   passwordHash: string;
   roles: string[];
+  isGuest: boolean;
   createdAt: string;
   updatedAt: string;
 };

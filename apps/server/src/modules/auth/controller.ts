@@ -24,7 +24,7 @@ export function createAuthController(auth: AuthService, sessionMaxAgeSec: number
       try {
         const { user, token } = await auth.login(email, password);
         setSessionCookie(res, token, sessionMaxAgeSec);
-        res.status(200).json({ id: user.id, email: user.email, roles: user.roles });
+        res.status(200).json({ id: user.id, email: user.email, roles: user.roles, isGuest: user.isGuest });
       } catch (e: any) {
         if (e?.message === "invalid_credentials") {
           res.status(401).json({ error: "unauthorized", message: "Invalid credentials." });
@@ -47,7 +47,7 @@ export function createAuthController(auth: AuthService, sessionMaxAgeSec: number
         res.status(401).json({ error: "unauthorized", message: "Missing session." });
         return;
       }
-      res.status(200).json({ id: u.id, email: u.email, roles: u.roles ?? [] });
+      res.status(200).json({ id: u.id, email: u.email, roles: u.roles ?? [], isGuest: u.isGuest });
     },
   } as const;
 }

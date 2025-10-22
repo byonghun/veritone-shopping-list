@@ -28,6 +28,7 @@ export function mapPrismaUserToDomain(row: any): User {
     emailCanonical: row.emailCanonical,
     passwordHash: row.passwordHash,
     roles: row.roles ?? [],
+    isGuest: row.isGuest ?? false,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

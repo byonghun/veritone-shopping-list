@@ -46,7 +46,7 @@ export function requireAuth(auth: AuthService) {
         return;
       }
       const ident = await auth.verify(token);
-      req.user = { id: ident.id, email: ident.email, roles: ident.roles };
+      req.user = { id: ident.id, email: ident.email, roles: ident.roles, isGuest: ident.isGuest };
       req.auth = { sub: ident.id, email: ident.email, roles: ident.roles, payload: ident.payload };
       next();
     } catch {

@@ -42,7 +42,7 @@ export function createAuthService(repo: AuthRepo, config: AuthConfig) {
 
   async function signSessionJWT(u: User): Promise<string> {
     const now = Math.floor(Date.now() / 1000);
-    return await new SignJWT({ sub: u.id, email: u.email, roles: u.roles })
+    return await new SignJWT({ sub: u.id, email: u.email, roles: u.roles, isGuest: u.isGuest })
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .setIssuedAt(now)
       .setNotBefore(now)
@@ -84,7 +84,7 @@ export function createAuthService(repo: AuthRepo, config: AuthConfig) {
     /** Verify a session token and return a lightweight identity object */
     async verify(
       token: string,
-    ): Promise<{ id: string; email?: string; roles?: string[]; payload: JWTPayload }> {
+    ): Promise<{ id: string; email?: string; roles?: string[]; isGuest?: boolean; payload: JWTPayload }> {
       const payload = await verifySessionJWT(token);
       return {
         id: String(payload.sub),
@@ -92,6 +92,7 @@ export function createAuthService(repo: AuthRepo, config: AuthConfig) {
         roles: Array.isArray((payload as any).roles)
           ? ((payload as any).roles as string[])
           : undefined,
+        isGuest: typeof (payload as any).isGuest === "boolean" ? (payload as any).isGuest : undefined,
         payload,
       };
     },
